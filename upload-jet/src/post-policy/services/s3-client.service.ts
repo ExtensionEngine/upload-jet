@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { config } from 'dotenv';
-import { S3Client } from '@aws-sdk/client-s3';
+import { Injectable } from "@nestjs/common";
+import { config } from "dotenv";
+import { S3Client } from "@aws-sdk/client-s3";
 
 // env variables
 config();

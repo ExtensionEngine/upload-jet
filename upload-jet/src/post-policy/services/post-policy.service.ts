@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { S3Client } from '@aws-sdk/client-s3';
-import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
-import { PostPolicyDto } from '../../dtos/post-policy.dto';
+import { Injectable } from "@nestjs/common";
+import { S3Client } from "@aws-sdk/client-s3";
+import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
+import { PostPolicyDto } from "../../dtos/post-policy.dto";
 
 // services
-import { S3ClientService } from './s3-client.service';
-import { ConditionValidationService } from './condition-validation.service';
+import { S3ClientService } from "./s3-client.service";
+import { ConditionValidationService } from "./condition-validation.service";
 
 @Injectable()
 export class PostPolicyService {
@@ -30,15 +30,15 @@ export class PostPolicyService {
         continue;
       }
 
-      if (dto[key].hasOwnProperty('startsWith')) {
-        Conditions.push(['starts-with', `$${key}`, dto[key].startsWith]);
+      if (dto[key].hasOwnProperty("startsWith")) {
+        Conditions.push(["starts-with", `$${key}`, dto[key].startsWith]);
       } else {
-        Conditions.push(['eq', `$${key}`, dto[key]]);
+        Conditions.push(["eq", `$${key}`, dto[key]]);
       }
     }
 
-    const Bucket = 'mcabo';
-    const Key = 'a';
+    const Bucket = "mcabo";
+    const Key = "a";
 
     const signedPostPolicy = await createPresignedPost(s3Client, {
       Bucket,
