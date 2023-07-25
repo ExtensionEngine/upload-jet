@@ -8,10 +8,11 @@ export class UploadPolicyController {
 
   @Post()
   generateUploadPolicy(@Body() userInput: Record<string, userInputDto>) {
+    const [fileName] = Object.keys(userInput);
     const [fileConditions] = Object.values(userInput);
 
     return this.uploadPolicyService.generateUploadPolicy(
-      userInput,
+      fileName,
       fileConditions
     );
   }
