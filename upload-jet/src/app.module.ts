@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { PostPolicyModule } from './post-policy/post-policy.module';
+import { ConfigModule } from '@nestjs/config';
+import { UploadPolicyModule } from './upload-policy/upload-policy.module';
 
 @Module({
-  imports: [PostPolicyModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), UploadPolicyModule],
   controllers: [],
   providers: []
 })

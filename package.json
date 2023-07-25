@@ -10,5 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "prettier": "3.0.0"
+  },
+  "dependencies": {
+    "zod": "^3.21.4"
   }
 }
