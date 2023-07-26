@@ -29,39 +29,43 @@ const uploadJet = new UploadJet({ apiKey: API_KEY });
 Following example demonstrates registering a new route:
 
 ```javascript
-app.use('/api/upload', uploadJet.maxSize(15).generate());
+app.use('/api/upload', uploadJet.createUploadRoute());
 ```
 
-This example will generate a policy that limits the file size to maximum 15MB.
-You can create a policy using as many conditions as you like and combine them.
-Generate method takes all conditions previously specified and processes them to
-create the policy.
-
-Below you can see an example of a route using multiple conditions.
+This example will generate a simple policy with no restrictions on upload files.
+You can create restrictions by passing cconfig object to createUploadRoute method.
+Below you can see an example of upload route with multiple restrictions.
 
 ```javascript
-app.use(
-  '/api/users/images',
-  uploadJet
-    .minSize(0)
-    .maxSize(15)
-    .key('content/*')
-    .key('media/*')
-    .contentType('image/jpg')
-    .generate()
-);
+const createUploadRoute = new UploadJet({ apiKey });
+
+const route = createUploadRoute({
+  fileType: 'image',
+  maxFileSize: '2MB',
+  maxFileCount: 6,
+  public: true,
+  setFileName: (req, file) => {
+    return file.originalName;
+  }
+});
+
+router.post('/profile/images', route);
 ```
 
 Created policy will have following properties:
 
-- Minimum file size is 0MB
-- Maximum file size is 15MB
-- File name name must start with “content/” or “media/”
-- Content type must be “image/jpg”
+- File tipe must me image
+- Maximum file size is 2MB
+- Maximum number of files that can be uploaded is 6
+- Uploaded files will be visible to public
 
-Condition value that ends with “_” specifies a “starts with” condition that will
+User can alo specifiy own method for generating file names as shown above.
+If no method is specified file name will be derived from original file name
+and random seed.
+
+Condition value that ends with “\*” specifies a “starts with” condition that will
 allow all results starting with that string.
-For example .key(“media/_”) will allow “media/picture.jpg”.
+For example .fileType(image/\*”) will allow image/jpg, image/gif, image/png...
 
 Leaving the condition value empty specifies “match any” condition that will allow any result.
 
