@@ -11,6 +11,8 @@ const policyOptionsSchema = z
   })
   .strict();
 
+export type PolicyOptions = z.infer<typeof policyOptionsSchema>;
+
 export const createUploadPolicySchema = z.record(
   fileNameSchema,
   policyOptionsSchema

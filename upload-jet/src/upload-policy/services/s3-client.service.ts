@@ -3,6 +3,7 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { ConfigType } from '@nestjs/config';
 import awsConfig from 'src/config/aws.config';
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
+import { PolicyOptions } from '../dtos/user-input.dto';
 
 @Injectable()
 export class S3ClientService {
@@ -23,7 +24,19 @@ export class S3ClientService {
     });
   }
 
-  generatePostPolicy({ bucket, key }) {
-    return createPresignedPost(this.s3Client, { Bucket: bucket, Key: key });
+  generatePostPolicy({
+    bucket,
+    key,
+    ...conditions
+  }: PolicyOptions & { bucket: string }) {
+    const Conditions = [];
+    if ('maxFileSize' in conditions) {
+      Conditions.push(['content-length-range', 0, conditions.maxFileSize]);
+    }
+    return createPresignedPost(this.s3Client, {
+      Bucket: bucket,
+      Key: key,
+      Conditions
+    });
   }
 }
