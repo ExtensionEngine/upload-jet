@@ -41,7 +41,7 @@ export class S3ClientService {
       const tagKey = 'policy';
       const tagValue = 'public';
       Fields[
-        '$Tagging'
+        'Tagging'
       ] = `<Tagging><TagSet><Tag><Key>${tagKey}</Key><Value>${tagValue}</Value></Tag></TagSet></Tagging>`;
     }
 
