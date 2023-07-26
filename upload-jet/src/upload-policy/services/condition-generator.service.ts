@@ -12,13 +12,10 @@ export class ConditionGeneratorService {
     for (const key in fileConditions) {
       const value = fileConditions[key];
       const conditionFunction = this.conditionMappings[key];
-      if (conditionFunction) {
-        const conditionObject = conditionFunction(value);
-        Conditions.push(conditionObject);
-      } else {
-        const conditionObject = { [key]: value };
-        Conditions.push(conditionObject);
-      }
+      const conditionObject = conditionFunction
+        ? conditionFunction(value)
+        : { [key]: value };
+      Conditions.push(conditionObject);
     }
     return Conditions;
   };
