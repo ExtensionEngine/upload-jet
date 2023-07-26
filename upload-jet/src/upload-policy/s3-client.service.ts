@@ -38,7 +38,7 @@ export class S3ClientService {
       Conditions.push({ 'Content-Type': conditions.fileType });
     }
     if ('public' in conditions && conditions.public) {
-      const tagKey = 'privacy';
+      const tagKey = 'policy';
       const tagValue = 'public';
       Fields[
         '$Tagging'
