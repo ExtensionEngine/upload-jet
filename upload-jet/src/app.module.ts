@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
+import { UploadPolicyModule } from './upload-policy/upload-policy.module';
+import awsConfig from './config/aws.config';
+import appConfig from './config/app.config';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService]
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true, load: [appConfig, awsConfig] }),
+    UploadPolicyModule
+  ],
+  controllers: [],
+  providers: []
 })
 export class AppModule {}
