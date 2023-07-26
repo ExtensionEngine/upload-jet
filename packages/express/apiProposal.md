@@ -21,7 +21,7 @@ To use the uploader it is required to provide an api key when creating
 a new instance of EzeeUploader class.
 
 ```javascript
-const uploadJet = new UploadJet(API_KEY);
+const uploadJet = new UploadJet({ apiKey: API_KEY });
 ```
 
 ### Registering a new route
