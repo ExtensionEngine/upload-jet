@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { S3ClientService } from './s3-client.service';
-import { CreateUploadPolicyPayload } from '../dtos/user-input.dto';
+import { CreateUploadPolicyPayload } from './policy.dto';
 import { ConfigType } from '@nestjs/config';
 import awsConfig from 'src/config/aws.config';
 import { objectify } from 'radash';

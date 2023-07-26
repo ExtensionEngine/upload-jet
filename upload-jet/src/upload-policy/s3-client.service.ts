@@ -3,7 +3,7 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { ConfigType } from '@nestjs/config';
 import awsConfig from 'src/config/aws.config';
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
-import { PolicyOptions } from '../dtos/user-input.dto';
+import { PolicyOptions } from './policy.dto';
 
 @Injectable()
 export class S3ClientService {

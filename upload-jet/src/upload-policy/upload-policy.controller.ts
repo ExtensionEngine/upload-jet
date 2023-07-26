@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { UploadPolicyService } from '../services/upload-policy.service';
-import { createUploadPolicySchema } from 'src/upload-policy/dtos/user-input.dto';
+import { UploadPolicyService } from './services/upload-policy.service';
+import { createUploadPolicySchema } from 'src/upload-policy/policy.dto';
 
 @Controller('upload-policy')
 export class UploadPolicyController {
