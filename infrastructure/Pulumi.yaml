@@ -1,0 +1,3 @@
+name: upload-jet-infrastructure
+runtime: nodejs
+description: A minimal AWS TypeScript Pulumi program
