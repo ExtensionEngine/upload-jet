@@ -33,6 +33,9 @@ export class S3ClientService {
     if ('maxFileSize' in conditions) {
       Conditions.push(['content-length-range', 0, conditions.maxFileSize]);
     }
+    if ('fileType' in conditions) {
+      Conditions.push({ 'Content-Type': conditions.fileType });
+    }
     return createPresignedPost(this.s3Client, {
       Bucket: bucket,
       Key: key,

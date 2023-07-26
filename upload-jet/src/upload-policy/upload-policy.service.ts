@@ -16,11 +16,10 @@ export class UploadPolicyService {
   async createUploadPolicy(payload: CreateUploadPolicyPayload) {
     const bucket = this.config.bucketName;
     const pResult = Object.entries(payload).map(
-      async ([fileName, { key, ...conditions }]) => {
+      async ([fileName, policyOptions]) => {
         const policy = await this.s3ClientService.generatePostPolicy({
           bucket,
-          key,
-          ...conditions
+          ...policyOptions
         });
         return { fileName, policy };
       }
