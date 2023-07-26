@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { S3Client } from '@aws-sdk/client-s3';
 import { ConfigType } from '@nestjs/config';
 import awsConfig from 'src/config/aws.config';
+import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 
 @Injectable()
 export class S3ClientService {
@@ -9,9 +10,9 @@ export class S3ClientService {
 
   constructor(
     @Inject(awsConfig.KEY)
-    private configService: ConfigType<typeof awsConfig>
+    private config: ConfigType<typeof awsConfig>
   ) {
-    const { region, accessKey, secretKey } = this.configService;
+    const { region, accessKey, secretKey } = this.config;
 
     this.s3Client = new S3Client({
       region,
@@ -22,7 +23,7 @@ export class S3ClientService {
     });
   }
 
-  getS3Client(): S3Client {
-    return this.s3Client;
+  generatePostPolicy({ bucket, key }) {
+    return createPresignedPost(this.s3Client, { Bucket: bucket, Key: key });
   }
 }
