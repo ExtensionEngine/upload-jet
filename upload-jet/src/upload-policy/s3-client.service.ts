@@ -36,10 +36,19 @@ export class S3ClientService {
     if ('fileType' in conditions) {
       Conditions.push({ 'Content-Type': conditions.fileType });
     }
+    const Fields = conditions?.public
+      ? { Tagging: this.getPublicPolicyTag() }
+      : {};
+
     return createPresignedPost(this.s3Client, {
       Bucket: bucket,
       Key: key,
+      Fields,
       Conditions
     });
+  }
+
+  private getPublicPolicyTag() {
+    return `<Tagging><TagSet><Tag><Key>policy</Key><Value>public</Value></Tag></TagSet></Tagging>`;
   }
 }
