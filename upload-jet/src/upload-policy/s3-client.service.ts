@@ -8,6 +8,11 @@ import { PolicyOptions } from './policy.dto';
 @Injectable()
 export class S3ClientService {
   private s3Client: S3Client;
+  private getPublicPolicyTag(): string {
+    const tagKey = 'policy';
+    const tagValue = 'public';
+    return `<Tagging><TagSet><Tag><Key>${tagKey}</Key><Value>${tagValue}</Value></Tag></TagSet></Tagging>`;
+  }
 
   constructor(
     @Inject(awsConfig.KEY)
@@ -30,20 +35,15 @@ export class S3ClientService {
     ...conditions
   }: PolicyOptions & { bucket: string }) {
     const Conditions = [];
-    const Fields = {};
     if ('maxFileSize' in conditions) {
       Conditions.push(['content-length-range', 0, conditions.maxFileSize]);
     }
     if ('fileType' in conditions) {
       Conditions.push({ 'Content-Type': conditions.fileType });
     }
-    if ('public' in conditions && conditions.public) {
-      const tagKey = 'policy';
-      const tagValue = 'public';
-      Fields[
-        'Tagging'
-      ] = `<Tagging><TagSet><Tag><Key>${tagKey}</Key><Value>${tagValue}</Value></Tag></TagSet></Tagging>`;
-    }
+    const Fields = conditions?.public
+      ? { Tagging: this.getPublicPolicyTag() }
+      : {};
 
     return createPresignedPost(this.s3Client, {
       Bucket: bucket,
