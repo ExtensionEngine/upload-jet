@@ -8,11 +8,6 @@ import { PolicyOptions } from './policy.dto';
 @Injectable()
 export class S3ClientService {
   private s3Client: S3Client;
-  private getPublicPolicyTag(): string {
-    const tagKey = 'policy';
-    const tagValue = 'public';
-    return `<Tagging><TagSet><Tag><Key>${tagKey}</Key><Value>${tagValue}</Value></Tag></TagSet></Tagging>`;
-  }
 
   constructor(
     @Inject(awsConfig.KEY)
@@ -51,5 +46,9 @@ export class S3ClientService {
       Fields,
       Conditions
     });
+  }
+
+  private getPublicPolicyTag() {
+    return `<Tagging><TagSet><Tag><Key>policy</Key><Value>public</Value></Tag></TagSet></Tagging>`;
   }
 }
