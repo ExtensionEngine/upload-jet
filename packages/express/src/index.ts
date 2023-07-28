@@ -1,15 +1,25 @@
-import { UploadJetConfig, UploadRouteConfig } from 'types';
 import axios from 'axios';
 import * as express from 'express';
+import {
+  UploadJetConfig,
+  uploadJetConfigSchema
+} from './schema/uploadJetConfig.dto';
+import {
+  UploadRouteConfig,
+  uploadRouteConfigSchema
+} from './schema/UploadRouteConfig.dto';
 
 export class UploadJet {
   #apiKey: string;
 
   constructor(config: UploadJetConfig) {
-    this.#apiKey = config.apiKey;
+    const data = uploadJetConfigSchema.parse(config);
+    this.#apiKey = data.apiKey;
   }
 
   createUploadRoute(config: UploadRouteConfig) {
+    const routeConfig = uploadRouteConfigSchema.parse(config);
+
     return (req: any, res: any, next: any) => {
       return express.json()(req, res, async () => {
         const fileNames = req.body.fileNames;
@@ -20,15 +30,15 @@ export class UploadJet {
 
         const policyData = {};
         fileNames.forEach((name: string) => {
-          const fileName = config.setFileName
-            ? config.setFileName(req, name)
+          const fileName = routeConfig.setFileName
+            ? routeConfig.setFileName(req, name)
             : name;
 
           policyData[name] = {
             key: fileName,
-            maxFileSize: config.maxFileSize,
-            fileType: config.fileType,
-            public: config.public
+            maxFileSize: routeConfig.maxFileSize,
+            fileType: routeConfig.fileType,
+            public: routeConfig.public
           };
         });
 
