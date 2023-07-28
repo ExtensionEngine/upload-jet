@@ -8,6 +8,7 @@ import {
   UploadRouteConfig,
   uploadRouteConfigSchema
 } from './schema/UploadRouteConfig.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 export class UploadJet {
   #apiKey: string;
@@ -32,7 +33,7 @@ export class UploadJet {
         fileNames.forEach((name: string) => {
           const fileName = routeConfig.setFileName
             ? routeConfig.setFileName(req, name)
-            : name;
+            : `${uuidv4()}-${name}`;
 
           policyData[name] = {
             key: fileName,
