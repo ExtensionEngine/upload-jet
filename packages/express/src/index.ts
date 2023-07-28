@@ -1,6 +1,5 @@
 import { UploadJetConfig, UploadRouteConfig } from 'types';
 import axios from 'axios';
-import express, { Request } from 'express';
 
 export class UploadJet {
   #apiKey: string;
@@ -10,7 +9,7 @@ export class UploadJet {
   }
 
   createUploadRoute(config: UploadRouteConfig) {
-    return async (req: Request, res: any, next: Function) => {
+    return async (req: any, res: any, next: any) => {
       const fileNames = req.body.fileNames;
 
       if (!fileNames || !fileNames.length) {
