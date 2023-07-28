@@ -14,7 +14,7 @@ To install the VueUploadJet component in your project, run the following command
 
 ### Usage Example:
 
-In your Vue Component (ex. ParentComponent):
+In your Vue Component (ex. ParentComponent) using Options API in Vue:
 
 ```javascript
 <script>
@@ -39,6 +39,34 @@ In your Vue Component (ex. ParentComponent):
       },
     },
   };
+</script>
+
+<template>
+  <VueUploadJet
+  :url="backendUrl"
+  @success="showSuccessDialog"
+  @error="showErrorDialog"
+  />
+</template>
+
+<style></style>
+```
+
+In your Vue Component (ex. ParentComponent) using Composition API in Vue:
+
+```javascript
+<script setup>
+  import { ref } from 'vue';
+  import VueUploadJet from 'vue-upload-jet';
+
+  const backendUrl = ref(''); //User defines a URL to the server which is responsible for generating and returning post policy
+
+   function showSuccessDialog(){
+      //User defines an action for success
+      };
+   function showErrorDialog(){
+      //User defines an action for error
+      };
 </script>
 
 <template>
