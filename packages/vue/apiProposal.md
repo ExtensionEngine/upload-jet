@@ -14,56 +14,6 @@ To install the VueUploadJet component in your project, run the following command
 
 ### Usage Example:
 
-In your Vue Component (ex. ParentComponent) using Options API in Vue:
-
-```vue
-<script>
-import VueUploadJet from 'vue-upload-jet';
-
-type UploadData {
-  fileName: string;
-  fileUrl: string;
-  fileKey: string;
-}
-
-type UploadFailedError {
-  fileName: string;
-  message: string;
-  code: string
-}
-
-export default {
-  name: 'ParentComponent',
-  components: {
-    VueUploadJet
-  },
-  data() {
-    return {
-      backendUrl: 'server url'
-      console.log(User defines a URL to the server which is responsible for generating and returning post policy)
-    };
-  },
-  methods: {
-    showSuccessDialog(uploadData: UploadData) {
-      console.log(User defines an action for success)
-    },
-    showErrorDialog(error: UploadFailedError) {
-      console.log(User defines an action for error)
-    }
-  }
-};
-</script>
-
-<template>
-  <VueUploadJet
-    :url="backendUrl"
-    @upload-complete="showSuccessDialog"
-    @upload-error="showErrorDialog" />
-</template>
-
-<style></style>
-```
-
 In your Vue Component (ex. ParentComponent) using Composition API in Vue:
 
 ```vue
@@ -71,32 +21,19 @@ In your Vue Component (ex. ParentComponent) using Composition API in Vue:
 import { ref } from 'vue';
 import VueUploadJet from 'vue-upload-jet';
 
-type UploadData {
-  fileName: string;
-  fileUrl: string;
-  fileKey: string;
-}
+const url = ref(ENDPOINT_URL);
 
-type UploadFailedError {
-  fileName: string;
-  message: string;
-  code: string
-}
-
-const backendUrl = ref('server url');
-console.log(User defines a URL to the server which is responsible for generating and returning post policy)
-
-showSuccessDialog(uploadData: UploadData) {
-  console.log(User defines an action for success)
+showSuccessDialog(payload) {
+    console.log('File uploaded');
   };
-showErrorDialog(error: UploadFailedError) {
-  console.log(User defines an action for error)
+showErrorDialog(error) {
+    console.log('File upload error: ', error);
   };
 </script>
 
 <template>
   <VueUploadJet
-    :url="backendUrl"
+    :url="url"
     @upload-complete="showSuccessDialog"
     @upload-error="showErrorDialog" />
 </template>
@@ -125,7 +62,7 @@ List of all events and description:
 
 Event parameters are being passed through the uploadData or error payload object
 
-| Payload    | Event parameters                                        |
-| ---------- | ------------------------------------------------------- |
-| uploadData | fileName: string;<br>fileUrl:string;<br>fileKey:string; |
-| error      | fileName: string;<br>message:string;<br>code:string;    |
+| Payload    | Event parameters                                            |
+| ---------- | ----------------------------------------------------------- |
+| uploadData | { fileName: string;<br>fileUrl:string;<br>fileKey:string; } |
+| error      | { fileName: string;<br>message:string;<br>code:string; }    |
