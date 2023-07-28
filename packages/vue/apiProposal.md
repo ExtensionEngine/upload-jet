@@ -16,37 +16,49 @@ To install the VueUploadJet component in your project, run the following command
 
 In your Vue Component (ex. ParentComponent) using Options API in Vue:
 
-```javascript
+```vue
 <script>
-  import VueUploadJet from 'vue-upload-jet';
+import VueUploadJet from 'vue-upload-jet';
 
-  export default {
-  name: "ParentComponent",
+type UploadData {
+  fileName: string;
+  fileUrl: string;
+  fileKey: string;
+}
+
+type UploadFailedError {
+  fileName: string;
+  message: string;
+  code: string
+}
+
+export default {
+  name: 'ParentComponent',
   components: {
-    VueUploadJet,
+    VueUploadJet
   },
   data() {
     return {
-      backendUrl: "" //User defines a URL to the server which is responsible for generating and returning post policy
+      backendUrl: 'server url'
+      console.log(User defines a URL to the server which is responsible for generating and returning post policy)
     };
   },
   methods: {
-    showSuccessDialog(){
-      //User defines an action for success
-      },
-    showErrorDialog(){
-      //User defines an action for error
-      },
+    showSuccessDialog(uploadData: UploadData) {
+      console.log(User defines an action for success)
     },
-  };
+    showErrorDialog(error: UploadFailedError) {
+      console.log(User defines an action for error)
+    }
+  }
+};
 </script>
 
 <template>
   <VueUploadJet
-  :url="backendUrl"
-  @success="showSuccessDialog"
-  @error="showErrorDialog"
-  />
+    :url="backendUrl"
+    @upload-complete="showSuccessDialog"
+    @upload-error="showErrorDialog" />
 </template>
 
 <style></style>
@@ -54,27 +66,39 @@ In your Vue Component (ex. ParentComponent) using Options API in Vue:
 
 In your Vue Component (ex. ParentComponent) using Composition API in Vue:
 
-```javascript
+```vue
 <script setup>
-  import { ref } from 'vue';
-  import VueUploadJet from 'vue-upload-jet';
+import { ref } from 'vue';
+import VueUploadJet from 'vue-upload-jet';
 
-  const backendUrl = ref(''); //User defines a URL to the server which is responsible for generating and returning post policy
+type UploadData {
+  fileName: string;
+  fileUrl: string;
+  fileKey: string;
+}
 
-   function showSuccessDialog(){
-      //User defines an action for success
-      };
-   function showErrorDialog(){
-      //User defines an action for error
-      };
+type UploadFailedError {
+  fileName: string;
+  message: string;
+  code: string
+}
+
+const backendUrl = ref('server url');
+console.log(User defines a URL to the server which is responsible for generating and returning post policy)
+
+showSuccessDialog(uploadData: UploadData) {
+  console.log(User defines an action for success)
+  };
+showErrorDialog(error: UploadFailedError) {
+  console.log(User defines an action for error)
+  };
 </script>
 
 <template>
   <VueUploadJet
-  :url="backendUrl"
-  @success="showSuccessDialog"
-  @error="showErrorDialog"
-  />
+    :url="backendUrl"
+    @upload-complete="showSuccessDialog"
+    @upload-error="showErrorDialog" />
 </template>
 
 <style></style>
@@ -84,15 +108,24 @@ In your Vue Component (ex. ParentComponent) using Composition API in Vue:
 
 List of all props and description:
 
-| Props | Description                                                                                                                                               |
-| ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| url   | Default: ""<br>Required: true<br>'Value of the backendUrl variable that defines URL of the server responsible for generating and returning a post policy' |
+| Props | Description                                                                              |
+| ----- | ---------------------------------------------------------------------------------------- |
+| url   | <br>Required: true<br>Endpoint responsible for returning post policy for uploaded files. |
 
 ## Events
 
 List of all events and description:
 
-| Event    | Description                                                                                                                                                                      |
-| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| @success | Event listener that listens for a custom event named 'success' emitted by the <br>VueUploadJet component<br>User defines the showSuccessDialog() method in the parent component. |
-| @error   | Event listener that listens for a custom event named 'error' emitted by the <br>VueUploadJet component<br>User defines the showErrorDialog() method in the parent component.     |
+| Event            | Type                |
+| ---------------- | ------------------- |
+| @upload-complete | [Event, uploadData] |
+| @upload-error    | [Event, error]      |
+
+### Event parameters
+
+Event parameters are being passed through the uploadData or error payload object
+
+| Payload    | Event parameters                                        |
+| ---------- | ------------------------------------------------------- |
+| uploadData | fileName: string;<br>fileUrl:string;<br>fileKey:string; |
+| error      | fileName: string;<br>message:string;<br>code:string;    |
