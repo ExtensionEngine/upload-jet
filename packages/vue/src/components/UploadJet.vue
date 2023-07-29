@@ -1,4 +1,14 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+const fileName = ref('')
+
+function handleFileChange(event: Event) {
+  const inputElement = event.target as HTMLInputElement
+  if (inputElement.files && inputElement.files.length > 0) {
+    fileName.value = inputElement.files[0].name
+  }
+}
+</script>
 
 <template>
   <div class="dropzone">
@@ -7,7 +17,7 @@
       <label for="fileInput" class="browse-label"
         >Or, <span class="browse-link">browse your file</span></label
       >
-      <input type="file" id="fileInput" class="file-input" />
+      <input type="file" id="fileInput" class="file-input" @change="handleFileChange" />
     </div>
   </div>
 </template>
