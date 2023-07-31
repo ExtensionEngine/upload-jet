@@ -4,7 +4,11 @@ import {
   UploadJetConfig,
   uploadJetConfigSchema
 } from './schema/uploadJetConfig.dto';
-import { UploadOptions, uploadOptionsSchema } from './schema/UploadOptions.dto';
+import {
+  SetFileName,
+  UploadOptions,
+  uploadOptionsSchema
+} from './schema/UploadOptions.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { createUploadPolicyBodySchema } from './schema/createUploadPolicyBody.dto';
 import * as bytes from 'bytes';
@@ -33,17 +37,19 @@ export class UploadJet {
         }
 
         const policyData = uploadPolicyBodyResult.data.files
-          .map(name => {
-            const fileName = routeConfig.setFileName
-              ? routeConfig.setFileName(req, name)
-              : `${uuidv4()}-${name}`;
+          .map(originalName => {
+            const fileName = this.#getFileName(
+              originalName,
+              req,
+              routeConfig.setFileName
+            );
 
             return {
-              name,
+              originalName,
               fileName
             };
           })
-          .reduce((previous, { name, fileName }) => {
+          .reduce((previous, { originalName, fileName }) => {
             const policyRules = {
               key: fileName,
               maxFileSize: bytes.parse(routeConfig.maxFileSize),
@@ -51,7 +57,7 @@ export class UploadJet {
               public: routeConfig.public
             };
 
-            return { ...previous, [name]: policyRules };
+            return { ...previous, [originalName]: policyRules };
           }, {});
 
         const url = new URL('upload-policy', API_URL);
@@ -60,5 +66,15 @@ export class UploadJet {
         return res.json(response.data);
       });
     };
+  }
+
+  #getFileName(
+    originalName: string,
+    req: express.Request,
+    setFileName?: SetFileName
+  ) {
+    return setFileName
+      ? setFileName(req, originalName)
+      : `${uuidv4()}-${originalName}`;
   }
 }
