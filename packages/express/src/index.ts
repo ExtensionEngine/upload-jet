@@ -25,7 +25,7 @@ export class UploadJet {
   }
 
   createUploadRoute(options: UploadOptions) {
-    const routeConfig = uploadOptionsSchema.parse(options);
+    const uploadOptions = uploadOptionsSchema.parse(options);
 
     return (req: express.Request, res: express.Response) => {
       return express.json()(req, res, async () => {
@@ -36,45 +36,58 @@ export class UploadJet {
           return res.status(BAD_REQUEST).send(uploadPolicyBodyResult.error);
         }
 
-        const policyData = uploadPolicyBodyResult.data.files
-          .map(originalName => {
-            const fileName = this.#getFileName(
-              originalName,
-              req,
-              routeConfig.setFileName
-            );
+        const policy = await this.#fetchPolicy(
+          uploadPolicyBodyResult.data.files,
+          uploadOptions,
+          req
+        );
 
-            return {
-              originalName,
-              fileName
-            };
-          })
-          .reduce((previous, { originalName, fileName }) => {
-            const policyRules = {
-              key: fileName,
-              maxFileSize: bytes.parse(routeConfig.maxFileSize),
-              fileType: routeConfig.fileType,
-              public: routeConfig.public
-            };
-
-            return { ...previous, [originalName]: policyRules };
-          }, {});
-
-        const url = new URL('upload-policy', API_URL);
-        const response = await axios.post(url.href, policyData);
-
-        return res.json(response.data);
+        return res.json(policy);
       });
     };
   }
 
-  #getFileName(
+  #fetchPolicy = async (
+    files: string[],
+    uploadOptions: UploadOptions,
+    req: express.Request
+  ) => {
+    const policyData = files
+      .map(originalName => {
+        const fileName = this.#getFileName(
+          originalName,
+          req,
+          uploadOptions.setFileName
+        );
+
+        return {
+          originalName,
+          fileName
+        };
+      })
+      .reduce((previous, { originalName, fileName }) => {
+        const policyRules = {
+          key: fileName,
+          maxFileSize: bytes.parse(uploadOptions.maxFileSize),
+          fileType: uploadOptions.fileType,
+          public: uploadOptions.public
+        };
+
+        return { ...previous, [originalName]: policyRules };
+      }, {});
+
+    const url = new URL('upload-policy', API_URL);
+    const response = await axios.post(url.href, policyData);
+    return response.data;
+  };
+
+  #getFileName = (
     originalName: string,
     req: express.Request,
     setFileName?: SetFileName
-  ) {
+  ) => {
     return setFileName
       ? setFileName(req, originalName)
       : `${uuidv4()}-${originalName}`;
-  }
+  };
 }
