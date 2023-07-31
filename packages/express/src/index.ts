@@ -47,10 +47,8 @@ export class UploadJet {
           };
         });
 
-        const response = await axios.post(
-          `${API_URL}/upload-policy`,
-          policyData
-        );
+        const url = new URL('upload-policy', API_URL);
+        const response = await axios.post(url.href, policyData);
 
         return res.json(response.data);
       });
