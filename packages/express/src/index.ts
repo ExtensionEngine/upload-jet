@@ -9,7 +9,7 @@ import {
   uploadRouteConfigSchema
 } from './schema/UploadRouteConfig.dto';
 import { v4 as uuidv4 } from 'uuid';
-import { FileNameArray, fileNameArraySchema } from './schema/fileNameArray.dto';
+import { createUploadPolicyBodySchema } from './schema/createUploadPolicyBody.dto';
 
 const API_URL = 'http://localhost:3000';
 
@@ -26,15 +26,15 @@ export class UploadJet {
 
     return (req: express.Request, res: express.Response) => {
       return express.json()(req, res, async () => {
-        const fileNameArray: FileNameArray = req.body.fileName;
-        const fileNamesResult = fileNameArraySchema.safeParse(fileNameArray);
+        const uploadPolicyBodyResult =
+          await createUploadPolicyBodySchema.safeParseAsync(req.body);
 
-        if (fileNamesResult.success === false) {
-          return res.status(400).send(fileNamesResult.error);
+        if (uploadPolicyBodyResult.success === false) {
+          return res.status(400).send(uploadPolicyBodyResult.error);
         }
 
         const policyData = {};
-        fileNamesResult.data.forEach((name: string) => {
+        uploadPolicyBodyResult.data.files.forEach((name: string) => {
           const fileName = routeConfig.setFileName
             ? routeConfig.setFileName(req, name)
             : `${uuidv4()}-${name}`;
