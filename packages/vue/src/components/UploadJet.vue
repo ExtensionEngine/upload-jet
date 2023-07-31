@@ -67,7 +67,7 @@ async function handleUpload() {
         <label for="fileInput" class="browse-label"
           >Or, <span class="browse-link">browse your file</span></label
         >
-        <input type="file" id="fileInput" class="file-input" @change="handleFileChange" />
+        <input type="file" id="fileInput" class="file-input" multiple @change="handleFileChange" />
         <div class="submit">
           <button @click="handleUpload">Upload File to Server</button>
         </div>
