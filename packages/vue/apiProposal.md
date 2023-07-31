@@ -8,7 +8,7 @@ A simple Vue component for easy file uploads with a drag and drop option.
 
 To install the VueUploadJet component in your project, run the following command:
 
-`$ npm install vue-upload-jet --save`
+`$ npm install vue-upload-jet`
 
 ## Importing the Component
 
@@ -37,8 +37,6 @@ showErrorDialog(error) {
     @upload-complete="showSuccessDialog"
     @upload-error="showErrorDialog" />
 </template>
-
-<style></style>
 ```
 
 ## Props
@@ -62,7 +60,7 @@ List of all events and description:
 
 Event parameters are being passed through the uploadData or error payload object
 
-| Payload    | Event parameters                                            |
-| ---------- | ----------------------------------------------------------- |
-| uploadData | { fileName: string;<br>fileUrl:string;<br>fileKey:string; } |
-| error      | { fileName: string;<br>message:string;<br>code:string; }    |
+| Payload    | Event parameters                                                                       |
+| ---------- | -------------------------------------------------------------------------------------- |
+| uploadData | { <br>&nbsp;fileName: string;<br>&nbsp;fileUrl:string;<br>&nbsp;fileKey:string; <br> } |
+| error      | { <br>&nbsp;fileName: string;<br>&nbsp;message:string;<br>&nbsp;code:string; <br> }    |
