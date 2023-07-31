@@ -70,9 +70,7 @@ const fetchPolicy = async (
       };
     })
     .reduce((previous, { originalName, fileName }) => {
-      const maxSize = maxFileSize
-        ? bytes.parse(uploadOptions.maxFileSize)
-        : undefined;
+      const maxSize = maxFileSize ? bytes.parse(maxFileSize) : undefined;
 
       const policyRules = {
         key: fileName,
