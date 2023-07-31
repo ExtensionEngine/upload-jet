@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const uploadRouteConfigSchema = z
+export const uploadOptionsSchema = z
   .object({
     fileType: z.string().optional(),
     maxFileSize: z.string().optional(),
@@ -13,4 +13,4 @@ export const uploadRouteConfigSchema = z
   })
   .strict();
 
-export type UploadRouteConfig = z.infer<typeof uploadRouteConfigSchema>;
+export type UploadOptions = z.infer<typeof uploadOptionsSchema>;

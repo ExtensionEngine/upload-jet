@@ -4,10 +4,7 @@ import {
   UploadJetConfig,
   uploadJetConfigSchema
 } from './schema/uploadJetConfig.dto';
-import {
-  UploadRouteConfig,
-  uploadRouteConfigSchema
-} from './schema/UploadRouteConfig.dto';
+import { UploadOptions, uploadOptionsSchema } from './schema/UploadOptions.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { createUploadPolicyBodySchema } from './schema/createUploadPolicyBody.dto';
 import * as bytes from 'bytes';
@@ -23,8 +20,8 @@ export class UploadJet {
     this.#apiKey = data.apiKey;
   }
 
-  createUploadRoute(config: UploadRouteConfig) {
-    const routeConfig = uploadRouteConfigSchema.parse(config);
+  createUploadRoute(options: UploadOptions) {
+    const routeConfig = uploadOptionsSchema.parse(options);
 
     return (req: express.Request, res: express.Response) => {
       return express.json()(req, res, async () => {
