@@ -31,9 +31,11 @@ const files = ref<File[]>([])
 
 function handleFileChange(event: Event) {
   const inputElement = event.target as HTMLInputElement
+
   if (inputElement.files && inputElement.files.length > 0) {
-    fileName.value.push(inputElement.files[0].name)
-    files.value.push(inputElement.files[0])
+    for (let i = 0; i < inputElement.files.length; i++) {
+      fileName.value.push(inputElement.files[i].name)
+    }
   }
 }
 
