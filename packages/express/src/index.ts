@@ -13,6 +13,7 @@ import { createUploadPolicyBodySchema } from './schema/createUploadPolicyBody.dt
 import * as bytes from 'bytes';
 
 const API_URL = 'http://localhost:3000';
+const BAD_REQUEST = 400;
 
 export class UploadJet {
   #apiKey: string;
@@ -31,7 +32,7 @@ export class UploadJet {
           await createUploadPolicyBodySchema.safeParseAsync(req.body);
 
         if (uploadPolicyBodyResult.success === false) {
-          return res.status(400).send(uploadPolicyBodyResult.error);
+          return res.status(BAD_REQUEST).send(uploadPolicyBodyResult.error);
         }
 
         const policyData = uploadPolicyBodyResult.data.files
