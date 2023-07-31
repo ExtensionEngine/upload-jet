@@ -24,11 +24,7 @@ export class UploadJet {
   createUploadRoute(config: UploadRouteConfig) {
     const routeConfig = uploadRouteConfigSchema.parse(config);
 
-    return (
-      req: express.Request,
-      res: express.Response,
-      _next: express.NextFunction
-    ) => {
+    return (req: express.Request, res: express.Response) => {
       return express.json()(req, res, async () => {
         const fileNameArray: FileNameArray = req.body.fileName;
         const fileNamesResult = fileNameArraySchema.safeParse(fileNameArray);
