@@ -33,19 +33,23 @@ export class UploadJet {
           return res.status(400).send(uploadPolicyBodyResult.error);
         }
 
-        const policyData = {};
-        uploadPolicyBodyResult.data.files.forEach((name: string) => {
-          const fileName = routeConfig.setFileName
-            ? routeConfig.setFileName(req, name)
-            : `${uuidv4()}-${name}`;
+        const policyData = uploadPolicyBodyResult.data.files.reduce(
+          (previous, name) => {
+            const fileName = routeConfig.setFileName
+              ? routeConfig.setFileName(req, name)
+              : `${uuidv4()}-${name}`;
 
-          policyData[name] = {
-            key: fileName,
-            maxFileSize: routeConfig.maxFileSize,
-            fileType: routeConfig.fileType,
-            public: routeConfig.public
-          };
-        });
+            const policy = {
+              key: fileName,
+              maxFileSize: routeConfig.maxFileSize,
+              fileType: routeConfig.fileType,
+              public: routeConfig.public
+            };
+
+            return { ...previous, [name]: policy };
+          },
+          {}
+        );
 
         const url = new URL('upload-policy', API_URL);
         const response = await axios.post(url.href, policyData);
