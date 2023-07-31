@@ -41,7 +41,7 @@ const createUploadRoute = new UploadJet({ apiKey });
 
 const route = createUploadRoute({
   fileType: 'image',
-  maxFileSize: 1000,
+  maxFileSize: '1000MB',
   maxFileCount: 6,
   public: true,
   setFileName: (req, fileName) => {
@@ -55,7 +55,7 @@ router.post('/profile/images', route);
 The created policy will have the following properties:
 
 - File type must be an image
-- Maximum file size is 1000
+- Maximum file size is 1000MB
 - Maximum number of files that can be uploaded is 6
 - Uploaded files will be visible to the public
 

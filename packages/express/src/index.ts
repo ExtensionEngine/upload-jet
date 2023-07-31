@@ -10,6 +10,7 @@ import {
 } from './schema/UploadRouteConfig.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { createUploadPolicyBodySchema } from './schema/createUploadPolicyBody.dto';
+import * as bytes from 'bytes';
 
 const API_URL = 'http://localhost:3000';
 
@@ -47,7 +48,7 @@ export class UploadJet {
           .reduce((previous, { name, fileName }) => {
             const policyRules = {
               key: fileName,
-              maxFileSize: routeConfig.maxFileSize,
+              maxFileSize: bytes.parse(routeConfig.maxFileSize),
               fileType: routeConfig.fileType,
               public: routeConfig.public
             };
