@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import type { Ref } from 'vue'
 
+const emit = defineEmits(['upload-complete', 'upload-error'])
+
 import uploadFileService from '../services/uploadFileServices'
 
 type EachPolicy = {
@@ -16,6 +18,12 @@ type EachPolicy = {
     Policy: string
     'X-Amz-Signature': string
   }
+}
+
+type UploadData = {
+  fileName: string
+  fileUrl: string
+  fileKey: string
 }
 
 const fileName: Ref<string[]> = ref([])
@@ -36,6 +44,7 @@ async function handleUpload() {
     try {
       const postPoliciesObject = await uploadFileService.getPostPolicy(fileName.value)
       if (!postPoliciesObject) return
+      const uploadData: UploadData[] = []
 
       const pResult = Object.entries(postPoliciesObject).map(async ([fileName, policyOptions]) => {
         const formData = new FormData()
@@ -48,11 +57,23 @@ async function handleUpload() {
         const [file] = files.value.filter((file) => file.name === fileName)
         formData.append('file', file)
 
+        uploadData.push({
+          fileName: fileName,
+          fileUrl: `${policyOptions.url}/${policyOptions.fields.key}`,
+          fileKey: policyOptions.fields.key
+        })
         await uploadFileService.postFileToAWS(policyOptions.url, formData)
       })
       await Promise.all(pResult)
+      emit('upload-complete', uploadData)
+      throw new Error()
     } catch (err) {
-      console.log(err)
+      const error = {
+        fileName: fileName.value,
+        message: 'An error occurred during file upload',
+        code: '404'
+      }
+      emit('upload-error', error)
     }
   }
 }
