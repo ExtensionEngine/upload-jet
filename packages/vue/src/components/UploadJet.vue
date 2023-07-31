@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import type { Ref } from 'vue'
 
 const emit = defineEmits(['upload-complete', 'upload-error'])
+const events = ['dragenter', 'dragleave', 'dragover', 'drop']
 
 import uploadFileService from '../services/uploadFileServices'
 
@@ -33,9 +34,8 @@ function handleFileChange(event: Event) {
   const inputElement = event.target as HTMLInputElement
 
   if (inputElement.files && inputElement.files.length > 0) {
-    for (let i = 0; i < inputElement.files.length; i++) {
-      fileName.value.push(inputElement.files[i].name)
-    }
+    const files = [...inputElement.files]
+    files.map((file) => fileName.value.push(file.name))
   }
 }
 
