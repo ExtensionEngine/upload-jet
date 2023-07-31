@@ -5,7 +5,11 @@ export const uploadRouteConfigSchema = z
     fileType: z.string().optional(),
     maxFileSize: z.number().min(0).optional(),
     public: z.boolean().optional(),
-    setFileName: z.function().optional()
+    setFileName: z
+      .function()
+      .args(z.any(), z.string())
+      .returns(z.string())
+      .optional()
   })
   .strict();
 
