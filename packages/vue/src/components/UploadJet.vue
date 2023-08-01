@@ -1,94 +1,97 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { Ref } from 'vue'
-import uploadFileService from '../services/uploadFileServices'
+import { ref } from 'vue';
+import type { Ref } from 'vue';
+import uploadFileService from '../services/uploadFileServices';
 
-const emit = defineEmits(['upload-complete', 'upload-error'])
+const emit = defineEmits(['upload-complete', 'upload-error']);
+const props = defineProps({
+  enableDragDrop: { type: Boolean, default: false }
+});
 
 type EachPolicy = {
-  url: string
+  url: string;
   fields: {
-    Tagging?: string
-    bucket: string
-    'X-Amz-Algorithm': string
-    'X-Amz-Credential': string
-    'X-Amz-Date': string
-    key: string
-    Policy: string
-    'X-Amz-Signature': string
-  }
-}
+    Tagging?: string;
+    bucket: string;
+    'X-Amz-Algorithm': string;
+    'X-Amz-Credential': string;
+    'X-Amz-Date': string;
+    key: string;
+    Policy: string;
+    'X-Amz-Signature': string;
+  };
+};
 
 type UploadData = {
-  fileName: string
-  fileUrl: string
-  fileKey: string
-}
+  fileName: string;
+  fileUrl: string;
+  fileKey: string;
+};
 
-const fileName: Ref<string[]> = ref([])
-const filesToUpload = ref<File[]>([])
-const activeDropzone = ref(false)
+const fileName: Ref<string[]> = ref([]);
+const filesToUpload = ref<File[]>([]);
+const activeDropzone = ref(false);
 
 function handleSelectFiles(e: Event) {
-  const inputElement = e.target as HTMLInputElement
+  const inputElement = e.target as HTMLInputElement;
   if (inputElement.files && inputElement.files.length > 0) {
-    const selectedFilesArray = [...inputElement.files]
+    const selectedFilesArray = [...inputElement.files];
     selectedFilesArray.map((file) => {
-      fileName.value.push(file.name)
-      filesToUpload.value.push(file)
-    })
+      fileName.value.push(file.name);
+      filesToUpload.value.push(file);
+    });
   }
 }
 
 function handleDropFiles(e: DragEvent) {
-  const droppedFiles = e.dataTransfer?.files as FileList
-  const droppedFilesArray = [...droppedFiles]
+  const droppedFiles = e.dataTransfer?.files as FileList;
+  const droppedFilesArray = [...droppedFiles];
   droppedFilesArray.map((file) => {
-    fileName.value.push(file.name)
-    filesToUpload.value.push(file)
-  })
-  activeDropzone.value = false
+    fileName.value.push(file.name);
+    filesToUpload.value.push(file);
+  });
+  activeDropzone.value = false;
 }
 
 function toggleActive() {
-  activeDropzone.value = !activeDropzone.value
+  activeDropzone.value = !activeDropzone.value;
 }
 
 async function handleUpload() {
   if (fileName.value.length === 0) {
-    console.log('Please select a file before uploading.')
+    console.log('Please select a file before uploading.');
   } else {
     try {
-      const postPoliciesObject = await uploadFileService.getPostPolicy(fileName.value)
-      if (!postPoliciesObject) return
-      const uploadData: UploadData[] = []
+      const postPoliciesObject = await uploadFileService.getPostPolicy(fileName.value);
+      if (!postPoliciesObject) return;
+      const uploadData: UploadData[] = [];
 
       const pResult = Object.entries(postPoliciesObject).map(async ([fileName, policyOptions]) => {
-        const formData = new FormData()
+        const formData = new FormData();
         for (const key in policyOptions.fields) {
-          const fieldKey = key as keyof EachPolicy['fields']
-          const fieldValue = policyOptions.fields[fieldKey]
-          formData.append(fieldKey as string, fieldValue as string)
+          const fieldKey = key as keyof EachPolicy['fields'];
+          const fieldValue = policyOptions.fields[fieldKey];
+          formData.append(fieldKey as string, fieldValue as string);
         }
-        const [file] = filesToUpload.value.filter((file) => file.name === fileName)
-        formData.append('file', file)
+        const [file] = filesToUpload.value.filter((file) => file.name === fileName);
+        formData.append('file', file);
 
         uploadData.push({
           fileName: fileName,
           fileUrl: `${policyOptions.url}/${policyOptions.fields.key}`,
           fileKey: policyOptions.fields.key
-        })
-        await uploadFileService.postFileToAWS(policyOptions.url, formData)
-      })
-      await Promise.all(pResult)
-      emit('upload-complete', uploadData)
+        });
+        await uploadFileService.postFileToAWS(policyOptions.url, formData);
+      });
+      await Promise.all(pResult);
+      emit('upload-complete', uploadData);
     } catch (err) {
       const error = {
         fileName: fileName.value,
         message: 'An error occurred during file upload',
         code: '404'
-      }
-      emit('upload-error', error)
+      };
+      emit('upload-error', error);
     }
   }
 }
@@ -96,6 +99,7 @@ async function handleUpload() {
 
 <template>
   <div
+    v-if="props.enableDragDrop"
     class="dropzone"
     @dragenter.prevent="toggleActive"
     @dragleave.prevent="toggleActive"
@@ -117,6 +121,28 @@ async function handleUpload() {
       </form>
     </div>
   </div>
+
+  <div v-else>
+    <div class="dropzone">
+      <div class="dropzone-content">
+        <form @submit.prevent>
+          <label for="fileInput" class="browse-label"
+            ><span class="browse-link">Browse your file</span></label
+          >
+          <input
+            type="file"
+            id="fileInput"
+            class="file-input"
+            multiple
+            @change="handleSelectFiles"
+          />
+          <div class="submit">
+            <button @click="handleUpload">Upload File to Server</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style>
@@ -131,6 +157,7 @@ async function handleUpload() {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .dropzone-content {
   text-align: center;
 }
