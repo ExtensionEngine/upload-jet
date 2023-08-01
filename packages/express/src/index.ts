@@ -35,18 +35,18 @@ export class UploadJet {
           return res.status(BAD_REQUEST).send(uploadPolicyBodyResult.error);
         }
 
-        const policy = await this.#fetchPolicy(
+        const policies = await this.#fetchPolicies(
           uploadPolicyBodyResult.data.files,
           uploadOptions,
           req
         );
 
-        return res.json(policy);
+        return res.json(policies);
       });
     };
   }
 
-  #fetchPolicy = async (
+  #fetchPolicies = async (
     files: string[],
     uploadOptions: UploadOptions,
     req: express.Request
