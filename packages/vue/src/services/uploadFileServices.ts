@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const getPostPolicy = async function (fileName: string[]) {
+const getPostPolicy = async function (url: string, fileName: string[]) {
   // mock a return value -> post policies
 
   return {

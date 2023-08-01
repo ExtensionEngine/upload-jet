@@ -4,6 +4,10 @@ import type { Ref } from 'vue';
 import uploadFileService from '../services/uploadFileServices.ts';
 
 const uploadEmits = defineEmits(['upload-complete', 'upload-error']);
+const props = defineProps({
+  url: { type: String, required: true },
+  numberOfFiles: { type: Number, required: false, default: 1 }
+});
 
 type Policy = {
   url: string;
@@ -45,7 +49,10 @@ async function handleUpload() {
   }
   try {
     const fileName = selectedFiles.value.map(it => it.name);
-    const postPoliciesObject = await uploadFileService.getPostPolicy(fileName);
+    const postPoliciesObject = await uploadFileService.getPostPolicy(
+      props.url,
+      fileName
+    );
     if (!postPoliciesObject) return;
     const uploadData: UploadData[] = [];
 
@@ -95,7 +102,7 @@ async function handleUpload() {
           type="file"
           id="fileInput"
           class="file-input"
-          multiple
+          :multiple="props.numberOfFiles > 1"
           @change="setFiles" />
         <div class="submit">
           <button @click="handleUpload">Upload File to Server</button>
