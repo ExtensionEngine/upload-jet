@@ -3,15 +3,14 @@ import { z } from 'zod';
 const setFileNameSchema = z
   .function()
   .args(z.any(), z.string())
-  .returns(z.string())
-  .optional();
+  .returns(z.string());
 
 export const uploadOptionsSchema = z
   .object({
     fileType: z.string().optional(),
     maxFileSize: z.string().optional(),
     public: z.boolean().optional(),
-    setFileName: setFileNameSchema
+    setFileName: setFileNameSchema.optional()
   })
   .strict();
 
