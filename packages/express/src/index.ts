@@ -3,14 +3,14 @@ import * as express from 'express';
 import {
   UploadJetConfig,
   uploadJetConfigSchema
-} from './schema/uploadJetConfig.dto';
+} from './schema/upload-jet-config.dto';
 import {
   SetFileName,
   UploadOptions,
   uploadOptionsSchema
-} from './schema/UploadOptions.dto';
+} from './schema/upload-options.dto';
 import { v4 as uuidv4 } from 'uuid';
-import { createUploadPolicyBodySchema } from './schema/createUploadPolicyBody.dto';
+import { createUploadPolicyBodySchema } from './schema/create-upload-policy-body.dto';
 import * as bytes from 'bytes';
 
 const API_URL = 'http://localhost:3000';
@@ -82,7 +82,6 @@ export class UploadJet {
       }, {});
 
     const url = new URL('upload-policy', API_URL);
-    console.log(policyData);
     const response = await axios.post(url.href, policyData);
     return response.data;
   };
