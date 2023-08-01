@@ -26,11 +26,13 @@ type UploadData = {
 };
 
 const selectedFiles: Ref<File[]> = ref([]);
+const noFileError = ref(false);
 
 function setFiles(event: Event) {
   const inputElement = event.target as HTMLInputElement;
 
   if (inputElement.files && inputElement.files.length > 0) {
+    noFileError.value = false;
     const filesArray = [...inputElement.files];
     filesArray.map(file => selectedFiles.value.push(file));
   }
@@ -38,7 +40,7 @@ function setFiles(event: Event) {
 
 async function handleUpload() {
   if (!selectedFiles.value.length) {
-    console.log('Please select a file before uploading.');
+    noFileError.value = true;
     return;
   }
   try {
@@ -99,6 +101,9 @@ async function handleUpload() {
           <button @click="handleUpload">Upload File to Server</button>
         </div>
       </form>
+      <p v-if="noFileError" class="no-file-error">
+        Please select a file before uploading.
+      </p>
     </div>
   </div>
 </template>
@@ -134,5 +139,9 @@ async function handleUpload() {
 
 .file-input {
   display: none;
+}
+
+.no-file-error {
+  margin-top: 1rem;
 }
 </style>
