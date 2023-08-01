@@ -11,6 +11,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { createUploadPolicyBodySchema } from './schema/create-upload-policy-body.dto';
 import * as bytes from 'bytes';
+import { ZodError } from 'zod';
 
 const API_URL = 'http://localhost:3000';
 const BAD_REQUEST = 400;
@@ -27,22 +28,19 @@ export class UploadJet {
     return (req: express.Request, res: express.Response) => {
       return express.json()(req, res, async () => {
         const uploadOptions = await uploadOptionsSchema.parseAsync(options);
-        const uploadPolicyBodyResult =
-          await createUploadPolicyBodySchema.safeParseAsync(req.body);
+        const parsedBody = await createUploadPolicyBodySchema.safeParseAsync(
+          req.body
+        );
 
-        if (uploadPolicyBodyResult.success === false) {
+        if (parsedBody.success === false) {
           return res.status(BAD_REQUEST).send({
             message: 'Invalid request body',
-            errors: uploadPolicyBodyResult.error.issues.map(issue => ({
-              message: issue.message,
-              path: issue.path,
-              code: issue.code
-            }))
+            error: mapZodError(parsedBody.error)
           });
         }
 
-        const policies = await this.#fetchPolicies(
-          uploadPolicyBodyResult.data.files,
+        const policies = await this.fetchPolicies(
+          parsedBody.data.files,
           uploadOptions,
           req
         );
@@ -52,11 +50,11 @@ export class UploadJet {
     };
   }
 
-  #fetchPolicies = async (
+  private async fetchPolicies(
     files: string[],
     uploadOptions: UploadOptions,
     req: express.Request
-  ) => {
+  ) {
     const {
       fileType,
       maxFileSize,
@@ -87,7 +85,15 @@ export class UploadJet {
       );
 
     const url = new URL('upload-policy', API_URL);
-    const response = await axios.post(url.href, policyRules);
-    return response.data;
-  };
+    const { data } = await axios.post(url.href, policyRules);
+    return data;
+  }
+}
+
+function mapZodError(error: ZodError) {
+  return error.issues.map(({ path, message, code }) => ({
+    path,
+    message,
+    code
+  }));
 }
