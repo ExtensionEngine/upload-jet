@@ -5,7 +5,6 @@ import {
   uploadJetConfigSchema
 } from './schema/upload-jet-config.dto';
 import {
-  SetFileName,
   UploadOptions,
   uploadOptionsSchema
 } from './schema/upload-options.dto';
