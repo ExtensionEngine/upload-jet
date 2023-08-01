@@ -32,7 +32,14 @@ export class UploadJet {
           await createUploadPolicyBodySchema.safeParseAsync(req.body);
 
         if (uploadPolicyBodyResult.success === false) {
-          return res.status(BAD_REQUEST).send(uploadPolicyBodyResult.error);
+          return res.status(BAD_REQUEST).send({
+            message: 'Invalid request body',
+            errors: uploadPolicyBodyResult.error.issues.map(issue => ({
+              message: issue.message,
+              path: issue.path,
+              code: issue.code
+            }))
+          });
         }
 
         const policies = await this.#fetchPolicies(
@@ -58,40 +65,30 @@ export class UploadJet {
       setFileName
     } = uploadOptions;
 
-    const policyData = files
-      .map(originalName => {
-        const fileName = this.#getFileName(originalName, req, setFileName);
+    const maxSize = maxFileSize ? bytes.parse(maxFileSize) : undefined;
+    const getKey = (originalName: string) =>
+      setFileName
+        ? setFileName(req, originalName)
+        : `${uuidv4()}-${originalName}`;
 
-        return {
-          originalName,
-          fileName
-        };
-      })
-      .reduce((previous, { originalName, fileName }) => {
-        const maxSize = maxFileSize ? bytes.parse(maxFileSize) : undefined;
-
-        const policyRules = {
-          key: fileName,
-          maxFileSize: maxSize,
-          fileType,
-          public: isPublic
-        };
-
-        return { ...previous, [originalName]: policyRules };
-      }, {});
+    const policyRules = files
+      .map(originalName => ({
+        originalName,
+        key: getKey(originalName),
+        maxFileSize: maxSize,
+        fileType,
+        public: isPublic
+      }))
+      .reduce(
+        (acc, { originalName, ...fields }) => ({
+          ...acc,
+          [originalName]: fields
+        }),
+        {}
+      );
 
     const url = new URL('upload-policy', API_URL);
-    const response = await axios.post(url.href, policyData);
+    const response = await axios.post(url.href, policyRules);
     return response.data;
-  };
-
-  #getFileName = (
-    originalName: string,
-    req: express.Request,
-    setFileName?: SetFileName
-  ) => {
-    return setFileName
-      ? setFileName(req, originalName)
-      : `${uuidv4()}-${originalName}`;
   };
 }
