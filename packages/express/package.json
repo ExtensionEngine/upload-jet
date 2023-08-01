@@ -12,7 +12,7 @@
     "default": "./dist/esm/index.js"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.esm.json tsconfig.cjs.json"
+    "build": "tsc -b tsconfig.esm.json tsconfig.cjs.json && ./setBuildType.sh"
   },
   "author": "",
   "license": "ISC",
