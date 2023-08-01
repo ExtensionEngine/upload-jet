@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "outDir": "./dist/cjs"
+  },
+  "files": ["./src/index.ts"],
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "**/*.test.js"]
+}
