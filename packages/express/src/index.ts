@@ -25,10 +25,9 @@ export class UploadJet {
   }
 
   createUploadRoute(options: UploadOptions) {
-    const uploadOptions = uploadOptionsSchema.parse(options);
-
     return (req: express.Request, res: express.Response) => {
       return express.json()(req, res, async () => {
+        const uploadOptions = await uploadOptionsSchema.parseAsync(options);
         const uploadPolicyBodyResult =
           await createUploadPolicyBodySchema.safeParseAsync(req.body);
 
