@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UploadJet from './components/UploadJet.vue'
+import UploadJet from './components/UploadJet.vue';
 </script>
 
 <template>

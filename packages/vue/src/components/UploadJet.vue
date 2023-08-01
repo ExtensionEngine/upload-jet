@@ -1,96 +1,100 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { Ref } from 'vue'
+import { ref } from 'vue';
+import type { Ref } from 'vue';
+import uploadFileService from '../services/uploadFileServices.ts';
 
-const emit = defineEmits(['upload-complete', 'upload-error'])
-const events = ['dragenter', 'dragleave', 'dragover', 'drop']
+const uploadEmits = defineEmits(['upload-complete', 'upload-error']);
 
-import uploadFileService from '../services/uploadFileServices'
-
-type EachPolicy = {
-  url: string
+type Policy = {
+  url: string;
   fields: {
-    Tagging?: string
-    bucket: string
-    'X-Amz-Algorithm': string
-    'X-Amz-Credential': string
-    'X-Amz-Date': string
-    key: string
-    Policy: string
-    'X-Amz-Signature': string
-  }
-}
+    bucket: string;
+    'X-Amz-Algorithm': string;
+    'X-Amz-Credential': string;
+    'X-Amz-Date': string;
+    key: string;
+    Policy: string;
+    'X-Amz-Signature': string;
+    Tagging?: string;
+  };
+};
 
 type UploadData = {
-  fileName: string
-  fileUrl: string
-  fileKey: string
-}
+  fileName: string;
+  fileUrl: string;
+  fileKey: string;
+};
 
-const fileName: Ref<string[]> = ref([])
-const files = ref<File[]>([])
+const selectedFiles: Ref<File[]> = ref([]);
 
-function handleFileChange(event: Event) {
-  const inputElement = event.target as HTMLInputElement
+function setFiles(event: Event) {
+  const inputElement = event.target as HTMLInputElement;
 
   if (inputElement.files && inputElement.files.length > 0) {
-    const files = [...inputElement.files]
-    files.map((file) => fileName.value.push(file.name))
+    const filesArray = [...inputElement.files];
+    filesArray.map(file => selectedFiles.value.push(file));
   }
 }
 
 async function handleUpload() {
-  if (fileName.value.length === 0) {
-    console.log('Please select a file before uploading.')
-  } else {
-    try {
-      const postPoliciesObject = await uploadFileService.getPostPolicy(fileName.value)
-      if (!postPoliciesObject) return
-      const uploadData: UploadData[] = []
+  if (!selectedFiles.value.length) {
+    console.log('Please select a file before uploading.');
+    return;
+  }
+  try {
+    const fileName = selectedFiles.value.map(it => it.name);
+    const postPoliciesObject = await uploadFileService.getPostPolicy(fileName);
+    if (!postPoliciesObject) return;
+    const uploadData: UploadData[] = [];
 
-      const pResult = Object.entries(postPoliciesObject).map(async ([fileName, policyOptions]) => {
-        const formData = new FormData()
+    const pResult = Object.entries(postPoliciesObject).map(
+      async ([fileName, policyOptions]) => {
+        const formData = new FormData();
 
         for (const key in policyOptions.fields) {
-          const fieldKey = key as keyof EachPolicy['fields']
-          const fieldValue = policyOptions.fields[fieldKey]
-          formData.append(fieldKey as string, fieldValue as string)
+          const fieldKey = key as keyof Policy['fields'];
+          const fieldValue = policyOptions.fields[fieldKey];
+          formData.append(fieldKey as string, fieldValue as string);
         }
-        const [file] = files.value.filter((file) => file.name === fileName)
-        formData.append('file', file)
+        const [file] = selectedFiles.value.filter(
+          file => file.name === fileName
+        );
+        formData.append('file', file);
 
         uploadData.push({
           fileName: fileName,
           fileUrl: `${policyOptions.url}/${policyOptions.fields.key}`,
           fileKey: policyOptions.fields.key
-        })
-        await uploadFileService.postFileToAWS(policyOptions.url, formData)
-      })
-      await Promise.all(pResult)
-      emit('upload-complete', uploadData)
-      throw new Error()
-    } catch (err) {
-      const error = {
-        fileName: fileName.value,
-        message: 'An error occurred during file upload',
-        code: '404'
+        });
+        await uploadFileService.postFileToAWS(policyOptions.url, formData);
       }
-      emit('upload-error', error)
-    }
+    );
+    await Promise.all(pResult);
+    uploadEmits('upload-complete', uploadData);
+  } catch (err) {
+    const error = {
+      fileName: selectedFiles.value.map(file => file.name),
+      message: 'An error occurred during file upload',
+      code: '404'
+    };
+    uploadEmits('upload-error', error);
   }
 }
 </script>
 
 <template>
-  <div class="dropzone">
-    <div class="dropzone-content">
-      <p class="dropzone-content-message">Drag and drop the file you want to upload here</p>
-
+  <div class="container">
+    <div class="container-content">
       <form @submit.prevent>
         <label for="fileInput" class="browse-label"
-          >Or, <span class="browse-link">browse your file</span></label
+          ><p class="browse-link">Browse your file</p></label
         >
-        <input type="file" id="fileInput" class="file-input" multiple @change="handleFileChange" />
+        <input
+          type="file"
+          id="fileInput"
+          class="file-input"
+          multiple
+          @change="setFiles" />
         <div class="submit">
           <button @click="handleUpload">Upload File to Server</button>
         </div>
@@ -100,7 +104,7 @@ async function handleUpload() {
 </template>
 
 <style>
-.dropzone {
+.container {
   border: dashed;
   padding: 3rem 6rem;
   border-radius: 5px;
@@ -111,11 +115,11 @@ async function handleUpload() {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.dropzone-content {
+.container-content {
   text-align: center;
 }
 
-.dropzone-content-browse {
+.container-content-browse {
   margin-top: 0.5rem;
 }
 
