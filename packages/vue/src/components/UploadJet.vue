@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Ref } from 'vue'
+import uploadFileService from '../services/uploadFileServices'
 
 const emit = defineEmits(['upload-complete', 'upload-error'])
-const events = ['dragenter', 'dragleave', 'dragover', 'drop']
-
-import uploadFileService from '../services/uploadFileServices'
 
 type EachPolicy = {
   url: string
@@ -28,15 +26,32 @@ type UploadData = {
 }
 
 const fileName: Ref<string[]> = ref([])
-const files = ref<File[]>([])
+const filesToUpload = ref<File[]>([])
+const activeDropzone = ref(false)
 
-function handleFileChange(event: Event) {
-  const inputElement = event.target as HTMLInputElement
-
+function handleSelectFiles(e: Event) {
+  const inputElement = e.target as HTMLInputElement
   if (inputElement.files && inputElement.files.length > 0) {
-    const files = [...inputElement.files]
-    files.map((file) => fileName.value.push(file.name))
+    const selectedFilesArray = [...inputElement.files]
+    selectedFilesArray.map((file) => {
+      fileName.value.push(file.name)
+      filesToUpload.value.push(file)
+    })
   }
+}
+
+function handleDropFiles(e: DragEvent) {
+  const droppedFiles = e.dataTransfer?.files as FileList
+  const droppedFilesArray = [...droppedFiles]
+  droppedFilesArray.map((file) => {
+    fileName.value.push(file.name)
+    filesToUpload.value.push(file)
+  })
+  activeDropzone.value = false
+}
+
+function toggleActive() {
+  activeDropzone.value = !activeDropzone.value
 }
 
 async function handleUpload() {
@@ -50,13 +65,12 @@ async function handleUpload() {
 
       const pResult = Object.entries(postPoliciesObject).map(async ([fileName, policyOptions]) => {
         const formData = new FormData()
-
         for (const key in policyOptions.fields) {
           const fieldKey = key as keyof EachPolicy['fields']
           const fieldValue = policyOptions.fields[fieldKey]
           formData.append(fieldKey as string, fieldValue as string)
         }
-        const [file] = files.value.filter((file) => file.name === fileName)
+        const [file] = filesToUpload.value.filter((file) => file.name === fileName)
         formData.append('file', file)
 
         uploadData.push({
@@ -68,7 +82,6 @@ async function handleUpload() {
       })
       await Promise.all(pResult)
       emit('upload-complete', uploadData)
-      throw new Error()
     } catch (err) {
       const error = {
         fileName: fileName.value,
@@ -82,7 +95,14 @@ async function handleUpload() {
 </script>
 
 <template>
-  <div class="dropzone">
+  <div
+    class="dropzone"
+    @dragenter.prevent="toggleActive"
+    @dragleave.prevent="toggleActive"
+    @dragover.prevent
+    @drop.prevent="handleDropFiles"
+    :class="{ 'active-dropzone': activeDropzone }"
+  >
     <div class="dropzone-content">
       <p class="dropzone-content-message">Drag and drop the file you want to upload here</p>
 
@@ -90,7 +110,7 @@ async function handleUpload() {
         <label for="fileInput" class="browse-label"
           >Or, <span class="browse-link">browse your file</span></label
         >
-        <input type="file" id="fileInput" class="file-input" multiple @change="handleFileChange" />
+        <input type="file" id="fileInput" class="file-input" multiple @change="handleSelectFiles" />
         <div class="submit">
           <button @click="handleUpload">Upload File to Server</button>
         </div>
@@ -117,6 +137,10 @@ async function handleUpload() {
 
 .dropzone-content-browse {
   margin-top: 0.5rem;
+}
+
+.active-dropzone {
+  background-color: rgb(20, 56, 44);
 }
 
 .browse-label {
