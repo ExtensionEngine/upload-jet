@@ -65,7 +65,7 @@ export class UploadJet {
       setFileName
     } = uploadOptions;
 
-    const maxSize = maxFileSize ? bytes.parse(maxFileSize) : undefined;
+    const maxSize = maxFileSize && bytes.parse(maxFileSize);
     const getKey = (originalName: string) =>
       setFileName
         ? setFileName(req, originalName)
