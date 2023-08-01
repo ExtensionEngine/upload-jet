@@ -95,15 +95,15 @@ async function handleUpload() {
   <div class="container">
     <div class="container-content">
       <form @submit.prevent>
-        <label for="fileInput" class="browse-label"
-          ><p class="browse-link">Browse your file</p></label
-        >
-        <input
-          type="file"
-          id="fileInput"
-          class="file-input"
-          :multiple="props.numberOfFiles > 1"
-          @change="setFiles" />
+        <label class="browse-label"
+          ><p class="browse-link">Browse your file</p>
+          <input
+            type="file"
+            class="file-input"
+            :multiple="props.numberOfFiles > 1"
+            @change="setFiles"
+        /></label>
+
         <div class="submit">
           <button @click="handleUpload">Upload File to Server</button>
         </div>
