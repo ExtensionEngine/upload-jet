@@ -9,7 +9,9 @@ import { LoggerModule } from 'nestjs-pino';
   imports: [
     LoggerModule.forRoot({
       pinoHttp: {
-        transport: { target: 'pino-pretty' }
+        transport: { target: 'pino-pretty' },
+        redact: ['req.headers.authorization'],
+        quietReqLogger: true
       }
     }),
     ConfigModule.forRoot({ isGlobal: true, load: [appConfig, awsConfig] }),
