@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
-    "declaration": true,
     "removeComments": true,
     "target": "ES2021",
     "outDir": "./dist",
