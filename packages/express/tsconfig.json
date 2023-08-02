@@ -19,6 +19,8 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
     "moduleResolution": "NodeNext"
   },
   "files": ["./src/index.ts"],
