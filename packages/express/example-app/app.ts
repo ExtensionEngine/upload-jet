@@ -1,5 +1,5 @@
 import express from 'express';
-import { UploadJet } from 'upload-jet-express';
+import { UploadJet } from '../src/index.ts';
 
 const app = express();
 const PORT = 3001;

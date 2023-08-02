@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "description": "This is an example app that demonstrates how to use upload-jet-express package",
   "main": "app.js",
-  "type": "module",
   "scripts": {
-    "start": "node app.js"
+    "start": "npx ts-node app.ts"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +16,7 @@
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/node": "^20.4.5",
+    "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   }
 }
