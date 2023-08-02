@@ -2,11 +2,18 @@
   "name": "upload-jet-express",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "type": "commonjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs",
+    "default": "./dist/index.js"
+  },
   "scripts": {
-    "build": "tsc"
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +21,7 @@
     "@types/express": "^4.17.17",
     "@types/node": "^20.4.5",
     "@types/uuid": "^9.0.2",
+    "tsup": "^7.1.0",
     "typescript": "^5.1.6"
   },
   "dependencies": {
