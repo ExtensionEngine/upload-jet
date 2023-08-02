@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "module": "CommonJS",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -8,7 +9,9 @@
     "target": "ES2021",
     "sourceMap": true,
     "baseUrl": "./src",
-    "declarationDir": "dist/types",
+    "outDir": "./dist",
+    "declarationDir": "./dist",
+    "tsBuildInfoFile": ".tsbuildinfo",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
