@@ -3,13 +3,13 @@ import * as express from 'express';
 import {
   UploadJetConfig,
   uploadJetConfigSchema
-} from './schema/upload-jet-config.dto.ts';
+} from './schema/upload-jet-config.dto';
 import {
   UploadOptions,
   uploadOptionsSchema
-} from './schema/upload-options.dto.ts';
+} from './schema/upload-options.dto';
 import { v4 as uuidv4 } from 'uuid';
-import { createUploadPolicyBodySchema } from './schema/create-upload-policy-body.dto.ts';
+import { createUploadPolicyBodySchema } from './schema/create-upload-policy-body.dto';
 import * as bytes from 'bytes';
 import { ZodError } from 'zod';
 
