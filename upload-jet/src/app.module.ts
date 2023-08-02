@@ -3,9 +3,15 @@ import { ConfigModule } from '@nestjs/config';
 import { UploadPolicyModule } from './upload-policy/upload-policy.module';
 import awsConfig from './config/aws.config';
 import appConfig from './config/app.config';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: { target: 'pino-pretty' }
+      }
+    }),
     ConfigModule.forRoot({ isGlobal: true, load: [appConfig, awsConfig] }),
     UploadPolicyModule
   ],
