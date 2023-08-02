@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useUploadJet } from '../useUploadJet';
 import type { UploadError, UploadedFile } from '@/types';
 
-const uploadEmits = defineEmits<{
+const emit = defineEmits<{
   (event: 'upload-complete', payload: UploadedFile[]): void;
   (event: 'upload-error', payload: UploadError[]): void;
 }>();
@@ -26,8 +26,8 @@ const { upload } = useUploadJet({ url: props.url });
 async function handleUpload() {
   if (!selectedFiles.value) return;
   try {
-    const result = await upload(selectedFiles.value);
-    console.log('Result: ', result);
+    const { successfullUploads } = await upload(selectedFiles.value);
+    emit('upload-complete', successfullUploads);
   } catch (error) {
     console.log('Error: ', error);
   }
