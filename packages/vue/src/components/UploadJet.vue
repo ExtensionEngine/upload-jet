@@ -11,31 +11,30 @@ const emit = defineEmits<{
 const props = defineProps({
   url: { type: String, required: true },
   maxFileCount: { type: Number, default: 1 },
-  enableDragDrop: { type: String }
+  enableDragDrop: { type: Boolean, default: false }
 });
 
 const selectedFiles = ref<File[]>([]);
-const activeDropzone = ref(false);
-
-function setFiles(event: Event) {
-  const inputElement = event.target as HTMLInputElement;
-  if (!inputElement.files?.length) return;
-  selectedFiles.value = [...inputElement.files];
-}
-
+const isActiveDropzone = ref(false);
 const { upload } = useUploadJet({ url: props.url });
 
-function handleDropFiles(e: DragEvent) {
+function addSelectedFiles(event: Event) {
+  const inputElement = event.target as HTMLInputElement;
+  if (!inputElement.files?.length) return;
+  selectedFiles.value = [...selectedFiles.value, ...inputElement.files];
+}
+
+function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files as FileList;
   const droppedFilesArray = [...droppedFiles];
   droppedFilesArray.map(file => {
     selectedFiles.value.push(file);
   });
-  activeDropzone.value = false;
+  isActiveDropzone.value = false;
 }
 
-function toggleActive() {
-  activeDropzone.value = !activeDropzone.value;
+function toggleActiveDropZone() {
+  isActiveDropzone.value = !isActiveDropzone.value;
 }
 
 async function uploadFiles() {
@@ -50,52 +49,44 @@ async function uploadFiles() {
 </script>
 
 <template>
-  <div
-    v-if="props.enableDragDrop"
-    class="dropzone"
-    @dragenter.prevent="toggleActive"
-    @dragleave.prevent="toggleActive"
-    @dragover.prevent
-    @drop.prevent="handleDropFiles"
-    :class="{ 'active-dropzone': activeDropzone }">
-    <div class="dropzone-content">
-      <p class="dropzone-content-message">
-        Drag and drop the file you want to upload here
-      </p>
-
-      <form @submit.prevent="uploadFiles">
-        <label class="browse-label"
-          >Or, <span class="browse-link">browse your file</span></label
-        >
-        <input
-          @change="setFiles"
-          :multiple="props.maxFileCount > 1"
-          type="file"
-          required
-          class="file-input" />
-        <div class="submit">
-          <button type="submit">Upload File to S3</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div v-else>
-    <div class="dropzone">
+  <div class="main-container">
+    <div
+      :class="{
+        dropzone: enableDragDrop,
+        'active-dropzone': isActiveDropzone && enableDragDrop
+      }"
+      @dragenter.prevent="toggleActiveDropZone"
+      @dragleave.prevent="toggleActiveDropZone"
+      @dragover.prevent
+      @drop.prevent="addDroppedFiles">
       <div class="dropzone-content">
-        <form @submit.prevent="uploadFiles">
-          <label class="browse-label"
-            ><span class="browse-link">Browse your file</span></label
+        <p v-if="props.enableDragDrop" class="dropzone-content-message">
+          Drag and drop the file you want to upload here
+        </p>
+        <form @submit.prevent>
+          <label for="file-input" class="browse-label"
+            ><span v-if="enableDragDrop">Or, </span>
+            <span class="browse-link">browse your file</span></label
           >
           <input
-            @change="setFiles"
+            @change="addSelectedFiles"
             :multiple="props.maxFileCount > 1"
             type="file"
-            required
-            class="file-input" />
+            class="file-input"
+            id="file-input" />
           <div class="submit">
-            <button type="submit">Upload File to S3</button>
+            <button @click="uploadFiles">Upload File to S3</button>
           </div>
+
+          <p>
+            <template v-if="selectedFiles.length > 0">
+              Selected files:<br />
+              <span v-for="(file, index) in selectedFiles" :key="index"
+                >{{ file.name }}<br
+              /></span>
+            </template>
+            <template v-else>No files selected.</template>
+          </p>
         </form>
       </div>
     </div>
@@ -103,16 +94,42 @@ async function uploadFiles() {
 </template>
 
 <style>
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: #f8f8f8;
+  background: #181818;
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-family: sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.main-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .dropzone {
   border: dashed;
   padding: 3rem 6rem;
   border-radius: 5px;
   border-color: rgb(255, 255, 255);
   background-color: rgb(28, 37, 48);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .dropzone-content {
