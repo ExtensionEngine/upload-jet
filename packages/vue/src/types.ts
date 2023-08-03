@@ -5,8 +5,8 @@ export type UploadedFile = {
 
 export type UploadError = {
   fileName: string;
-  message: string;
-  code: string;
+  message: string | null;
+  code: string | null;
 };
 
 export type Policy = {
@@ -25,3 +25,28 @@ export type Policy = {
 
 export type FileName = string;
 export type PolicyResponse = Record<FileName, Policy>;
+
+export type UseUploadJetOptions = {
+  url: string;
+};
+
+export interface UseUploadJetReturn {
+  upload: (files: File[]) => Promise<any>;
+}
+
+export type FulfilledValue = {
+  name: string;
+  key: string;
+};
+
+export type RejectReason = {
+  fileName: string;
+  message: string;
+  code: string;
+};
+
+export type SettledResult = {
+  status: 'fulfilled' | 'rejected';
+  value?: FulfilledValue;
+  reason?: RejectReason;
+};

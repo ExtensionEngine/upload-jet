@@ -30,15 +30,17 @@ export class S3ClientService {
     ...conditions
   }: PolicyOptions & { bucket: string }) {
     const Conditions = [];
+    const Fields = {};
     if ('maxFileSize' in conditions) {
       Conditions.push(['content-length-range', 0, conditions.maxFileSize]);
     }
     if ('fileType' in conditions) {
       Conditions.push({ 'Content-Type': conditions.fileType });
+      Fields['Content-Type'] = conditions.fileType;
     }
-    const Fields = conditions?.public
-      ? { Tagging: this.getPublicPolicyTag() }
-      : {};
+    if (conditions.public) {
+      Fields['Tagging'] = this.getPublicPolicyTag();
+    }
 
     return createPresignedPost(this.s3Client, {
       Bucket: bucket,

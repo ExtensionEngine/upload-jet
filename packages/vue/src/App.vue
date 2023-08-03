@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import UploadJet from './components/UploadJet.vue';
 
-const log = (data: any) => {
-  console.log('Data: ', data);
+const showErrorDialog = (data: any) => {
+  console.log('Error: ', data);
+};
+const showSuccessDialog = (data: any) => {
+  console.log('Success: ', data);
 };
 </script>
 
 <template>
-  <UploadJet @upload-complete="log" />
+  <UploadJet
+    @upload-error="showErrorDialog"
+    @upload-complete="showSuccessDialog" />
 </template>
 
 <style scoped></style>

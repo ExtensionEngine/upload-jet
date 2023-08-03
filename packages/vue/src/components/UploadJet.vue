@@ -26,8 +26,11 @@ const { upload } = useUploadJet({ url: props.url });
 async function handleUpload() {
   if (!selectedFiles.value) return;
   try {
-    const { successfullUploads } = await upload(selectedFiles.value);
+    const { successfullUploads, failedUploads } = await upload(
+      selectedFiles.value
+    );
     emit('upload-complete', successfullUploads);
+    emit('upload-error', failedUploads);
   } catch (error) {
     console.log('Error: ', error);
   }
