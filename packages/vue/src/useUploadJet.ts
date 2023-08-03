@@ -41,7 +41,8 @@ async function uploadFilesToS3(
     Object.entries({ ...fields, file }).forEach(([key, value]) => {
       formData.append(key, value);
     });
-    await fetch(url, { method: 'POST', body: formData });
+    const response = await fetch(url, { method: 'POST', body: formData });
+    if (!response.ok) throw new Error(`Could not upload ${name}`);
     return { name, key: fields.key };
   });
 
