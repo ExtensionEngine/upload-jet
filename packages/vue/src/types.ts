@@ -5,8 +5,8 @@ export type UploadedFile = {
 
 export type UploadError = {
   fileName: string;
-  message: string | null;
-  code: string | null;
+  message: string;
+  code: string;
 };
 
 export type Policy = {
@@ -20,33 +20,9 @@ export type Policy = {
     Policy: string;
     'X-Amz-Signature': string;
     Tagging?: string;
+    'Content-Type'?: string;
   };
 };
 
 export type FileName = string;
 export type PolicyResponse = Record<FileName, Policy>;
-
-export type UseUploadJetOptions = {
-  url: string;
-};
-
-export interface UseUploadJetReturn {
-  upload: (files: File[]) => Promise<any>;
-}
-
-export type FulfilledValue = {
-  name: string;
-  key: string;
-};
-
-export type RejectReason = {
-  fileName: string;
-  message: string;
-  code: string;
-};
-
-export type SettledResult = {
-  status: 'fulfilled' | 'rejected';
-  value?: FulfilledValue;
-  reason?: RejectReason;
-};

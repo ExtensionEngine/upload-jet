@@ -1,12 +1,39 @@
-import type {
-  FulfilledValue,
-  PolicyResponse,
-  RejectReason,
-  SettledResult,
-  UploadError,
-  UseUploadJetOptions,
-  UseUploadJetReturn
-} from './types';
+import type { PolicyResponse, UploadError } from './types';
+
+export type UseUploadJetOptions = {
+  url: string;
+};
+
+export interface UseUploadJetReturn {
+  upload: (files: File[]) => Promise<any>;
+}
+
+export type FulfilledValue = {
+  name: string;
+  key: string;
+};
+
+export type SettledResult = {
+  status: 'fulfilled' | 'rejected';
+  value?: FulfilledValue;
+  reason?: UploadError;
+};
+
+const UPLOAD_ERROR_MESSAGE =
+  'Your proposed upload does not meet the defined policy conditions';
+const UPLOAD_ERROR_CODE = 'Error uploading';
+
+export class UploadFailedError extends Error {
+  public fileName: string;
+  public code: string;
+
+  constructor(message: string, fileName: string, code: string) {
+    super(message);
+    this.name = this.constructor.name;
+    this.fileName = fileName;
+    this.code = code;
+  }
+}
 
 export function useUploadJet({ url }: UseUploadJetOptions): UseUploadJetReturn {
   const upload = async (files: File[]) => {
@@ -16,7 +43,7 @@ export function useUploadJet({ url }: UseUploadJetOptions): UseUploadJetReturn {
     const successfullUploads: (FulfilledValue | undefined)[] = result
       .filter(it => it.status === 'fulfilled')
       .map(it => it.value);
-    const failedUploads: (RejectReason | undefined)[] = result
+    const failedUploads: (UploadError | undefined)[] = result
       .filter(it => it.status === 'rejected')
       .map(it => it.reason);
     return { successfullUploads, failedUploads };
@@ -59,16 +86,13 @@ async function uploadFilesToS3(policies: PolicyResponse, files: File[]) {
       const res = await response.text();
       const xmlDoc = parser.parseFromString(res, 'text/xml');
       const message =
-        xmlDoc.getElementsByTagName('Message')[0].childNodes[0].nodeValue;
+        xmlDoc.getElementsByTagName('Message')[0].childNodes[0].nodeValue ||
+        UPLOAD_ERROR_MESSAGE;
       const code =
-        xmlDoc.getElementsByTagName('Code')[0].childNodes[0].nodeValue;
+        xmlDoc.getElementsByTagName('Code')[0].childNodes[0].nodeValue ||
+        UPLOAD_ERROR_CODE;
 
-      const error: UploadError = {
-        fileName: name,
-        message: message,
-        code: code
-      };
-      throw error;
+      throw new UploadFailedError(message, name, code);
     }
     return { name, key: fields.key };
   });

@@ -10,7 +10,7 @@ const emit = defineEmits<{
 
 const props = defineProps({
   url: { type: String, required: true },
-  maxFileCount: { type: Number, default: 3 }
+  maxFileCount: { type: Number, default: 1 }
 });
 
 const selectedFiles = ref<File[]>();
@@ -23,29 +23,25 @@ function setFiles(event: Event) {
 
 const { upload } = useUploadJet({ url: props.url });
 
-async function handleUpload() {
+async function uploadFiles() {
   if (!selectedFiles.value) return;
-  try {
-    const { successfullUploads, failedUploads } = await upload(
-      selectedFiles.value
-    );
-    emit('upload-complete', successfullUploads);
-    emit('upload-error', failedUploads);
-  } catch (error) {
-    console.log('Error: ', error);
-  }
+  const { successfullUploads, failedUploads } = await upload(
+    selectedFiles.value
+  );
+  successfullUploads.length > 0 && emit('upload-complete', successfullUploads);
+  failedUploads.length > 0 && emit('upload-error', failedUploads);
 }
 </script>
 
 <template>
-  <form @submit.prevent="handleUpload">
+  <form @submit.prevent="uploadFiles">
     <label>
       <input
-        type="file"
-        class="file-input"
-        :multiple="props.maxFileCount > 1"
         @change="setFiles"
-        required />
+        :multiple="props.maxFileCount > 1"
+        type="file"
+        required
+        class="file-input" />
     </label>
     <button type="submit">Upload File to S3</button>
   </form>
