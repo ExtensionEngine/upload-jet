@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useUploadJet } from '../useUploadJet';
-import type { UploadError, UploadedFile } from '@/types';
+import type { UploadedFile } from '@/types';
 
 const emit = defineEmits<{
   (event: 'upload-complete', payload: UploadedFile[]): void;
-  (event: 'upload-error', payload: UploadError[]): void;
+  (event: 'upload-error', error: unknown): void;
 }>();
 
 const props = defineProps({
@@ -25,11 +25,12 @@ const { upload } = useUploadJet({ url: props.url });
 
 async function uploadFiles() {
   if (!selectedFiles.value) return;
-  const { successfullUploads, failedUploads } = await upload(
-    selectedFiles.value
-  );
-  successfullUploads.length > 0 && emit('upload-complete', successfullUploads);
-  failedUploads.length > 0 && emit('upload-error', failedUploads);
+  try {
+    const result = await upload(selectedFiles.value);
+    if (result?.length) emit('upload-complete', result);
+  } catch (error: unknown) {
+    emit('upload-error', error);
+  }
 }
 </script>
 

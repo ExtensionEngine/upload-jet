@@ -3,12 +3,6 @@ export type UploadedFile = {
   key: string;
 };
 
-export type UploadError = {
-  fileName: string;
-  message: string;
-  code: string;
-};
-
 export type Policy = {
   url: string;
   fields: {
