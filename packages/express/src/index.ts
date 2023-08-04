@@ -15,6 +15,7 @@ import { ZodError } from 'zod';
 
 const API_URL = 'http://localhost:3000';
 const BAD_REQUEST = 400;
+const SERVER_UNAVAILABLE_ERROR = 503;
 
 export class UploadJet {
   #apiKey: string;
@@ -39,13 +40,19 @@ export class UploadJet {
           });
         }
 
-        const policies = await this.fetchPolicies(
-          parsedBody.data.files,
-          uploadOptions,
-          req
-        );
+        try {
+          const policies = await this.fetchPolicies(
+            parsedBody.data.files,
+            uploadOptions,
+            req
+          );
 
-        return res.json(policies);
+          return res.json(policies);
+        } catch (error: any) {
+          return res
+            .status(SERVER_UNAVAILABLE_ERROR)
+            .json({ error: error.message });
+        }
       });
     };
   }
@@ -85,8 +92,12 @@ export class UploadJet {
       );
 
     const url = new URL('upload-policy', API_URL);
-    const { data } = await axios.post(url.href, policyRules);
-    return data;
+    try {
+      const { data } = await axios.post(url.href, policyRules);
+      return data;
+    } catch (error) {
+      throw new Error('Error fetching upload policy');
+    }
   }
 }
 
