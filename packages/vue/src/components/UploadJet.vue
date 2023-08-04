@@ -13,6 +13,11 @@ const props = defineProps({
   maxFileCount: { type: Number, default: 1 }
 });
 
+const fileInputRef = ref<HTMLInputElement | null>(null);
+const openFileInput = () => {
+  fileInputRef?.value?.click();
+};
+
 const selectedFiles = ref<File[]>([]);
 const isActiveDropzone = ref(false);
 const { upload } = useUploadJet({ url: props.url });
@@ -60,11 +65,13 @@ async function uploadFiles() {
         <form @submit.prevent>
           <label for="file-input" class="browse-label">
             <span>Or,</span>
-            <span class="browse-link">browse your file</span>
+            <br />
+            <button @click="openFileInput">Browse files</button>
           </label>
           <input
             @change="addSelectedFiles"
             :multiple="props.maxFileCount > 1"
+            ref="fileInputRef"
             type="file"
             class="file-input"
             id="file-input" />
@@ -93,18 +100,10 @@ async function uploadFiles() {
 </template>
 
 <style>
-.main-container {
+.dropzone {
   color: #f8f8f8;
   font-family: sans-serif;
   font-size: 15px;
-  -webkit-font-smoothing: antialiased;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.dropzone {
   border: dashed;
   padding: 3rem 6rem;
   border-radius: 5px;
