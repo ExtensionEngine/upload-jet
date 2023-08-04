@@ -13,7 +13,6 @@
     "default": "./dist/index.js"
   },
   "scripts": {
-    "example-app": "npm --prefix ./example-app install && npm --prefix ./example-app run start",
     "build": "tsup src/index.ts --format cjs,esm --dts --clean"
   },
   "author": "",
