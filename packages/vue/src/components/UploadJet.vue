@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { Ref } from 'vue';
-import uploadFileService from '../services/uploadFileServices.ts';
+import uploadFileService from '../services/uploadFileServices';
 
 const uploadEmits = defineEmits(['upload-complete', 'upload-error']);
 const props = defineProps({

@@ -1,18 +1,20 @@
 {
-  "name": "upload-jet-component-lib",
+  "name": "upload-jet-lib",
   "version": "0.0.0",
   "files": [
     "dist"
   ],
-  "main": "./dist/upload-jet-component-lib.umd.cjs",
-  "module": "./dist/upload-jet-component-lib.js",
+  "main": "./dist/upload-jet-lib.umd.cjs",
+  "module": "./dist/upload-jet-lib.es.js",
   "exports": {
     ".": {
-      "import": "./dist/upload-jet-component-lib.js",
-      "require": "./dist/upload-jet-component-lib.umd.cjs"
-    }
+      "import": "./dist/upload-jet-lib.js",
+      "require": "./dist/upload-jet-lib.umd.es.cjs"
+    },
+    "./dist/": "./dist/"
   },
   "types": "./dist/index.d.ts",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build && vue-tsc --emitDeclarationOnly --declaration",

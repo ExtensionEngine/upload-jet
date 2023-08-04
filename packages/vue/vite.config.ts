@@ -8,8 +8,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'VueUploadJet',
-      fileName: 'VueUploadJet'
+      name: 'upload-jet-lib',
+      fileName: 'upload-jet-lib'
     },
     rollupOptions: {
       external: ['vue'],

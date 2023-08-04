@@ -4,26 +4,19 @@
   "exclude": ["src/App.vue", "src/main.ts"],
 
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "esnext",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "skipLibCheck": true,
-    "allowJs": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    // "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    // "noEmit": true,
+    "moduleResolution": "node",
+    "strict": true,
     "jsx": "preserve",
-
-    //myconfig
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "outDir": "dist",
     "declaration": true,
     "composite": true,
-    // "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": true,
     // "emitDeclarationOnly": true,
     // "composite": true,
     "baseUrl": ".",
