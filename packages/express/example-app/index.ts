@@ -1,7 +1,8 @@
-import express, { Express } from 'express';
+import express from 'express';
 import { UploadJet } from '../src/index';
 
-const app: Express = express();
+const app = express();
+const router = express.Router();
 const port = 3001;
 const API_KEY = 'example-api-key';
 
@@ -15,7 +16,9 @@ const uploadRouteConfig = {
   }
 };
 
-app.use('/api/example', uploadJet.createUploadRoute(uploadRouteConfig));
+router.post('/api/example', uploadJet.createUploadRoute(uploadRouteConfig));
+
+app.use(router);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
