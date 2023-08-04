@@ -16,9 +16,9 @@ const uploadRouteConfig = {
   }
 };
 
-router.post('/api/example', uploadJet.createUploadRoute(uploadRouteConfig));
+router.post('/images', uploadJet.createUploadRoute(uploadRouteConfig));
 
-app.use(router);
+app.use('/api', router);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
