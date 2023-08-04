@@ -10,8 +10,7 @@ const emit = defineEmits<{
 
 const props = defineProps({
   url: { type: String, required: true },
-  maxFileCount: { type: Number, default: 1 },
-  enableDragDrop: { type: Boolean, default: false }
+  maxFileCount: { type: Number, default: 1 }
 });
 
 const selectedFiles = ref<File[]>([]);
@@ -27,14 +26,9 @@ function addSelectedFiles(event: Event) {
 function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files as FileList;
   const droppedFilesArray = [...droppedFiles];
-  droppedFilesArray.map(file => {
-    selectedFiles.value.push(file);
-  });
-  isActiveDropzone.value = false;
-}
+  selectedFiles.value = [...selectedFiles.value, ...droppedFilesArray];
 
-function toggleActiveDropZone() {
-  isActiveDropzone.value = !isActiveDropzone.value;
+  isActiveDropzone.value = false;
 }
 
 async function uploadFiles() {
@@ -52,41 +46,46 @@ async function uploadFiles() {
   <div class="main-container">
     <div
       :class="{
-        dropzone: enableDragDrop,
-        'active-dropzone': isActiveDropzone && enableDragDrop
+        'active-dropzone': isActiveDropzone
       }"
-      @dragenter.prevent="toggleActiveDropZone"
-      @dragleave.prevent="toggleActiveDropZone"
-      @dragover.prevent
-      @drop.prevent="addDroppedFiles">
+      @dragenter.prevent="isActiveDropzone = true"
+      @dragleave.prevent="isActiveDropzone = false"
+      @dragover.prevent="isActiveDropzone = true"
+      @drop.prevent="addDroppedFiles"
+      class="dropzone">
       <div class="dropzone-content">
-        <p v-if="props.enableDragDrop" class="dropzone-content-message">
+        <p class="dropzone-content-message">
           Drag and drop the file you want to upload here
         </p>
         <form @submit.prevent>
-          <label for="file-input" class="browse-label"
-            ><span v-if="enableDragDrop">Or, </span>
-            <span class="browse-link">browse your file</span></label
-          >
+          <label for="file-input" class="browse-label">
+            <span>Or,</span>
+            <span class="browse-link">browse your file</span>
+          </label>
           <input
             @change="addSelectedFiles"
             :multiple="props.maxFileCount > 1"
             type="file"
             class="file-input"
             id="file-input" />
+
           <div class="submit">
             <button @click="uploadFiles">Upload File to S3</button>
           </div>
 
-          <p>
-            <template v-if="selectedFiles.length > 0">
-              Selected files:<br />
-              <span v-for="(file, index) in selectedFiles" :key="index"
-                >{{ file.name }}<br
-              /></span>
+          <div>
+            <template v-if="selectedFiles.length">
+              Selected files:
+              <br />
+              <span
+                v-for="file in selectedFiles"
+                :key="file.name + file.lastModified">
+                {{ file.name }}
+                <br />
+              </span>
             </template>
             <template v-else>No files selected.</template>
-          </p>
+          </div>
         </form>
       </div>
     </div>
@@ -94,30 +93,11 @@ async function uploadFiles() {
 </template>
 
 <style>
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
-}
-
-body {
-  min-height: 100vh;
+.main-container {
   color: #f8f8f8;
-  background: #181818;
-  transition:
-    color 0.5s,
-    background-color 0.5s;
-  line-height: 1.6;
   font-family: sans-serif;
   font-size: 15px;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.main-container {
   position: absolute;
   top: 50%;
   left: 50%;
