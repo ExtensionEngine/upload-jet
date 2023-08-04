@@ -4,8 +4,14 @@
   "description": "This is an example app that demonstrates how to use upload-jet-express package",
   "main": "dist/example-app/index.js",
   "scripts": {
-    "dev": "tsc && node dist/example-app/index.js",
-    "start": "node dist/example-app/index.js"
+    "compile": "tsc && node dist/example-app/index.js",
+    "dev": "nodemon -e ts --exec \"npm run compile\""
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "./dist/**"
+    ],
+    "delay": 2500
   },
   "keywords": [],
   "author": "",
@@ -16,6 +22,7 @@
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/node": "^20.4.6",
+    "nodemon": "^3.0.1",
     "typescript": "^5.1.6"
   }
 }
