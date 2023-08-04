@@ -29,8 +29,8 @@ export class S3ClientService {
     key,
     ...conditions
   }: PolicyOptions & { bucket: string }) {
-    const Conditions: any = [];
-    const Fields: any = {};
+    const Conditions = [];
+    const Fields = {};
     if ('maxFileSize' in conditions) {
       Conditions.push(['content-length-range', 0, conditions.maxFileSize]);
     }
