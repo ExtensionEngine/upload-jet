@@ -3,7 +3,7 @@ import UploadJet from './components/UploadJet.vue';
 </script>
 
 <template>
-  <UploadJet />
+  <UploadJet url="someUrl" :numberOfFiles="3" />
 </template>
 
 <style scoped></style>

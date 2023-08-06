@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { UploadJetLib } from 'upload-jet-lib'
+import { UploadJet } from 'upload-jet-lib'
 </script>
 
 <template>
-  <UploadJetLib />
+  <UploadJet url="someUrl" :numberOfFiles="3" />
 </template>
 
 <style></style>

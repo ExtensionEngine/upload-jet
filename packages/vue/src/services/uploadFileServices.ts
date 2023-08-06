@@ -1,4 +1,6 @@
 const getPostPolicy = async function (url: string, fileName: string[]) {
+  console.log(url);
+  console.log(fileName);
   // mock a return value -> post policies
 
   return {

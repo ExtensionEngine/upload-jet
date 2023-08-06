@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "vue": "^3.3.4",
-    "upload-jet-lib": "file:../packages/vue/dist"
+    "upload-jet-lib": "file:../"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.3.2",
