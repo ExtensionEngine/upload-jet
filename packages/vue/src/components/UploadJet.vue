@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useUploadJet } from '../useUploadJet';
 import type { UploadedFile } from '@/types';
 
@@ -14,13 +14,15 @@ const props = defineProps({
 });
 
 const fileInputRef = ref<HTMLInputElement>();
+const selectedFiles = ref<File[]>([]);
+const isDropzoneActive = ref(false);
+const multiple = computed(() => props.maxFileCount > 1);
+
+const { upload } = useUploadJet({ url: props.url });
+
 const openFileInput = () => {
   fileInputRef.value?.click();
 };
-
-const selectedFiles = ref<File[]>([]);
-const isDropzoneActive = ref(false);
-const { upload } = useUploadJet({ url: props.url });
 
 function addSelectedFiles(event: Event) {
   const inputElement = event.target as HTMLInputElement;
@@ -33,7 +35,6 @@ function addDroppedFiles(e: DragEvent) {
   if (!droppedFiles?.length) return;
   const droppedFilesArray = [...droppedFiles];
   selectedFiles.value = [...selectedFiles.value, ...droppedFilesArray];
-
   isDropzoneActive.value = false;
 }
 
@@ -59,8 +60,9 @@ async function uploadFiles() {
     @drop.prevent="addDroppedFiles"
     class="dropzone">
     <div class="dropzone-content">
-      <div class="dropzone-content-message">
-        Drag and drop the file you want to upload here
+      <div>
+        Drag and drop {{ multiple ? 'files' : 'the file' }} you want to upload
+        here
       </div>
       <form @submit.prevent>
         <label class="browse-label">
@@ -69,13 +71,13 @@ async function uploadFiles() {
           <button @click="openFileInput">Browse files</button>
           <input
             @change="addSelectedFiles"
-            :multiple="props.maxFileCount > 1"
+            :multiple="multiple"
             ref="fileInputRef"
             type="file"
             class="file-input" />
         </label>
 
-        <div class="submit">
+        <div>
           <button @click="uploadFiles">Upload File to S3</button>
         </div>
 
@@ -113,10 +115,6 @@ async function uploadFiles() {
   text-align: center;
 }
 
-.dropzone-content-browse {
-  margin-top: 0.5rem;
-}
-
 .dropzone.active {
   background-color: rgb(20, 56, 44);
 }
@@ -124,10 +122,6 @@ async function uploadFiles() {
 .browse-label {
   cursor: pointer;
   margin-bottom: 10px;
-}
-
-.browse-link {
-  text-decoration: underline;
 }
 
 .file-input {
