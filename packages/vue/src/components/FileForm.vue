@@ -9,7 +9,6 @@ const props = defineProps({
 });
 
 const fileInputRef = ref<HTMLInputElement>();
-
 const selectedFiles = computed({
   get() {
     return props.selectedFiles;
@@ -18,10 +17,6 @@ const selectedFiles = computed({
     emit('update:selected-files', newValue);
   }
 });
-
-const openFileInput = () => {
-  fileInputRef.value?.click();
-};
 
 function addSelectedFiles(event: Event) {
   const inputElement = event.target as HTMLInputElement;
@@ -32,13 +27,8 @@ function addSelectedFiles(event: Event) {
 
 <template>
   <form @submit.prevent="emit('submit', $event)">
-    <div>
-      Drag and drop {{ multiple ? 'files' : 'the file' }} you want to upload
-      here
-    </div>
     <label class="browse-label">
-      <div>Or,</div>
-      <button @click="openFileInput">Browse files</button>
+      <button @click="fileInputRef?.click()">Browse files</button>
       <input
         @change="addSelectedFiles"
         :multiple="multiple"

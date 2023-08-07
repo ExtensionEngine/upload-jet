@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+
 const emit = defineEmits(['update:selected-files']);
 
 const props = defineProps({
-  selectedFiles: { type: Array, default: () => [] }
+  selectedFiles: { type: Array, default: () => [] },
+  multiple: { type: Boolean, default: false }
 });
 
 const isDropzoneActive = ref(false);
-
 const selectedFiles = computed({
   get() {
     return props.selectedFiles;
@@ -37,6 +38,10 @@ function addDroppedFiles(e: DragEvent) {
     @drop.prevent="addDroppedFiles"
     class="dropzone">
     <div class="dropzone-content">
+      <div>
+        Drag and drop {{ multiple ? 'files' : 'the file' }} you want to upload
+        here
+      </div>
       <slot></slot>
     </div>
   </div>

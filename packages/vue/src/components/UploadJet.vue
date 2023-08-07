@@ -17,9 +17,7 @@ const props = defineProps({
 });
 
 const selectedFiles = ref<File[]>([]);
-
 const multiple = computed(() => props.maxFileCount > 1);
-
 const { upload } = useUploadJet({ url: props.url });
 
 async function uploadFiles() {
