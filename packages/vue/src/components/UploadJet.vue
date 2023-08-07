@@ -13,13 +13,13 @@ const props = defineProps({
   maxFileCount: { type: Number, default: 1 }
 });
 
-const fileInputRef = ref<HTMLInputElement | null>(null);
+const fileInputRef = ref<HTMLInputElement>();
 const openFileInput = () => {
-  fileInputRef?.value?.click();
+  fileInputRef.value?.click();
 };
 
 const selectedFiles = ref<File[]>([]);
-const isActiveDropzone = ref(false);
+const isDropzoneActive = ref(false);
 const { upload } = useUploadJet({ url: props.url });
 
 function addSelectedFiles(event: Event) {
@@ -29,15 +29,16 @@ function addSelectedFiles(event: Event) {
 }
 
 function addDroppedFiles(e: DragEvent) {
-  const droppedFiles = e.dataTransfer?.files as FileList;
+  const droppedFiles = e.dataTransfer?.files;
+  if (!droppedFiles?.length) return;
   const droppedFilesArray = [...droppedFiles];
   selectedFiles.value = [...selectedFiles.value, ...droppedFilesArray];
 
-  isActiveDropzone.value = false;
+  isDropzoneActive.value = false;
 }
 
 async function uploadFiles() {
-  if (!selectedFiles.value) return;
+  if (!selectedFiles.value?.length) return;
   try {
     const result = await upload(selectedFiles.value);
     if (result?.length) emit('upload-complete', result);
@@ -48,58 +49,55 @@ async function uploadFiles() {
 </script>
 
 <template>
-  <div class="main-container">
-    <div
-      :class="{
-        'active-dropzone': isActiveDropzone
-      }"
-      @dragenter.prevent="isActiveDropzone = true"
-      @dragleave.prevent="isActiveDropzone = false"
-      @dragover.prevent="isActiveDropzone = true"
-      @drop.prevent="addDroppedFiles"
-      class="dropzone">
-      <div class="dropzone-content">
-        <p class="dropzone-content-message">
-          Drag and drop the file you want to upload here
-        </p>
-        <form @submit.prevent>
-          <label for="file-input" class="browse-label">
-            <span>Or,</span>
-            <br />
-            <button @click="openFileInput">Browse files</button>
-          </label>
+  <div
+    :class="{
+      active: isDropzoneActive
+    }"
+    @dragenter.prevent="isDropzoneActive = true"
+    @dragleave.prevent="isDropzoneActive = false"
+    @dragover.prevent="isDropzoneActive = true"
+    @drop.prevent="addDroppedFiles"
+    class="dropzone">
+    <div class="dropzone-content">
+      <div class="dropzone-content-message">
+        Drag and drop the file you want to upload here
+      </div>
+      <form @submit.prevent>
+        <label class="browse-label">
+          <span>Or,</span>
+          <br />
+          <button @click="openFileInput">Browse files</button>
           <input
             @change="addSelectedFiles"
             :multiple="props.maxFileCount > 1"
             ref="fileInputRef"
             type="file"
-            class="file-input"
-            id="file-input" />
+            class="file-input" />
+        </label>
 
-          <div class="submit">
-            <button @click="uploadFiles">Upload File to S3</button>
-          </div>
+        <div class="submit">
+          <button @click="uploadFiles">Upload File to S3</button>
+        </div>
 
-          <div>
-            <template v-if="selectedFiles.length">
-              Selected files:
+        <div>
+          <template v-if="selectedFiles.length">
+            Selected files:
+            <br />
+            <span
+              v-for="file in selectedFiles"
+              :key="file.name + file.lastModified">
+              {{ file.name }}
               <br />
-              <span
-                v-for="file in selectedFiles"
-                :key="file.name + file.lastModified">
-                {{ file.name }}
-                <br />
-              </span>
-            </template>
-            <template v-else>No files selected.</template>
-          </div>
-        </form>
-      </div>
+            </span>
+          </template>
+          <template v-else>No files selected.</template>
+        </div>
+      </form>
     </div>
   </div>
 </template>
 
-<style>
+<style scoped>
 .dropzone {
   color: #f8f8f8;
   font-family: sans-serif;
@@ -119,7 +117,7 @@ async function uploadFiles() {
   margin-top: 0.5rem;
 }
 
-.active-dropzone {
+.dropzone.active {
   background-color: rgb(20, 56, 44);
 }
 
