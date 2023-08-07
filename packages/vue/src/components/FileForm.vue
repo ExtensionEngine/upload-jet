@@ -36,7 +36,7 @@ function addSelectedFiles(event: Event) {
         type="file"
         class="file-input" />
     </label>
-    <div>
+    <div class="mt-1">
       <button>Upload File to S3</button>
     </div>
   </form>
@@ -45,7 +45,10 @@ function addSelectedFiles(event: Event) {
 <style scoped>
 .browse-label {
   cursor: pointer;
-  margin-bottom: 10px;
+}
+
+.mt-1 {
+  margin-top: 1rem;
 }
 
 .file-input {

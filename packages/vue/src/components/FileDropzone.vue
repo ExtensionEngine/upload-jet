@@ -38,7 +38,7 @@ function addDroppedFiles(e: DragEvent) {
     @drop.prevent="addDroppedFiles"
     class="dropzone">
     <div class="dropzone-content">
-      <div>
+      <div class="mb-1">
         Drag and drop {{ multiple ? 'files' : 'the file' }} you want to upload
         here
       </div>
@@ -49,13 +49,11 @@ function addDroppedFiles(e: DragEvent) {
 
 <style scoped>
 .dropzone {
-  color: #f8f8f8;
-  font-family: sans-serif;
-  font-size: 15px;
+  color: white;
   border: dashed;
   padding: 3rem 6rem;
   border-radius: 5px;
-  border-color: rgb(255, 255, 255);
+  border-color: white;
   background-color: rgb(28, 37, 48);
 }
 
@@ -65,5 +63,9 @@ function addDroppedFiles(e: DragEvent) {
 
 .dropzone-content {
   text-align: center;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
 }
 </style>
