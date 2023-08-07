@@ -1,20 +1,12 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-const emit = defineEmits(['update:is-active', 'update:selected-files']);
+import { computed, ref } from 'vue';
+const emit = defineEmits(['update:selected-files']);
 
 const props = defineProps({
-  isActive: { type: Boolean, default: false },
   selectedFiles: { type: Array, default: () => [] }
 });
 
-const isActive = computed({
-  get() {
-    return props.isActive;
-  },
-  set(newValue) {
-    emit('update:is-active', newValue);
-  }
-});
+const isDropzoneActive = ref(false);
 
 const selectedFiles = computed({
   get() {
@@ -30,18 +22,18 @@ function addDroppedFiles(e: DragEvent) {
   if (!droppedFiles?.length) return;
   const droppedFilesArray = [...droppedFiles];
   selectedFiles.value = [...selectedFiles.value, ...droppedFilesArray];
-  isActive.value = false;
+  isDropzoneActive.value = false;
 }
 </script>
 
 <template>
   <div
     :class="{
-      active: isActive
+      active: isDropzoneActive
     }"
-    @dragenter.prevent="isActive = true"
-    @dragleave.prevent="isActive = false"
-    @dragover.prevent="isActive = true"
+    @dragenter.prevent="isDropzoneActive = true"
+    @dragleave.prevent="isDropzoneActive = false"
+    @dragover.prevent="isDropzoneActive = true"
     @drop.prevent="addDroppedFiles"
     class="dropzone">
     <div class="dropzone-content">

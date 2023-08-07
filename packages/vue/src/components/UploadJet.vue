@@ -17,7 +17,7 @@ const props = defineProps({
 });
 
 const selectedFiles = ref<File[]>([]);
-const isDropzoneActive = ref(false);
+
 const multiple = computed(() => props.maxFileCount > 1);
 
 const { upload } = useUploadJet({ url: props.url });
@@ -34,9 +34,7 @@ async function uploadFiles() {
 </script>
 
 <template>
-  <file-dropzone
-    v-model:selected-files="selectedFiles"
-    v-model:is-active="isDropzoneActive">
+  <file-dropzone v-model:selected-files="selectedFiles">
     <file-form
       @submit="uploadFiles"
       v-model:selected-files="selectedFiles"
