@@ -12,8 +12,8 @@
     "baseUrl": "./src",
     "incremental": true,
     "skipLibCheck": true,
-    "strict": true,
-    "noImplicitAny": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": false
   }

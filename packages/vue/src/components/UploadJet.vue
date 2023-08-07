@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useUploadJet } from '../useUploadJet';
 import type { UploadedFile } from '@/types';
+import FileList from './FileList.vue';
+import FileDropzone from './FileDropzone.vue';
+import FileForm from './FileForm.vue';
 
 const emit = defineEmits<{
   (event: 'upload-complete', payload: UploadedFile[]): void;
@@ -13,18 +16,12 @@ const props = defineProps({
   maxFileCount: { type: Number, default: 1 }
 });
 
-const selectedFiles = ref<File[]>();
-
-function setFiles(event: Event) {
-  const inputElement = event.target as HTMLInputElement;
-  if (!inputElement.files?.length) return;
-  selectedFiles.value = [...inputElement.files];
-}
-
+const selectedFiles = ref<File[]>([]);
+const multiple = computed(() => props.maxFileCount > 1);
 const { upload } = useUploadJet({ url: props.url });
 
 async function uploadFiles() {
-  if (!selectedFiles.value) return;
+  if (!selectedFiles.value?.length) return;
   try {
     const result = await upload(selectedFiles.value);
     if (result?.length) emit('upload-complete', result);
@@ -35,15 +32,11 @@ async function uploadFiles() {
 </script>
 
 <template>
-  <form @submit.prevent="uploadFiles">
-    <label>
-      <input
-        @change="setFiles"
-        :multiple="props.maxFileCount > 1"
-        type="file"
-        required
-        class="file-input" />
-    </label>
-    <button type="submit">Upload File to S3</button>
-  </form>
+  <file-dropzone v-model:selected-files="selectedFiles">
+    <file-form
+      @submit="uploadFiles"
+      v-model:selected-files="selectedFiles"
+      :multiple="multiple" />
+    <file-list :files="selectedFiles" />
+  </file-dropzone>
 </template>
