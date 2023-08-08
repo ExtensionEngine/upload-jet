@@ -14,8 +14,12 @@ import * as bytes from 'bytes';
 import { ZodError } from 'zod';
 
 const API_URL = 'http://localhost:3000';
-const BAD_REQUEST = 400;
+const BAD_REQUEST_CODE = 400;
 const SERVER_UNAVAILABLE_ERROR = 503;
+
+const CONNECTION_REFUSED = 'ECONNREFUSED';
+const ERR_BAD_REQUEST = AxiosError.ERR_BAD_REQUEST;
+const ERR_BAD_RESPONSE = AxiosError.ERR_BAD_RESPONSE;
 
 export class UploadJet {
   #apiKey: string;
@@ -35,12 +39,12 @@ export class UploadJet {
 
         if (parsedBody.success === false) {
           return res
-            .status(BAD_REQUEST)
+            .status(BAD_REQUEST_CODE)
             .send(
               new UploadJetError(
                 'Invalid request body',
                 mapZodError(parsedBody.error),
-                BAD_REQUEST
+                BAD_REQUEST_CODE
               )
             );
         }
@@ -102,11 +106,27 @@ export class UploadJet {
       return data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        throw new UploadJetError(
-          'Error fetching upload policy',
-          error.code,
-          SERVER_UNAVAILABLE_ERROR
-        );
+        const errorCode = error.code;
+
+        if (errorCode === CONNECTION_REFUSED) {
+          throw new UploadJetError(
+            'Upload Jet service unavailable',
+            errorCode,
+            SERVER_UNAVAILABLE_ERROR
+          );
+        } else if (
+          errorCode === ERR_BAD_REQUEST ||
+          errorCode === ERR_BAD_RESPONSE
+        ) {
+          const response = error.response;
+          if (response) {
+            throw new UploadJetError(
+              'Error fetching upload policy',
+              response.data,
+              response.status
+            );
+          }
+        }
       }
     }
   }
