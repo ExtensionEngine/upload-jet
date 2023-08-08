@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import * as express from 'express';
 import {
   UploadJetConfig,
@@ -34,10 +34,15 @@ export class UploadJet {
         );
 
         if (parsedBody.success === false) {
-          return res.status(BAD_REQUEST).send({
-            message: 'Invalid request body',
-            error: mapZodError(parsedBody.error)
-          });
+          return res
+            .status(BAD_REQUEST)
+            .send(
+              new UploadJetError(
+                'Invalid request body',
+                mapZodError(parsedBody.error),
+                BAD_REQUEST
+              )
+            );
         }
 
         try {
@@ -48,10 +53,10 @@ export class UploadJet {
           );
 
           return res.json(policies);
-        } catch (error: any) {
-          return res
-            .status(SERVER_UNAVAILABLE_ERROR)
-            .json({ error: error.message });
+        } catch (error: unknown) {
+          if (error instanceof UploadJetError) {
+            res.status(error.code).send(error);
+          }
         }
       });
     };
@@ -96,7 +101,13 @@ export class UploadJet {
       const { data } = await axios.post(url.href, policyRules);
       return data;
     } catch (error) {
-      throw new Error('Error fetching upload policy');
+      if (error instanceof AxiosError) {
+        throw new UploadJetError(
+          'Error fetching upload policy',
+          error.code,
+          SERVER_UNAVAILABLE_ERROR
+        );
+      }
     }
   }
 }
@@ -107,4 +118,16 @@ function mapZodError(error: ZodError) {
     message,
     code
   }));
+}
+
+class UploadJetError {
+  message: string;
+  error: any;
+  code: number;
+
+  constructor(message: string, error: any, code: number) {
+    this.message = message;
+    this.error = error;
+    this.code = code;
+  }
 }
