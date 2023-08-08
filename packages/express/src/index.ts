@@ -15,7 +15,7 @@ import { ZodError } from 'zod';
 
 const API_URL = 'http://localhost:3000';
 const BAD_REQUEST_CODE = 400;
-const SERVER_UNAVAILABLE_ERROR = 503;
+const SERVER_UNAVAILABLE_CODE = 503;
 
 const CONNECTION_REFUSED = 'ECONNREFUSED';
 const ERR_BAD_REQUEST = AxiosError.ERR_BAD_REQUEST;
@@ -112,7 +112,7 @@ export class UploadJet {
           throw new UploadJetError(
             'Upload Jet service unavailable',
             errorCode,
-            SERVER_UNAVAILABLE_ERROR
+            SERVER_UNAVAILABLE_CODE
           );
         } else if (
           errorCode === ERR_BAD_REQUEST ||
