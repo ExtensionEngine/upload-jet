@@ -27,7 +27,7 @@ function addSelectedFiles(event: Event) {
 </script>
 
 <template>
-  <form @submit.prevent="emit('submit', $event)">
+  <form @submit.prevent>
     <label class="browse-label">
       <button @click="fileInputRef?.click()">Browse files</button>
       <input
@@ -39,7 +39,7 @@ function addSelectedFiles(event: Event) {
         :accept="props.fileTypes" />
     </label>
     <div class="mt-1">
-      <button>Upload File to S3</button>
+      <button @click="emit('submit', $event)">Upload File to S3</button>
     </div>
   </form>
 </template>

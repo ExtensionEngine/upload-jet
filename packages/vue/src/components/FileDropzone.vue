@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import accept from 'attr-accept';
 
-const emit = defineEmits(['update:selected-files']);
+const emit = defineEmits(['update:selected-files', 'update:non-valid-files']);
 
 const props = defineProps({
   selectedFiles: { type: Array, default: () => [] },
-  multiple: { type: Boolean, default: false }
+  nonValidFiles: { type: Array, default: () => [] },
+  multiple: { type: Boolean, default: false },
+  fileTypes: { type: String, default: null }
 });
 
 const isDropzoneActive = ref(false);
@@ -18,11 +21,26 @@ const selectedFiles = computed({
   }
 });
 
+const nonValidFiles = computed({
+  get() {
+    return props.nonValidFiles;
+  },
+  set(newValue) {
+    emit('update:non-valid-files', newValue);
+  }
+});
+
 function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files;
   if (!droppedFiles?.length) return;
   const droppedFilesArray = [...droppedFiles];
-  selectedFiles.value = [...selectedFiles.value, ...droppedFilesArray];
+  droppedFilesArray.forEach(file => {
+    if (accept({ type: file.type }, props.fileTypes)) {
+      selectedFiles.value = [...selectedFiles.value, file];
+    } else {
+      nonValidFiles.value.push(file);
+    }
+  });
   isDropzoneActive.value = false;
 }
 </script>
@@ -56,7 +74,6 @@ function addDroppedFiles(e: DragEvent) {
   border-color: white;
   background-color: rgb(28, 37, 48);
 }
-
 .dropzone.active {
   background-color: rgb(20, 56, 44);
 }
