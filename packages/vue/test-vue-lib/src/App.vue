@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UploadJet } from 'upload-jet-lib'
+import { UploadJet } from 'vue-upload-jet'
 </script>
 
 <template>
