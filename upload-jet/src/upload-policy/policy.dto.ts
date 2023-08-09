@@ -21,3 +21,11 @@ export const createUploadPolicySchema = z.record(
 export type CreateUploadPolicyPayload = z.infer<
   typeof createUploadPolicySchema
 >;
+
+export enum StandardTypes {
+  IMAGE = 'image',
+  AUDIO = 'audio',
+  VIDEO = 'video',
+  PDF = 'pdf',
+  TEXT = 'text'
+}

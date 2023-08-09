@@ -4,6 +4,7 @@ import { ConfigType } from '@nestjs/config';
 import awsConfig from 'config/aws.config';
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import { PolicyOptions } from './policy.dto';
+import { StandardTypes } from './policy.dto';
 
 @Injectable()
 export class S3ClientService {
@@ -34,9 +35,9 @@ export class S3ClientService {
     if ('maxFileSize' in conditions) {
       Conditions.push(['content-length-range', 0, conditions.maxFileSize]);
     }
-    if ('fileType' in conditions) {
-      Conditions.push({ 'Content-Type': conditions.fileType });
-      Fields['Content-Type'] = conditions.fileType;
+    if ('fileType' in conditions && !conditions.fileType.endsWith('/')) {
+      const fileTypes = this.getFileTypeOutput(conditions.fileType);
+      Conditions.push(fileTypes);
     }
     if (conditions.public) {
       Fields['Tagging'] = this.getPublicPolicyTag();
@@ -52,5 +53,11 @@ export class S3ClientService {
 
   private getPublicPolicyTag() {
     return `<Tagging><TagSet><Tag><Key>policy</Key><Value>public</Value></Tag></TagSet></Tagging>`;
+  }
+
+  private getFileTypeOutput(fileType: string) {
+    return Object.values(StandardTypes).includes(fileType as StandardTypes)
+      ? ['starts-with', '$Content-Type', `${fileType}/`]
+      : { 'Content-Type': fileType };
   }
 }

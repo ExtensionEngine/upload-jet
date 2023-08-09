@@ -1,10 +1,13 @@
 import express from 'express';
 import { UploadJet } from '../src/index';
+import cors from 'cors';
 
 const app = express();
 const router = express.Router();
 const port = 3001;
 const API_KEY = 'example-api-key';
+
+app.use(cors());
 
 const uploadJet = new UploadJet({ apiKey: API_KEY });
 const uploadRouteConfig = {

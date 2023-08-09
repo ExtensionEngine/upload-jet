@@ -14,7 +14,6 @@ export type Policy = {
     Policy: string;
     'X-Amz-Signature': string;
     Tagging?: string;
-    'Content-Type'?: string;
   };
 };
 
