@@ -56,6 +56,7 @@ export class UploadJet {
               message: DEFAULT_SERVER_ERROR_MESSAGE
             });
           }
+          throw error;
         }
       });
     };
