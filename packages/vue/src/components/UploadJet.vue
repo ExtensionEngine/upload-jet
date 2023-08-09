@@ -5,7 +5,7 @@ import type { UploadedFile } from '@/types';
 import FileList from './FileList.vue';
 import FileDropzone from './FileDropzone.vue';
 import FileForm from './FileForm.vue';
-import exportAcceptedTypes from '../acceptedFileTypes';
+import exportAcceptedTypes from '../validationService';
 
 const emit = defineEmits<{
   (event: 'upload-complete', payload: UploadedFile[]): void;

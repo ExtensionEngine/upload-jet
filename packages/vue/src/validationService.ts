@@ -1,12 +1,6 @@
-const StandardTypes = {
-  IMAGE: 'image',
-  AUDIO: 'audio',
-  VIDEO: 'video',
-  PDF: 'pdf',
-  TEXT: 'text'
-};
+import { StandardTypes } from './types';
 
-const exportAcceptedTypes = function (input: string[]) {
+const exportAcceptedTypes = function (input: StandardTypes[]) {
   const types: string[] = [];
   input.forEach(el => {
     switch (el) {
@@ -28,4 +22,5 @@ const exportAcceptedTypes = function (input: string[]) {
   });
   return types.join(',');
 };
+
 export default exportAcceptedTypes;
