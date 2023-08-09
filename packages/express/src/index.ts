@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import * as express from 'express';
 import {
   UploadJetConfig,
@@ -15,11 +15,8 @@ import { ZodError } from 'zod';
 
 const API_URL = 'http://localhost:3000';
 const BAD_REQUEST_CODE = 400;
-const SERVER_UNAVAILABLE_CODE = 503;
-
-const CONNECTION_REFUSED = 'ECONNREFUSED';
-const ERR_BAD_REQUEST = AxiosError.ERR_BAD_REQUEST;
-const ERR_BAD_RESPONSE = AxiosError.ERR_BAD_RESPONSE;
+const INTERNAL_SERVER_ERROR_CODE = 500;
+const DEFAULT_SERVER_ERROR_MESSAGE = 'Something went wrong.';
 
 export class UploadJet {
   #apiKey: string;
@@ -38,15 +35,10 @@ export class UploadJet {
         );
 
         if (parsedBody.success === false) {
-          return res
-            .status(BAD_REQUEST_CODE)
-            .send(
-              new UploadJetError(
-                'Invalid request body',
-                mapZodError(parsedBody.error),
-                BAD_REQUEST_CODE
-              )
-            );
+          return res.status(BAD_REQUEST_CODE).json({
+            message: 'Invalid request body',
+            error: mapZodError(parsedBody.error)
+          });
         }
 
         try {
@@ -58,8 +50,11 @@ export class UploadJet {
 
           return res.json(policies);
         } catch (error: unknown) {
+          console.error('UploadJetAdapterError: ', error);
           if (error instanceof UploadJetError) {
-            res.status(error.code).send(error);
+            res.status(INTERNAL_SERVER_ERROR_CODE).json({
+              message: DEFAULT_SERVER_ERROR_MESSAGE
+            });
           }
         }
       });
@@ -101,34 +96,12 @@ export class UploadJet {
       );
 
     const url = new URL('upload-policy', API_URL);
-    try {
-      const { data } = await axios.post(url.href, policyRules);
-      return data;
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        const errorCode = error.code;
-
-        if (errorCode === CONNECTION_REFUSED) {
-          throw new UploadJetError(
-            'Upload Jet service unavailable',
-            errorCode,
-            SERVER_UNAVAILABLE_CODE
-          );
-        } else if (
-          errorCode === ERR_BAD_REQUEST ||
-          errorCode === ERR_BAD_RESPONSE
-        ) {
-          const response = error.response;
-          if (response) {
-            throw new UploadJetError(
-              'Error fetching upload policy',
-              response.data,
-              response.status
-            );
-          }
-        }
-      }
-    }
+    return axios
+      .post(url.href, policyRules)
+      .then(({ data }) => data)
+      .catch(err => {
+        throw new UploadJetError(err.message);
+      });
   }
 }
 
@@ -140,14 +113,9 @@ function mapZodError(error: ZodError) {
   }));
 }
 
-class UploadJetError {
-  message: string;
-  error: any;
-  code: number;
-
-  constructor(message: string, error: any, code: number) {
-    this.message = message;
-    this.error = error;
-    this.code = code;
+class UploadJetError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = this.constructor.name;
   }
 }
