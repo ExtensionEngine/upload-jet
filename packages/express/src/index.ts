@@ -52,7 +52,7 @@ export class UploadJet {
         } catch (error: unknown) {
           console.error('UploadJetAdapterError: ', error);
           if (error instanceof UploadJetError) {
-            res.status(INTERNAL_SERVER_ERROR_CODE).json({
+            return res.status(INTERNAL_SERVER_ERROR_CODE).json({
               message: DEFAULT_SERVER_ERROR_MESSAGE
             });
           }
