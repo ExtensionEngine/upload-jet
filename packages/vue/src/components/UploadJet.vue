@@ -14,7 +14,7 @@ const emit = defineEmits<{
 
 const props = defineProps({
   url: { type: String, required: true },
-  maxFileCount: { type: Number, default: 1 },
+  maxFileCount: { type: Number, default: 3 },
   fileTypes: {
     type: Array as PropType<string[]>,
     default: () => ['image']
