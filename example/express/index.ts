@@ -1,5 +1,5 @@
 import express from 'express';
-import { UploadJet } from '../src/index';
+import { UploadJet } from '../../packages/express/src';
 
 const app = express();
 const router = express.Router();
