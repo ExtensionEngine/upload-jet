@@ -4,9 +4,6 @@ import { UploadPolicyModule } from './upload-policy/upload-policy.module';
 import awsConfig from './config/aws.config';
 import appConfig from './config/app.config';
 import { LoggerModule } from 'nestjs-pino';
-import { APP_FILTER } from '@nestjs/core';
-import { AllExceptionsFilter } from './filters/exception.filter';
-import { HttpExceptionFilter } from './filters/http-exception.filter';
 
 @Module({
   imports: [
@@ -21,15 +18,6 @@ import { HttpExceptionFilter } from './filters/http-exception.filter';
     UploadPolicyModule
   ],
   controllers: [],
-  providers: [
-    {
-      provide: APP_FILTER,
-      useClass: AllExceptionsFilter
-    },
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter
-    }
-  ]
+  providers: []
 })
 export class AppModule {}
