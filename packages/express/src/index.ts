@@ -6,8 +6,7 @@ import {
 } from './schema/upload-jet-config.dto';
 import {
   UploadOptions,
-  uploadOptionsSchema,
-  StandardTypes
+  uploadOptionsSchema
 } from './schema/upload-options.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { createUploadPolicyBodySchema } from './schema/create-upload-policy-body.dto';

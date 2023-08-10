@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import accept from 'attr-accept';
 
-const emit = defineEmits(['update:selected-files', 'update:non-valid-files']);
+const emit = defineEmits(['update:selected-files', 'update:invalid-files']);
 
 const props = defineProps({
   selectedFiles: { type: Array, default: () => [] },

@@ -35,8 +35,8 @@ function addSelectedFiles(event: Event) {
         :multiple="multiple"
         ref="fileInputRef"
         type="file"
-        class="file-input"
-        :accept="props.fileTypes" />
+        :accept="props.fileTypes"
+        class="file-input" />
     </label>
     <div class="mt-1">
       <button>Upload File to S3</button>

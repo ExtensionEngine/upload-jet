@@ -1,14 +1,7 @@
 import { z } from 'zod';
 
-export enum StandardTypes {
-  IMAGE = 'image',
-  AUDIO = 'audio',
-  VIDEO = 'video',
-  PDF = 'pdf',
-  TEXT = 'text'
-}
-
-const fileTypeSchema = z.nativeEnum(StandardTypes);
+const StandardTypes = z.enum(['image', 'audio', 'video', 'pdf', 'text']);
+const fileTypeSchema = z.union([StandardTypes, z.string().and(z.object({}))]);
 
 const setFileNameSchema = z
   .function()
@@ -17,7 +10,7 @@ const setFileNameSchema = z
 
 export const uploadOptionsSchema = z
   .object({
-    fileType: z.union([z.string(), fileTypeSchema]).optional(),
+    fileType: fileTypeSchema.optional(),
     maxFileSize: z.string().optional(),
     public: z.boolean().optional(),
     setFileName: setFileNameSchema.optional()
