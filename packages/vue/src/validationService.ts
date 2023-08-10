@@ -34,4 +34,15 @@ function isDuplicateFile(fileName: string, selectedFiles: File[]) {
   });
 }
 
-export { exportAcceptedTypes, isValidTypeFile, isDuplicateFile };
+function indexToReplace(file: File, selectedFiles: File[]) {
+  return selectedFiles.findIndex(
+    selectedfile => file.name === selectedfile.name
+  );
+}
+
+export {
+  exportAcceptedTypes,
+  isValidTypeFile,
+  isDuplicateFile,
+  indexToReplace
+};
