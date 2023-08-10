@@ -13,7 +13,8 @@ const showSuccessDialog = (data: any) => {
   <UploadJet
     @upload-error="showErrorDialog"
     @upload-complete="showSuccessDialog"
-    url="http://localhost:3001/api/images" />
+    url="http://localhost:3001/api/images"
+    :maxFileCount="3" />
 </template>
 
 <style scoped></style>
