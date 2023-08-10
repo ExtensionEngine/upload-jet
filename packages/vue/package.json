@@ -1,15 +1,24 @@
 {
-  "name": "vue",
-  "version": "0.0.0",
-  "private": true,
+  "name": "@upload-jet/vue",
+  "version": "0.0.1",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/upload-jet-lib.umd.cjs",
+  "module": "./dist/upload-jet-lib.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/upload-jet-lib.js",
+      "require": "./dist/upload-jet-lib.umd.cjs"
+    }
+  },
+  "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check build-only",
-    "preview": "vite preview",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "build": "vite build && vue-tsc",
+    "preview": "vite preview"
   },
   "dependencies": {
     "vue": "^3.3.4"
