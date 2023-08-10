@@ -5,7 +5,7 @@ import type { UploadedFile } from '@/types';
 import FileList from './FileList.vue';
 import FileDropzone from './FileDropzone.vue';
 import FileForm from './FileForm.vue';
-import exportAcceptedTypes from '../validationService';
+import { exportAcceptedTypes } from '../validationService';
 
 const emit = defineEmits<{
   (event: 'upload-complete', payload: UploadedFile[]): void;
@@ -17,7 +17,7 @@ const props = defineProps({
   maxFileCount: { type: Number, default: 1 },
   fileTypes: {
     type: Array as PropType<string[]>,
-    default: () => []
+    default: () => ['image']
   }
 });
 

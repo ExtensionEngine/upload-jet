@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import accept from 'attr-accept';
+import { isValidTypeFile, isDuplicateFile } from '../validationService';
 
 const emit = defineEmits(['update:selected-files', 'update:non-valid-files']);
 
 const props = defineProps({
-  selectedFiles: { type: Array, default: () => [] },
-  nonValidFiles: { type: Array, default: () => [] },
+  selectedFiles: { type: Array as () => File[], default: () => [] },
+  nonValidFiles: { type: Array as () => File[], default: () => [] },
   multiple: { type: Boolean, default: false },
   fileTypes: { type: String, default: null }
 });
@@ -35,8 +35,11 @@ function addDroppedFiles(e: DragEvent) {
   if (!droppedFiles?.length) return;
   const droppedFilesArray = [...droppedFiles];
   droppedFilesArray.forEach(file => {
-    if (accept({ type: file.type }, props.fileTypes)) {
-      selectedFiles.value = [...selectedFiles.value, file];
+    const isDuplicate = isDuplicateFile(file.name, props.selectedFiles);
+    const isValidType = isValidTypeFile(file, props.fileTypes);
+
+    if (!isDuplicate && isValidType) {
+      selectedFiles.value.push(file);
     } else {
       nonValidFiles.value.push(file);
     }

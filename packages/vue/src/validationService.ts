@@ -1,6 +1,7 @@
 import { StandardTypes } from './types';
+import accept from 'attr-accept';
 
-const exportAcceptedTypes = function (input: StandardTypes[]) {
+function exportAcceptedTypes(input: StandardTypes[]) {
   const types: string[] = [];
   input.forEach(el => {
     switch (el) {
@@ -21,6 +22,16 @@ const exportAcceptedTypes = function (input: StandardTypes[]) {
     }
   });
   return types.join(',');
-};
+}
 
-export default exportAcceptedTypes;
+function isValidTypeFile(file: File, fileType: string) {
+  return accept({ type: file.type }, fileType);
+}
+
+function isDuplicateFile(fileName: string, selectedFiles: File[]) {
+  return selectedFiles.some(file => {
+    return file.name === fileName;
+  });
+}
+
+export { exportAcceptedTypes, isValidTypeFile, isDuplicateFile };
