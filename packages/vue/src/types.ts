@@ -19,3 +19,6 @@ export type Policy = {
 
 export type FileName = string;
 export type PolicyResponse = Record<FileName, Policy>;
+
+type MimeType = string & {};
+export type FileType = 'image' | 'audio' | 'video' | 'pdf' | 'text' | MimeType;

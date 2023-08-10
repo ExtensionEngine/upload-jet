@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, ref, type PropType } from 'vue';
-import { useUploadJet } from '../useUploadJet';
-import type { UploadedFile } from '@/types';
 import FileList from './FileList.vue';
 import FileDropzone from './FileDropzone.vue';
 import FileForm from './FileForm.vue';
 import exportAcceptedTypes from '../validationService';
+import { useUploadJet } from '../useUploadJet';
+import type { UploadedFile, FileType } from '@/types';
 
 const emit = defineEmits<{
   (event: 'upload-complete', payload: UploadedFile[]): void;
@@ -16,7 +16,7 @@ const props = defineProps({
   url: { type: String, required: true },
   maxFileCount: { type: Number, default: 1 },
   fileTypes: {
-    type: Array as PropType<string[]>,
+    type: Array as PropType<FileType[]>,
     default: () => []
   }
 });
