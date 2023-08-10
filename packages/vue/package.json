@@ -1,5 +1,5 @@
 {
-  "name": "vue-upload-jet",
+  "name": "@upload-jet/vue",
   "version": "0.0.1",
   "type": "module",
   "files": [
@@ -17,7 +17,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vue-tsc --emitDeclarationOnly",
+    "build": "vite build && vue-tsc",
     "preview": "vite preview"
   },
   "dependencies": {
