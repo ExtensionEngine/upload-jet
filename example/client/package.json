@@ -1,5 +1,5 @@
 {
-  "name": "@upload-jet/vue-example",
+  "name": "vue-example",
   "private": true,
   "version": "0.0.0",
   "type": "module",
