@@ -4,3 +4,5 @@ services:
     build: ./upload-jet
     ports:
       - '3000:3000'
+    env_file:
+      - ./upload-jet/.env
