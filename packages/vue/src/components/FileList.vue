@@ -11,10 +11,16 @@ const props = defineProps<{ files: File[]; invalidFiles: File[] }>();
   </div>
   <div v-else>No files selected</div>
   <br />
-  <div v-if="props.invalidFiles.length">
-    <div>Not valid files:</div>
+  <div v-if="props.invalidFiles.length" class="error-message">
+    <div>Error:</div>
     <div v-for="file in props.invalidFiles" :key="file.size + file.name">
-      {{ file.name }}
+      File {{ file.name }} is not a vild type
     </div>
   </div>
 </template>
+
+<style scoped>
+.error-message {
+  color: red;
+}
+</style>

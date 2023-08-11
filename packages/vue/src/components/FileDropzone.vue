@@ -38,12 +38,11 @@ function addDroppedFiles(e: DragEvent) {
   const validFiles = droppedFilesArray.filter(({ type }) =>
     accept({ type }, props.fileTypes)
   );
-  const invalidFormatFiles = droppedFilesArray.filter(
+  invalidFiles.value = droppedFilesArray.filter(
     ({ type }) => !accept({ type }, props.fileTypes)
   );
 
   selectedFiles.value = [...selectedFiles.value, ...validFiles];
-  invalidFiles.value = [...invalidFormatFiles];
 
   isDropzoneActive.value = false;
 }
