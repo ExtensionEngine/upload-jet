@@ -11,8 +11,8 @@ app.use(cors());
 
 const uploadJet = new UploadJet({ apiKey: API_KEY });
 const uploadRouteConfig = {
-  // fileType: 'image',
-  // maxFileSize: '1MB',
+  fileType: 'image',
+  maxFileSize: '1MB',
   public: true,
   setFileName: (req: Request, fileName: string) => {
     return fileName;
