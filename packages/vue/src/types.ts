@@ -20,5 +20,13 @@ export type Policy = {
 export type FileName = string;
 export type PolicyResponse = Record<FileName, Policy>;
 
+export const StandardTypes = {
+  IMAGE: 'image',
+  AUDIO: 'audio',
+  VIDEO: 'video',
+  PDF: 'pdf',
+  TEXT: 'text'
+} as const;
+
 type MimeType = string & {};
 export type FileType = 'image' | 'audio' | 'video' | 'pdf' | 'text' | MimeType;

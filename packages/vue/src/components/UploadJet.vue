@@ -22,7 +22,7 @@ const props = defineProps({
 });
 
 const selectedFiles = ref<File[]>([]);
-const nonValidFiles = ref<File[]>([]);
+const invalidFiles = ref<File[]>([]);
 const multiple = computed(() => props.maxFileCount > 1);
 const acceptedTypes = computed(() => exportAcceptedTypes(props.fileTypes));
 const { upload } = useUploadJet({ url: props.url });
@@ -41,13 +41,13 @@ async function uploadFiles() {
 <template>
   <file-dropzone
     v-model:selected-files="selectedFiles"
-    v-model:non-valid-files="nonValidFiles"
+    v-model:invalid-files="invalidFiles"
     :fileTypes="acceptedTypes">
     <file-form
       @submit="uploadFiles"
       v-model:selected-files="selectedFiles"
       :multiple="multiple"
       :fileTypes="acceptedTypes" />
-    <file-list :files="selectedFiles" :nonValidFiles="nonValidFiles" />
+    <file-list :files="selectedFiles" :invalidFiles="invalidFiles" />
   </file-dropzone>
 </template>

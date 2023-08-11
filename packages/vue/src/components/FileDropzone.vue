@@ -6,7 +6,7 @@ const emit = defineEmits(['update:selected-files', 'update:invalid-files']);
 
 const props = defineProps({
   selectedFiles: { type: Array, default: () => [] },
-  nonValidFiles: { type: Array, default: () => [] },
+  invalidFiles: { type: Array, default: () => [] },
   multiple: { type: Boolean, default: false },
   fileTypes: { type: String, default: null }
 });
@@ -21,12 +21,12 @@ const selectedFiles = computed({
   }
 });
 
-const nonValidFiles = computed({
+const invalidFiles = computed({
   get() {
-    return props.nonValidFiles;
+    return props.invalidFiles;
   },
   set(newValue) {
-    emit('update:non-valid-files', newValue);
+    emit('update:invalid-files', newValue);
   }
 });
 
@@ -34,13 +34,17 @@ function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files;
   if (!droppedFiles?.length) return;
   const droppedFilesArray = [...droppedFiles];
-  droppedFilesArray.forEach(file => {
-    if (accept({ type: file.type }, props.fileTypes)) {
-      selectedFiles.value = [...selectedFiles.value, file];
-    } else {
-      nonValidFiles.value.push(file);
-    }
-  });
+
+  const validFiles = droppedFilesArray.filter(({ type }) =>
+    accept({ type }, props.fileTypes)
+  );
+  const invalidFormatFiles = droppedFilesArray.filter(
+    ({ type }) => !accept({ type }, props.fileTypes)
+  );
+
+  selectedFiles.value = [...selectedFiles.value, ...validFiles];
+  invalidFiles.value = [...invalidFormatFiles];
+
   isDropzoneActive.value = false;
 }
 </script>

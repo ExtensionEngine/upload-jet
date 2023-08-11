@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{ files: File[]; nonValidFiles: File[] }>();
+const props = defineProps<{ files: File[]; invalidFiles: File[] }>();
 </script>
 
 <template>
@@ -11,9 +11,9 @@ const props = defineProps<{ files: File[]; nonValidFiles: File[] }>();
   </div>
   <div v-else>No files selected</div>
   <br />
-  <div v-if="props.nonValidFiles.length">
+  <div v-if="props.invalidFiles.length">
     <div>Not valid files:</div>
-    <div v-for="file in props.nonValidFiles" :key="file.size + file.name">
+    <div v-for="file in props.invalidFiles" :key="file.size + file.name">
       {{ file.name }}
     </div>
   </div>
