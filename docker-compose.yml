@@ -1,0 +1,6 @@
+version: '3'
+services:
+  service:
+    build: ./upload-jet
+    ports:
+      - '3000:3000'
