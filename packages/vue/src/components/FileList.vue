@@ -1,5 +1,8 @@
 <script setup lang="ts">
-const props = defineProps<{ files: File[]; nonValidFiles: File[] }>();
+const props = defineProps<{
+  files: File[];
+  invalidFiles: File[];
+}>();
 </script>
 
 <template>
@@ -11,10 +14,16 @@ const props = defineProps<{ files: File[]; nonValidFiles: File[] }>();
   </div>
   <div v-else>No files selected</div>
   <br />
-  <div v-if="props.nonValidFiles.length">
-    <div>Not valid files:</div>
-    <div v-for="file in props.nonValidFiles" :key="file.size + file.name">
-      {{ file.name }}
+  <div v-if="invalidFiles.length" class="error-message">
+    <div>Error:</div>
+    <div v-for="file in invalidFiles" :key="file.size + file.name">
+      File {{ file.name }} is not a valid type
     </div>
   </div>
 </template>
+
+<style scoped>
+.error-message {
+  color: red;
+}
+</style>

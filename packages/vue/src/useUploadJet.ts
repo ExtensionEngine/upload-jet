@@ -19,14 +19,14 @@ export function useUploadJet({ url }: UseUploadJetOptions): UseUploadJetReturn {
 
 async function fetchUploadPolicy(
   url: UseUploadJetOptions['url'],
-  fileNames: string[]
+  files: string[]
 ): Promise<PolicyResponse> {
   const result = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ files: fileNames })
+    body: JSON.stringify({ files })
   });
   return result.json();
 }

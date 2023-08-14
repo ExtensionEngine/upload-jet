@@ -1,23 +1,23 @@
-import { StandardTypes } from './types';
+import { StandardTypes, FileType } from './types';
 import accept from 'attr-accept';
 
-function exportAcceptedTypes(input: StandardTypes[]) {
+function exportAcceptedTypes(fileTypes: FileType[]) {
   const types: string[] = [];
-  input.forEach(el => {
-    switch (el) {
+  fileTypes.forEach(type => {
+    switch (type) {
       case StandardTypes.IMAGE:
       case StandardTypes.AUDIO:
       case StandardTypes.VIDEO:
-        types.push(`${el}/*`);
+        types.push(`${type}/*`);
         break;
       case StandardTypes.PDF:
-        types.push(`application/${el}`);
+        types.push(`application/${type}`);
         break;
       case StandardTypes.TEXT:
-        types.push(`${el}/plain`);
+        types.push(`${type}/plain`);
         break;
       default:
-        types.push(el);
+        types.push(type);
         break;
     }
   });

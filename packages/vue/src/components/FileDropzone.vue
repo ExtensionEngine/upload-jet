@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { PropType, computed, ref } from 'vue';
 import {
   isValidTypeFile,
   isDuplicateFile,
   findIndexToReplace
 } from '../validationService';
 
-const emit = defineEmits(['update:selected-files', 'update:non-valid-files']);
+const emit = defineEmits(['update:selected-files', 'update:invalid-files']);
 
 const props = defineProps({
-  selectedFiles: { type: Array as () => File[], default: () => [] },
-  nonValidFiles: { type: Array as () => File[], default: () => [] },
+  selectedFiles: { type: Array as PropType<File[]>, default: () => [] },
   multiple: { type: Boolean, default: false },
   fileTypes: { type: String, default: null }
 });
@@ -25,14 +24,7 @@ const selectedFiles = computed({
   }
 });
 
-const nonValidFiles = computed({
-  get() {
-    return props.nonValidFiles;
-  },
-  set(newValue) {
-    emit('update:non-valid-files', newValue);
-  }
-});
+const invalidFiles = ref<File[]>([]);
 
 function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files;
@@ -43,7 +35,7 @@ function addDroppedFiles(e: DragEvent) {
     const isValidType = isValidTypeFile(file, props.fileTypes);
 
     if (!isValidType) {
-      nonValidFiles.value.push(file);
+      invalidFiles.value.push(file);
       return;
     }
     if (isDuplicate) {
@@ -73,7 +65,7 @@ function addDroppedFiles(e: DragEvent) {
         Drag and drop {{ multiple ? 'files' : 'the file' }} you want to upload
         here
       </div>
-      <slot></slot>
+      <slot :invalidFiles="invalidFiles"></slot>
     </div>
   </div>
 </template>
