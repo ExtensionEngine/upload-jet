@@ -6,7 +6,6 @@ const emit = defineEmits(['update:selected-files', 'update:invalid-files']);
 
 const props = defineProps({
   selectedFiles: { type: Array, default: () => [] },
-  invalidFiles: { type: Array, default: () => [] },
   multiple: { type: Boolean, default: false },
   fileTypes: { type: String, default: null }
 });
@@ -21,14 +20,7 @@ const selectedFiles = computed({
   }
 });
 
-const invalidFiles = computed({
-  get() {
-    return props.invalidFiles;
-  },
-  set(newValue) {
-    emit('update:invalid-files', newValue);
-  }
-});
+const invalidFiles = ref<File[]>([]);
 
 function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files;
@@ -38,12 +30,11 @@ function addDroppedFiles(e: DragEvent) {
   const validFiles = droppedFilesArray.filter(({ type }) =>
     accept({ type }, props.fileTypes)
   );
+  selectedFiles.value = [...selectedFiles.value, ...validFiles];
+
   invalidFiles.value = droppedFilesArray.filter(
     ({ type }) => !accept({ type }, props.fileTypes)
   );
-
-  selectedFiles.value = [...selectedFiles.value, ...validFiles];
-
   isDropzoneActive.value = false;
 }
 </script>
@@ -63,7 +54,7 @@ function addDroppedFiles(e: DragEvent) {
         Drag and drop {{ multiple ? 'files' : 'the file' }} you want to upload
         here
       </div>
-      <slot></slot>
+      <slot :invalidFiles="invalidFiles"></slot>
     </div>
   </div>
 </template>
