@@ -4,13 +4,17 @@ import {
   isValidTypeFile,
   checkAndReplaceDuplicate
 } from '../validationService';
+import { FileType } from '@/types';
 
-const emit = defineEmits(['update:selected-files', 'update:invalid-files']);
+const emit = defineEmits(['update:selected-files']);
 
 const props = defineProps({
   selectedFiles: { type: Array as PropType<File[]>, default: () => [] },
   multiple: { type: Boolean, default: false },
-  fileTypes: { type: String, default: null }
+  fileTypes: {
+    type: String as PropType<FileType>,
+    default: ''
+  }
 });
 
 const isDropzoneActive = ref(false);

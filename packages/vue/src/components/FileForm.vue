@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { PropType, computed, ref } from 'vue';
 import { checkAndReplaceDuplicate } from '@/validationService';
+import { FileType } from '@/types';
 
 const emit = defineEmits(['update:selected-files', 'submit']);
 
 const props = defineProps({
   selectedFiles: { type: Array as () => File[], default: () => [] },
   multiple: { type: Boolean, default: false },
-  fileTypes: { type: String, default: undefined }
+  fileTypes: {
+    type: String as PropType<FileType>,
+    default: ''
+  }
 });
 
 const fileInputRef = ref<HTMLInputElement>();
