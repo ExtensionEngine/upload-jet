@@ -38,17 +38,14 @@ function addDroppedFiles(e: DragEvent) {
 
   droppedFilesArray.forEach(file => {
     const isValidType = isValidTypeFile(file, props.fileTypes);
-    if (!isValidType) {
-      invalidFiles.value.push(file);
-      return;
-    }
     const isDuplicate = isDuplicateFile(file.name, selectedFiles.value);
-    if (isDuplicate) {
-      const index = findIndexToReplace(file, selectedFiles.value);
-      selectedFiles.value[index] = file;
-      return;
-    }
-    selectedFiles.value.push(file);
+    const index = findIndexToReplace(file, selectedFiles.value);
+
+    !isValidType
+      ? invalidFiles.value.push(file)
+      : isDuplicate
+      ? (selectedFiles.value[index] = file)
+      : selectedFiles.value.push(file);
 
     isDropzoneActive.value = false;
   });

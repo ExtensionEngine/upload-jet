@@ -31,12 +31,11 @@ function addSelectedFiles(event: Event) {
 
   inputFilesArray.forEach(file => {
     const isDuplicate = isDuplicateFile(file.name, props.selectedFiles);
-    if (isDuplicate) {
-      const index = findIndexToReplace(file, props.selectedFiles);
-      selectedFiles.value[index] = file;
-      return;
-    }
-    selectedFiles.value.push(file);
+    const index = findIndexToReplace(file, selectedFiles.value);
+
+    isDuplicate
+      ? (selectedFiles.value[index] = file)
+      : selectedFiles.value.push(file);
   });
 }
 </script>
