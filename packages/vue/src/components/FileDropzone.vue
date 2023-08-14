@@ -2,8 +2,7 @@
 import { PropType, computed, ref } from 'vue';
 import {
   isValidTypeFile,
-  isDuplicateFile,
-  findIndexToReplace
+  checkAndReplaceDuplicate
 } from '../validationService';
 
 const emit = defineEmits(['update:selected-files', 'update:invalid-files']);
@@ -30,22 +29,19 @@ function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files;
   if (!droppedFiles?.length) return;
   const droppedFilesArray = [...droppedFiles];
-  droppedFilesArray.forEach(file => {
-    const isDuplicate = isDuplicateFile(file.name, props.selectedFiles);
-    const isValidType = isValidTypeFile(file, props.fileTypes);
 
-    if (!isValidType) {
-      invalidFiles.value.push(file);
-      return;
-    }
-    if (isDuplicate) {
-      const index = findIndexToReplace(file, props.selectedFiles);
-      selectedFiles.value[index] = file;
-      return;
-    }
+  const { validTypeFiles, invalidTypeFiles } = isValidTypeFile(
+    droppedFilesArray,
+    props.fileTypes
+  );
+  selectedFiles.value = [...selectedFiles.value, ...validTypeFiles];
+  invalidFiles.value = [...invalidFiles.value, ...invalidTypeFiles];
 
-    selectedFiles.value.push(file);
-  });
+  selectedFiles.value = checkAndReplaceDuplicate(
+    droppedFilesArray,
+    selectedFiles.value
+  );
+
   isDropzoneActive.value = false;
 }
 </script>

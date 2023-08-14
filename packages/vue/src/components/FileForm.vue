@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { findIndexToReplace, isDuplicateFile } from '@/validationService';
+import { checkAndReplaceDuplicate } from '@/validationService';
 
 const emit = defineEmits(['update:selected-files', 'submit']);
 
@@ -24,15 +24,11 @@ function addSelectedFiles(event: Event) {
   const inputElement = event.target as HTMLInputElement;
   if (!inputElement.files?.length) return;
   const inputFilesArray = [...inputElement.files];
-  inputFilesArray.forEach(file => {
-    const isDuplicate = isDuplicateFile(file.name, props.selectedFiles);
-    if (isDuplicate) {
-      const index = findIndexToReplace(file, props.selectedFiles);
-      selectedFiles.value[index] = file;
-      return;
-    }
-    selectedFiles.value.push(file);
-  });
+
+  selectedFiles.value = checkAndReplaceDuplicate(
+    inputFilesArray,
+    selectedFiles.value
+  );
 }
 </script>
 
