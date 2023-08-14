@@ -17,7 +17,7 @@ const props = defineProps({
   maxFileCount: { type: Number, default: 3 },
   fileTypes: {
     type: Array as PropType<FileType[]>,
-    default: () => []
+    default: () => ['image']
   }
 });
 

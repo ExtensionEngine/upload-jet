@@ -24,31 +24,25 @@ function exportAcceptedTypes(fileTypes: FileType[]) {
   return types.join(',');
 }
 
-function isValidTypeFile(inputFiles: File[], fileTypes: FileType) {
-  const validTypeFiles = inputFiles.filter(({ type }) =>
-    accept({ type }, fileTypes)
-  );
-  const invalidTypeFiles = inputFiles.filter(
-    ({ type }) => !accept({ type }, fileTypes)
-  );
-
-  return { validTypeFiles, invalidTypeFiles };
+function isValidTypeFile(file: File, fileType: string) {
+  return accept({ type: file.type }, fileType);
 }
 
-function checkAndReplaceDuplicate(inputFiles: File[], selectedFiles: File[]) {
-  const updatedArray = [...selectedFiles];
-
-  for (const inputFile of inputFiles) {
-    const index = updatedArray.findIndex(file => inputFile.name === file.name);
-
-    if (index !== -1) {
-      updatedArray[index] = inputFile;
-    } else {
-      updatedArray.push(inputFile);
-    }
-  }
-  console.log(updatedArray);
-  return updatedArray;
+function isDuplicateFile(fileName: string, selectedFiles: File[]) {
+  return selectedFiles.some(selectedFile => {
+    return fileName === selectedFile.name;
+  });
 }
 
-export { exportAcceptedTypes, isValidTypeFile, checkAndReplaceDuplicate };
+function findIndexToReplace(file: File, selectedFiles: File[]) {
+  return selectedFiles.findIndex(
+    selectedfile => file.name === selectedfile.name
+  );
+}
+
+export {
+  exportAcceptedTypes,
+  isValidTypeFile,
+  isDuplicateFile,
+  findIndexToReplace
+};
