@@ -15,15 +15,16 @@ const emit = defineEmits<{
 const props = defineProps({
   url: { type: String, required: true },
   maxFileCount: { type: Number, default: 1 },
-  fileTypes: {
-    type: Array as PropType<FileType[]>,
-    default: () => []
+  fileType: {
+    type: String as PropType<FileType>,
+    default: () => ''
   }
 });
 
 const selectedFiles = ref<File[]>([]);
 const multiple = computed(() => props.maxFileCount > 1);
-const acceptedTypes = computed(() => exportAcceptedTypes(props.fileTypes));
+const acceptedType = computed(() => exportAcceptedTypes(props.fileType));
+console.log(acceptedType.value);
 const { upload } = useUploadJet({ url: props.url });
 
 async function uploadFiles() {
@@ -40,13 +41,13 @@ async function uploadFiles() {
 <template>
   <file-dropzone
     v-model:selected-files="selectedFiles"
-    :fileTypes="acceptedTypes"
+    :fileType="acceptedType"
     v-slot="{ invalidFiles }">
     <file-form
       @submit="uploadFiles"
       v-model:selected-files="selectedFiles"
       :multiple="multiple"
-      :fileTypes="acceptedTypes" />
+      :fileType="acceptedType" />
     <file-list :files="selectedFiles" :invalidFiles="invalidFiles" />
   </file-dropzone>
 </template>

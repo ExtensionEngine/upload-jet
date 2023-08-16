@@ -7,7 +7,7 @@ const emit = defineEmits(['update:selected-files', 'update:invalid-files']);
 const props = defineProps({
   selectedFiles: { type: Array, default: () => [] },
   multiple: { type: Boolean, default: false },
-  fileTypes: { type: String, default: null }
+  fileType: { type: String, default: null }
 });
 
 const isDropzoneActive = ref(false);
@@ -29,12 +29,12 @@ function addDroppedFiles(e: DragEvent) {
   const droppedFilesArray = [...droppedFiles];
 
   const validFiles = droppedFilesArray.filter(({ type }) =>
-    accept({ type }, props.fileTypes)
+    accept({ type }, props.fileType)
   );
   selectedFiles.value = [...selectedFiles.value, ...validFiles];
 
   invalidFiles.value = droppedFilesArray.filter(
-    ({ type }) => !accept({ type }, props.fileTypes)
+    ({ type }) => !accept({ type }, props.fileType)
   );
   isDropzoneActive.value = false;
 }

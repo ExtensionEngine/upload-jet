@@ -15,7 +15,7 @@ const showSuccessDialog = (data: any) => {
     @upload-complete="showSuccessDialog"
     :maxFileCount="3"
     url="http://localhost:3001/api/images"
-    :file-types="['']" />
+    :file-type="''" />
 </template>
 
 <style scoped></style>

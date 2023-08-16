@@ -1,22 +1,18 @@
 import { predefinedTypes, FileType } from './types';
 
-const exportAcceptedTypes = function (fileTypes: FileType[]) {
-  return fileTypes
-    .map(type => {
-      switch (type) {
-        case predefinedTypes.IMAGE:
-        case predefinedTypes.AUDIO:
-        case predefinedTypes.VIDEO:
-          return `${type}/*`;
-        case predefinedTypes.PDF:
-          return `application/${type}`;
-        case predefinedTypes.TEXT:
-          return `${type}/plain`;
-        default:
-          return type;
-      }
-    })
-    .join(',');
+const exportAcceptedTypes = function (fileType: FileType) {
+  switch (fileType) {
+    case predefinedTypes.IMAGE:
+    case predefinedTypes.AUDIO:
+    case predefinedTypes.VIDEO:
+      return `${fileType}/*`;
+    case predefinedTypes.PDF:
+      return `application/${fileType}`;
+    case predefinedTypes.TEXT:
+      return `${fileType}/plain`;
+    default:
+      return fileType;
+  }
 };
 
 export default exportAcceptedTypes;

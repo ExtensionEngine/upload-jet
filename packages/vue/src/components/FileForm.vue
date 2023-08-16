@@ -6,7 +6,7 @@ const emit = defineEmits(['update:selected-files', 'submit']);
 const props = defineProps({
   selectedFiles: { type: Array, default: () => [] },
   multiple: { type: Boolean, default: false },
-  fileTypes: { type: String, default: undefined }
+  fileType: { type: String, default: undefined }
 });
 
 const fileInputRef = ref<HTMLInputElement>();
@@ -35,7 +35,7 @@ function addSelectedFiles(event: Event) {
         :multiple="multiple"
         ref="fileInputRef"
         type="file"
-        :accept="props.fileTypes"
+        :accept="props.fileType"
         class="file-input" />
     </label>
     <div class="mt-1">
