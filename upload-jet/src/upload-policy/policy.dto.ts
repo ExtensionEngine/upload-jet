@@ -22,7 +22,7 @@ export type CreateUploadPolicyPayload = z.infer<
   typeof createUploadPolicySchema
 >;
 
-export const StandardTypes = {
+export const PredefinedType = {
   IMAGE: 'image',
   AUDIO: 'audio',
   VIDEO: 'video',
@@ -30,5 +30,5 @@ export const StandardTypes = {
   TEXT: 'text'
 } as const;
 
-export type StandardTypesValues =
-  (typeof StandardTypes)[keyof typeof StandardTypes];
+export type PredefinedTypeValue =
+  (typeof PredefinedType)[keyof typeof PredefinedType];

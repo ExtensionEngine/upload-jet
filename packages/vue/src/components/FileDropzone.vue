@@ -11,6 +11,8 @@ const props = defineProps({
 });
 
 const isDropzoneActive = ref(false);
+const invalidFiles = ref<File[]>([]);
+
 const selectedFiles = computed({
   get() {
     return props.selectedFiles;
@@ -20,11 +22,10 @@ const selectedFiles = computed({
   }
 });
 
-const invalidFiles = ref<File[]>([]);
-
 function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files;
   if (!droppedFiles?.length) return;
+  invalidFiles.value = [];
   const droppedFilesArray = [...droppedFiles];
 
   const validFiles = droppedFilesArray.filter(({ type }) =>
@@ -54,7 +55,7 @@ function addDroppedFiles(e: DragEvent) {
         Drag and drop {{ multiple ? 'files' : 'the file' }} you want to upload
         here
       </div>
-      <slot :invalidFiles="invalidFiles"></slot>
+      <slot :invalid-files="invalidFiles"></slot>
     </div>
   </div>
 </template>

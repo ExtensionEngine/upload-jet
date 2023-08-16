@@ -4,9 +4,9 @@ import { ConfigType } from '@nestjs/config';
 import awsConfig from 'config/aws.config';
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import {
-  StandardTypes,
+  PredefinedType,
   PolicyOptions,
-  StandardTypesValues
+  PredefinedTypeValue
 } from './policy.dto';
 
 @Injectable()
@@ -59,8 +59,8 @@ export class S3ClientService {
   }
 
   private getFileTypeOutput(fileType: string) {
-    return Object.values(StandardTypes).includes(
-      fileType as StandardTypesValues
+    return Object.values(PredefinedType).includes(
+      fileType as PredefinedTypeValue
     )
       ? ['starts-with', '$Content-Type', `${fileType}/`]
       : { 'Content-Type': fileType };

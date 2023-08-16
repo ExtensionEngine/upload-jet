@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
-const StandardTypes = z.enum(['image', 'audio', 'video', 'pdf', 'text']);
-const fileTypeSchema = z.union([StandardTypes, z.string().and(z.object({}))]);
+const predefinedTypes = z.enum(['image', 'audio', 'video', 'pdf', 'text']);
+const mimeType = z.string().and(z.object({}));
+const fileTypeSchema = z.union([predefinedTypes, mimeType]);
 
 const setFileNameSchema = z
   .function()

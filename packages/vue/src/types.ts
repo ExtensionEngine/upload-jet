@@ -20,7 +20,7 @@ export type Policy = {
 export type FileName = string;
 export type PolicyResponse = Record<FileName, Policy>;
 
-export const StandardTypes = {
+export const predefinedTypes = {
   IMAGE: 'image',
   AUDIO: 'audio',
   VIDEO: 'video',
