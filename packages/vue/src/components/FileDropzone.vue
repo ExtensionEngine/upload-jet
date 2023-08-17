@@ -2,12 +2,7 @@
 import { computed, ref } from 'vue';
 import accept from 'attr-accept';
 
-const emit = defineEmits([
-  'update:selected-files',
-  'update:invalid-files',
-  'error',
-  'noErrors'
-]);
+const emit = defineEmits(['update:selected-files', 'error', 'noErrors']);
 
 const props = defineProps({
   selectedFiles: { type: Array, default: () => [] },
@@ -32,7 +27,7 @@ function addDroppedFiles(e: DragEvent) {
   if (!droppedFiles?.length) return;
   invalidFiles.value = [];
   const accumulatedErrors = [];
-  const droppedFilesArray = [...droppedFiles];
+  const droppedFilesArray = Array.from(droppedFiles);
 
   const validFiles = droppedFilesArray.filter(({ type }) =>
     accept({ type }, props.fileType)
@@ -47,7 +42,6 @@ function addDroppedFiles(e: DragEvent) {
       errorPayload: invalidFiles.value
     });
   }
-
   accumulatedErrors.length
     ? emit('error', accumulatedErrors)
     : emit('noErrors');
