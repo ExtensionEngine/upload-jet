@@ -38,7 +38,7 @@ export class S3ClientService {
     if ('maxFileSize' in conditions) {
       Conditions.push(['content-length-range', 0, conditions.maxFileSize]);
     }
-    if ('fileType' in conditions && !conditions.fileType.endsWith('/')) {
+    if ('fileType' in conditions) {
       const fileTypes = this.getFileTypeOutput(conditions.fileType);
       Conditions.push(fileTypes);
     }
