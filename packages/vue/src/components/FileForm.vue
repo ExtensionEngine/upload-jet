@@ -8,10 +8,7 @@ const emit = defineEmits(['update:selected-files', 'submit']);
 const props = defineProps({
   selectedFiles: { type: Array as () => File[], default: () => [] },
   multiple: { type: Boolean, default: false },
-  fileTypes: {
-    type: String as PropType<FileType>,
-    default: ''
-  }
+  fileType: { type: String, default: undefined }
 });
 
 const fileInputRef = ref<HTMLInputElement>();
@@ -27,7 +24,7 @@ const selectedFiles = computed({
 function addSelectedFiles(event: Event) {
   const inputElement = event.target as HTMLInputElement;
   if (!inputElement.files?.length) return;
-  const inputFilesArray = [...inputElement.files];
+  const inputFilesArray = Array.from(inputElement.files);
 
   inputFilesArray.forEach(file => {
     const isDuplicate = isDuplicateFile(file.name, props.selectedFiles);
@@ -49,7 +46,7 @@ function addSelectedFiles(event: Event) {
         :multiple="multiple"
         ref="fileInputRef"
         type="file"
-        :accept="props.fileTypes"
+        :accept="props.fileType"
         class="file-input" />
     </label>
     <div class="mt-1">

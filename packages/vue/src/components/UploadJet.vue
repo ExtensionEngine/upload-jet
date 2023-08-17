@@ -5,7 +5,7 @@ import FileDropzone from './FileDropzone.vue';
 import FileForm from './FileForm.vue';
 import { exportAcceptedTypes } from '../validationService';
 import { useUploadJet } from '../useUploadJet';
-import type { UploadedFile, FileType } from '@/types';
+import type { UploadedFile, FileType, Errors, ErrorPayload } from '@/types';
 
 const emit = defineEmits<{
   (event: 'upload-complete', payload: UploadedFile[]): void;
@@ -15,16 +15,26 @@ const emit = defineEmits<{
 const props = defineProps({
   url: { type: String, required: true },
   maxFileCount: { type: Number, default: 1 },
-  fileTypes: {
-    type: Array as PropType<FileType[]>,
-    default: () => []
+  fileType: {
+    type: String as PropType<FileType>,
+    default: ''
   }
 });
-
 const selectedFiles = ref<File[]>([]);
+const errors = ref<Errors>({});
 const multiple = computed(() => props.maxFileCount > 1);
-const acceptedTypes = computed(() => exportAcceptedTypes(props.fileTypes));
+const acceptedType = computed(() => exportAcceptedTypes(props.fileType));
 const { upload } = useUploadJet({ url: props.url });
+
+function updateErrors(errorPayload: ErrorPayload[]) {
+  errors.value = {};
+  for (const { errorType, errorPayload: payload } of errorPayload) {
+    if (!errors.value[errorType]) {
+      errors.value[errorType] = [];
+    }
+    errors.value[errorType].push(...payload);
+  }
+}
 
 async function uploadFiles() {
   if (!selectedFiles.value?.length) return;
@@ -40,13 +50,14 @@ async function uploadFiles() {
 <template>
   <file-dropzone
     v-model:selected-files="selectedFiles"
-    :fileTypes="acceptedTypes"
-    v-slot="{ invalidFiles }">
+    :fileType="acceptedType"
+    @error="updateErrors"
+    @no-errors="errors = {}">
     <file-form
       @submit="uploadFiles"
       v-model:selected-files="selectedFiles"
       :multiple="multiple"
-      :fileTypes="acceptedTypes" />
-    <file-list :files="selectedFiles" :invalidFiles="invalidFiles" />
+      :fileType="acceptedType" />
+    <file-list :files="selectedFiles" :errors="errors" />
   </file-dropzone>
 </template>

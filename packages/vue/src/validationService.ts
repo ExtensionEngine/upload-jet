@@ -1,28 +1,19 @@
-import { StandardTypes, FileType } from './types';
-import accept from 'attr-accept';
+import { predefinedTypes, FileType } from './types';
 
-function exportAcceptedTypes(fileTypes: FileType[]) {
-  const types: string[] = [];
-  fileTypes.forEach(type => {
-    switch (type) {
-      case StandardTypes.IMAGE:
-      case StandardTypes.AUDIO:
-      case StandardTypes.VIDEO:
-        types.push(`${type}/*`);
-        break;
-      case StandardTypes.PDF:
-        types.push(`application/${type}`);
-        break;
-      case StandardTypes.TEXT:
-        types.push(`${type}/plain`);
-        break;
-      default:
-        types.push(type);
-        break;
-    }
-  });
-  return types.join(',');
-}
+const exportAcceptedTypes = function (fileType: FileType) {
+  switch (fileType) {
+    case predefinedTypes.IMAGE:
+    case predefinedTypes.AUDIO:
+    case predefinedTypes.VIDEO:
+      return `${fileType}/*`;
+    case predefinedTypes.PDF:
+      return `application/${fileType}`;
+    case predefinedTypes.TEXT:
+      return `${fileType}/plain`;
+    default:
+      return fileType;
+  }
+};
 
 function isValidTypeFile(file: File, fileType: string) {
   return accept({ type: file.type }, fileType);

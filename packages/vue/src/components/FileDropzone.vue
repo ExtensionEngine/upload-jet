@@ -7,18 +7,17 @@ import {
 } from '../validationService';
 import { FileType } from '@/types';
 
-const emit = defineEmits(['update:selected-files', 'update:invalid-files']);
+const emit = defineEmits(['update:selected-files', 'error', 'noErrors']);
 
 const props = defineProps({
   selectedFiles: { type: Array as PropType<File[]>, default: () => [] },
   multiple: { type: Boolean, default: false },
-  fileTypes: {
-    type: String as PropType<FileType>,
-    default: ''
-  }
+  fileType: { type: String, default: null }
 });
 
 const isDropzoneActive = ref(false);
+const invalidFiles = ref<File[]>([]);
+
 const selectedFiles = computed({
   get() {
     return props.selectedFiles;
@@ -28,16 +27,15 @@ const selectedFiles = computed({
   }
 });
 
-const invalidFiles = ref<File[]>([]);
-
 function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files;
   if (!droppedFiles?.length) return;
-  const droppedFilesArray = [...droppedFiles];
   invalidFiles.value = [];
+  const accumulatedErrors = [];
+  const droppedFilesArray = Array.from(droppedFiles);
 
   droppedFilesArray.forEach(file => {
-    const isValidType = isValidTypeFile(file, props.fileTypes);
+    const isValidType = isValidTypeFile(file, props.fileType);
     const isDuplicate = isDuplicateFile(file.name, selectedFiles.value);
     const index = findIndexToReplace(file, selectedFiles.value);
 
@@ -46,6 +44,23 @@ function addDroppedFiles(e: DragEvent) {
       : isDuplicate
       ? (selectedFiles.value[index] = file)
       : selectedFiles.value.push(file);
+
+    //  const validFiles = droppedFilesArray.filter(({ type }) =>
+    //  accept({ type }, props.fileType)
+    // );
+    // selectedFiles.value = [...selectedFiles.value, ...validFiles];
+    // invalidFiles.value = droppedFilesArray.filter(
+    //   ({ type }) => !accept({ type }, props.fileType)
+    // );
+    // if (invalidFiles.value.length) {
+    //   accumulatedErrors.push({
+    //     errorType: 'invalidType',
+    //     errorPayload: invalidFiles.value
+    //   });
+    // }
+    // accumulatedErrors.length
+    //   ? emit('error', accumulatedErrors)
+    //   : emit('noErrors');
 
     isDropzoneActive.value = false;
   });
@@ -67,7 +82,7 @@ function addDroppedFiles(e: DragEvent) {
         Drag and drop {{ multiple ? 'files' : 'the file' }} you want to upload
         here
       </div>
-      <slot :invalidFiles="invalidFiles"></slot>
+      <slot></slot>
     </div>
   </div>
 </template>

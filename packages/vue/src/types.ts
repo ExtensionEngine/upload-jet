@@ -20,7 +20,7 @@ export type Policy = {
 export type FileName = string;
 export type PolicyResponse = Record<FileName, Policy>;
 
-export const StandardTypes = {
+export const predefinedTypes = {
   IMAGE: 'image',
   AUDIO: 'audio',
   VIDEO: 'video',
@@ -30,3 +30,12 @@ export const StandardTypes = {
 
 type MimeType = string & {};
 export type FileType = 'image' | 'audio' | 'video' | 'pdf' | 'text' | MimeType;
+
+export type Errors = {
+  [key: string]: File[];
+};
+
+export type ErrorPayload = {
+  errorType: string;
+  errorPayload: File[];
+};
