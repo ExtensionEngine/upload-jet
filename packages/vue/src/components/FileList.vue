@@ -18,7 +18,6 @@ const hasErrors = computed(() => {
 </script>
 
 <template>
-  <div>{{ props.errors }}</div>
   <div v-if="props.files.length">
     <div>Selected files:</div>
     <div v-for="file in props.files" :key="file.size + file.name">

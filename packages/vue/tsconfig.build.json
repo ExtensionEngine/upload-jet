@@ -17,6 +17,7 @@
     "noUnusedParameters": true,
     "baseUrl": "./"
   },
-  "include": ["./src/**/*"],
+  "exclude": ["src/App.vue", "src/main.ts"],
+  "include": ["src/**/*.ts", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
