@@ -2,7 +2,12 @@
 import { computed, ref } from 'vue';
 import accept from 'attr-accept';
 
-const emit = defineEmits(['update:selected-files', 'update:invalid-files']);
+const emit = defineEmits([
+  'update:selected-files',
+  'update:invalid-files',
+  'error',
+  'noErrors'
+]);
 
 const props = defineProps({
   selectedFiles: { type: Array, default: () => [] },
@@ -26,16 +31,27 @@ function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files;
   if (!droppedFiles?.length) return;
   invalidFiles.value = [];
+  const accumulatedErrors = [];
   const droppedFilesArray = [...droppedFiles];
 
   const validFiles = droppedFilesArray.filter(({ type }) =>
     accept({ type }, props.fileType)
   );
   selectedFiles.value = [...selectedFiles.value, ...validFiles];
-
   invalidFiles.value = droppedFilesArray.filter(
     ({ type }) => !accept({ type }, props.fileType)
   );
+  if (invalidFiles.value.length) {
+    accumulatedErrors.push({
+      errorType: 'invalidType',
+      errorPayload: invalidFiles.value
+    });
+  }
+
+  accumulatedErrors.length
+    ? emit('error', accumulatedErrors)
+    : emit('noErrors');
+
   isDropzoneActive.value = false;
 }
 </script>
@@ -55,7 +71,7 @@ function addDroppedFiles(e: DragEvent) {
         Drag and drop {{ multiple ? 'files' : 'the file' }} you want to upload
         here
       </div>
-      <slot :invalid-files="invalidFiles"></slot>
+      <slot></slot>
     </div>
   </div>
 </template>

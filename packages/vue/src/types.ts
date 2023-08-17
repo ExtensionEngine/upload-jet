@@ -30,3 +30,12 @@ export const predefinedTypes = {
 
 type MimeType = string & {};
 export type FileType = 'image' | 'audio' | 'video' | 'pdf' | 'text' | MimeType;
+
+export type Errors = {
+  [key: string]: File[];
+};
+
+export type ErrorPayload = {
+  errorType: string;
+  errorPayload: File[];
+};
