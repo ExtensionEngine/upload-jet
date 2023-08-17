@@ -1,4 +1,5 @@
 import { predefinedTypes, FileType } from './types';
+import accept from 'attr-accept';
 
 const exportAcceptedTypes = function (fileType: FileType) {
   switch (fileType) {
@@ -15,25 +16,14 @@ const exportAcceptedTypes = function (fileType: FileType) {
   }
 };
 
-function isValidTypeFile(file: File, fileType: string) {
+function isValidFileType(file: File, fileType: string) {
   return accept({ type: file.type }, fileType);
 }
 
-function isDuplicateFile(fileName: string, selectedFiles: File[]) {
-  return selectedFiles.some(selectedFile => {
-    return fileName === selectedFile.name;
-  });
+function checkAndReplaceDuplicate(file: File, currentFiles: File[]) {
+  const filteredArray = currentFiles.filter(el => el.name !== file.name);
+  currentFiles = [...filteredArray, file];
+  return currentFiles;
 }
 
-function findIndexToReplace(file: File, selectedFiles: File[]) {
-  return selectedFiles.findIndex(
-    selectedfile => file.name === selectedfile.name
-  );
-}
-
-export {
-  exportAcceptedTypes,
-  isValidTypeFile,
-  isDuplicateFile,
-  findIndexToReplace
-};
+export { exportAcceptedTypes, isValidFileType, checkAndReplaceDuplicate };

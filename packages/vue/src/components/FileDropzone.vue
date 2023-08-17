@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { PropType, computed, ref } from 'vue';
 import {
-  isValidTypeFile,
-  isDuplicateFile,
-  findIndexToReplace
+  isValidFileType,
+  checkAndReplaceDuplicate
 } from '../validationService';
-import { FileType } from '@/types';
 
 const emit = defineEmits(['update:selected-files', 'error', 'noErrors']);
 
@@ -30,40 +28,33 @@ const selectedFiles = computed({
 function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files;
   if (!droppedFiles?.length) return;
+  const droppedFilesArray = [...droppedFiles];
   invalidFiles.value = [];
   const accumulatedErrors = [];
-  const droppedFilesArray = Array.from(droppedFiles);
+  let currentFiles = [...selectedFiles.value];
 
   droppedFilesArray.forEach(file => {
-    const isValidType = isValidTypeFile(file, props.fileType);
-    const isDuplicate = isDuplicateFile(file.name, selectedFiles.value);
-    const index = findIndexToReplace(file, selectedFiles.value);
-
-    !isValidType
-      ? invalidFiles.value.push(file)
-      : isDuplicate
-      ? (selectedFiles.value[index] = file)
-      : selectedFiles.value.push(file);
-
-    //  const validFiles = droppedFilesArray.filter(({ type }) =>
-    //  accept({ type }, props.fileType)
-    // );
-    // selectedFiles.value = [...selectedFiles.value, ...validFiles];
-    // invalidFiles.value = droppedFilesArray.filter(
-    //   ({ type }) => !accept({ type }, props.fileType)
-    // );
-    // if (invalidFiles.value.length) {
-    //   accumulatedErrors.push({
-    //     errorType: 'invalidType',
-    //     errorPayload: invalidFiles.value
-    //   });
-    // }
-    // accumulatedErrors.length
-    //   ? emit('error', accumulatedErrors)
-    //   : emit('noErrors');
-
-    isDropzoneActive.value = false;
+    const isValidType = isValidFileType(file, props.fileType);
+    if (!isValidType) {
+      invalidFiles.value.push(file);
+      return;
+    }
+    currentFiles = checkAndReplaceDuplicate(file, currentFiles);
   });
+
+  selectedFiles.value = currentFiles;
+
+  if (invalidFiles.value.length) {
+    accumulatedErrors.push({
+      errorType: 'invalidType',
+      errorPayload: invalidFiles.value
+    });
+  }
+  accumulatedErrors.length
+    ? emit('error', accumulatedErrors)
+    : emit('noErrors');
+
+  isDropzoneActive.value = false;
 }
 </script>
 
