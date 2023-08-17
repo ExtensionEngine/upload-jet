@@ -31,18 +31,18 @@ function addDroppedFiles(e: DragEvent) {
   const droppedFilesArray = [...droppedFiles];
   invalidFiles.value = [];
   const accumulatedErrors = [];
-  let currentFiles = [...selectedFiles.value];
 
-  droppedFilesArray.forEach(file => {
-    const isValidType = isValidFileType(file, props.fileType);
-    if (!isValidType) {
-      invalidFiles.value.push(file);
-      return;
-    }
-    currentFiles = checkAndReplaceDuplicate(file, currentFiles);
-  });
-
-  selectedFiles.value = currentFiles;
+  selectedFiles.value = droppedFilesArray.reduce(
+    (currentFiles, file) => {
+      const isValidType = isValidFileType(file, props.fileType);
+      if (!isValidType) {
+        invalidFiles.value.push(file);
+        return currentFiles;
+      }
+      return checkAndReplaceDuplicate(file, currentFiles);
+    },
+    [...selectedFiles.value]
+  );
 
   if (invalidFiles.value.length) {
     accumulatedErrors.push({

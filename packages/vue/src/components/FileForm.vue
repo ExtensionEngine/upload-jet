@@ -24,12 +24,13 @@ function addSelectedFiles(event: Event) {
   const inputElement = event.target as HTMLInputElement;
   if (!inputElement.files?.length) return;
   const inputFilesArray = [...inputElement.files];
-  let currentFiles = [...selectedFiles.value];
 
-  inputFilesArray.forEach(file => {
-    currentFiles = checkAndReplaceDuplicate(file, currentFiles);
-  });
-  selectedFiles.value = currentFiles;
+  selectedFiles.value = inputFilesArray.reduce(
+    (currentFiles, file) => {
+      return checkAndReplaceDuplicate(file, currentFiles);
+    },
+    [...selectedFiles.value]
+  );
 }
 </script>
 
