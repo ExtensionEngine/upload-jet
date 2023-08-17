@@ -4,10 +4,8 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
-
     "paths": {
-      "#/*": ["./src/*"],
-      "@/types": ["./src/types.ts"]
+      "@/*": ["./src/*"]
     },
     "moduleResolution": "bundler",
     "esModuleInterop": true,
@@ -16,17 +14,9 @@
     "declaration": true,
     "strict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "baseUrl": "./"
   },
-  "exclude": ["src/App.vue", "src/main.ts"],
-  "include": [
-    "src/**/*.ts",
-    "src/*.ts",
-    "src/types.ts",
-    "src/**/*.vue",
-    "src/**/*.d.ts",
-    "src/*.d.ts",
-    "src/types.d.ts"
-  ],
+  "include": ["./src/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
