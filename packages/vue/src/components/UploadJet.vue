@@ -5,7 +5,7 @@ import FileDropzone from './FileDropzone.vue';
 import FileForm from './FileForm.vue';
 import { getMimeType } from '../validationService';
 import { useUploadJet } from '../useUploadJet';
-import type { UploadedFile, FileType, Errors, ErrorPayload } from '@/types';
+import type { UploadedFile, FileType, FileValidationError } from '@/types';
 
 const emit = defineEmits<{
   (event: 'upload-complete', payload: UploadedFile[]): void;
@@ -21,20 +21,10 @@ const props = defineProps({
   }
 });
 const selectedFiles = ref<File[]>([]);
-const errors = ref<Errors>({});
+const errors = ref<FileValidationError[]>([]);
 const multiple = computed(() => props.maxFileCount > 1);
 const acceptedType = computed(() => getMimeType(props.fileType));
 const { upload } = useUploadJet({ url: props.url });
-
-function updateErrors(errorPayload: ErrorPayload[]) {
-  errors.value = {};
-  for (const { errorType, errorPayload: payload } of errorPayload) {
-    if (!errors.value[errorType]) {
-      errors.value[errorType] = [];
-    }
-    errors.value[errorType].push(...payload);
-  }
-}
 
 async function uploadFiles() {
   if (!selectedFiles.value?.length) return;
@@ -51,8 +41,7 @@ async function uploadFiles() {
   <file-dropzone
     v-model:selected-files="selectedFiles"
     :fileType="acceptedType"
-    @error="updateErrors"
-    @no-errors="errors = {}">
+    @error="errors = $event">
     <file-form
       @submit="uploadFiles"
       v-model:selected-files="selectedFiles"

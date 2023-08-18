@@ -1,3 +1,5 @@
+import { ErrorCodes } from 'vue';
+
 export type UploadedFile = {
   name: string;
   key: string;
@@ -33,11 +35,12 @@ export type FileType =
   | (typeof predefinedType)[keyof typeof predefinedType]
   | MimeType;
 
-export type Errors = {
-  [key: string]: File[];
-};
+export const errorCode = {
+  INVALID_FILE_TYPE: 'INVALID_FILE_TYPE'
+} as const;
+export type ErrorCode = (typeof errorCode)[keyof typeof errorCode];
 
-export type ErrorPayload = {
-  errorType: string;
-  errorPayload: File[];
+export type FileValidationError = {
+  code: ErrorCode;
+  file: File;
 };

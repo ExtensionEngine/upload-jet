@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import accept from 'attr-accept';
+import { errorCode } from '@/types';
 
-const emit = defineEmits(['update:selected-files', 'error', 'noErrors']);
+const emit = defineEmits(['update:selected-files', 'error']);
 
 const props = defineProps({
   selectedFiles: { type: Array, default: () => [] },
@@ -11,7 +12,6 @@ const props = defineProps({
 });
 
 const isDropzoneActive = ref(false);
-const invalidFiles = ref<File[]>([]);
 
 const selectedFiles = computed({
   get() {
@@ -25,27 +25,24 @@ const selectedFiles = computed({
 function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files;
   if (!droppedFiles?.length) return;
-  invalidFiles.value = [];
-  const accumulatedErrors = [];
-  const droppedFilesArray = Array.from(droppedFiles);
+  const droppedFilesArray = [...droppedFiles];
 
   const validFiles = droppedFilesArray.filter(({ type }) =>
     accept({ type }, props.fileType)
   );
-  selectedFiles.value = [...selectedFiles.value, ...validFiles];
-  invalidFiles.value = droppedFilesArray.filter(
+  const invalidFiles = droppedFilesArray.filter(
     ({ type }) => !accept({ type }, props.fileType)
   );
-  if (invalidFiles.value.length) {
-    accumulatedErrors.push({
-      errorType: 'invalidType',
-      errorPayload: invalidFiles.value
-    });
-  }
-  accumulatedErrors.length
-    ? emit('error', accumulatedErrors)
-    : emit('noErrors');
 
+  if (invalidFiles.length) {
+    const errors = invalidFiles.map(file => ({
+      code: errorCode.INVALID_FILE_TYPE,
+      file
+    }));
+    emit('error', errors);
+  }
+
+  selectedFiles.value = [...selectedFiles.value, ...validFiles];
   isDropzoneActive.value = false;
 }
 </script>

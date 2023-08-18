@@ -1,20 +1,13 @@
 <script setup lang="ts">
+import { FileValidationError } from '@/types';
 import { computed } from 'vue';
-import { Errors } from '@/types';
 
 const props = defineProps<{
   files: File[];
-  errors: Errors;
+  errors: FileValidationError[];
 }>();
 
-const hasErrors = computed(() => {
-  for (const key in props.errors) {
-    if (props.errors[key].length > 0) {
-      return true;
-    }
-  }
-  return false;
-});
+const hasErrors = computed(() => props.errors?.length);
 </script>
 
 <template>
@@ -28,12 +21,8 @@ const hasErrors = computed(() => {
   <br />
   <div v-if="hasErrors" class="error-message">
     <div>Error:</div>
-
-    <div v-for="(files, errorType) in props.errors" :key="errorType">
-      <div>{{ errorType }}:</div>
-      <div v-for="file in files" :key="file.size + file.name">
-        File {{ file.name }} is not a valid type
-      </div>
+    <div v-for="{ code, file } in props.errors" :key="file.name">
+      Error {{ code }}: for file {{ file.name }}
     </div>
   </div>
 </template>
