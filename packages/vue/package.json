@@ -17,10 +17,11 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vue-tsc",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "attr-accept": "^2.2.2",
     "vue": "^3.3.4"
   },
   "devDependencies": {
@@ -37,6 +38,7 @@
     "prettier": "^3.0.0",
     "typescript": "~5.1.6",
     "vite": "^4.4.6",
+    "vite-plugin-dts": "^3.5.2",
     "vue-tsc": "^1.8.6"
   }
 }
