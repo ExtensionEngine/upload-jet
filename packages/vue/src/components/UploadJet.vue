@@ -17,12 +17,14 @@ const props = defineProps({
   maxFileCount: { type: Number, default: 1 },
   fileType: {
     type: String as PropType<FileType>,
-    default: ''
+    required: false
   }
 });
 const selectedFiles = ref<File[]>([]);
 const multiple = computed(() => props.maxFileCount > 1);
-const acceptedType = computed(() => getMimeType(props.fileType));
+const acceptedType = computed(() => {
+  return props.fileType && getMimeType(props.fileType);
+});
 const { upload } = useUploadJet({ url: props.url });
 
 async function uploadFiles() {

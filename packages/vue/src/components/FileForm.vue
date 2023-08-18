@@ -22,8 +22,7 @@ const selectedFiles = computed({
 function addSelectedFiles(event: Event) {
   const inputElement = event.target as HTMLInputElement;
   if (!inputElement.files?.length) return;
-  const inputFilesArray = Array.from(inputElement.files);
-  selectedFiles.value = [...selectedFiles.value, ...inputFilesArray];
+  selectedFiles.value = [...selectedFiles.value, ...inputElement.files];
 }
 </script>
 
