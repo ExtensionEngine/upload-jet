@@ -4,8 +4,10 @@ import {
   isValidFileType,
   checkAndReplaceDuplicate
 } from '../validationService';
+import { FileValidationError, errorCode } from '@/types';
+import ErrorList from './ErrorList.vue';
 
-const emit = defineEmits(['update:selected-files', 'error', 'noErrors']);
+const emit = defineEmits(['update:selected-files']);
 
 const props = defineProps({
   selectedFiles: { type: Array as PropType<File[]>, default: () => [] },
@@ -14,7 +16,7 @@ const props = defineProps({
 });
 
 const isDropzoneActive = ref(false);
-const invalidFiles = ref<File[]>([]);
+const errors = ref<FileValidationError[]>([]);
 
 const selectedFiles = computed({
   get() {
@@ -29,31 +31,45 @@ function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files;
   if (!droppedFiles?.length) return;
   const droppedFilesArray = [...droppedFiles];
-  invalidFiles.value = [];
-  const accumulatedErrors = [];
+  // invalidFiles.value = [];
+  // const accumulatedErrors = [];
 
-  selectedFiles.value = droppedFilesArray.reduce(
-    (currentFiles, file) => {
-      const isValidType = isValidFileType(file, props.fileType);
-      if (!isValidType) {
-        invalidFiles.value.push(file);
-        return currentFiles;
-      }
-      return checkAndReplaceDuplicate(file, currentFiles);
-    },
-    [...selectedFiles.value]
+  // selectedFiles.value = droppedFilesArray.reduce(
+  //   (currentFiles, file) => {
+  //     const isValidType = isValidFileType(file, props.fileType);
+  //     if (!isValidType) {
+  //       invalidFiles.value.push(file);
+  //       return currentFiles;
+  //     }
+  //     return checkAndReplaceDuplicate(file, currentFiles);
+  //   },
+  //   [...selectedFiles.value]
+  // );
+
+  // if (invalidFiles.value.length) {
+  //   accumulatedErrors.push({
+  //     errorType: 'invalidType',
+  //     errorPayload: invalidFiles.value
+  //   });
+  // }
+  // accumulatedErrors.length
+  //   ? emit('error', accumulatedErrors)
+  //   : emit('noErrors');
+
+  const validFiles = droppedFilesArray.filter(({ type }) =>
+    accept({ type }, props.fileType)
+  );
+  const invalidFiles = droppedFilesArray.filter(
+    ({ type }) => !accept({ type }, props.fileType)
   );
 
-  if (invalidFiles.value.length) {
-    accumulatedErrors.push({
-      errorType: 'invalidType',
-      errorPayload: invalidFiles.value
-    });
-  }
-  accumulatedErrors.length
-    ? emit('error', accumulatedErrors)
-    : emit('noErrors');
-
+  selectedFiles.value = [...selectedFiles.value, ...validFiles];
+  errors.value = invalidFiles.length
+    ? invalidFiles.map(file => ({
+        code: errorCode.INVALID_FILE_TYPE,
+        file
+      }))
+    : [];
   isDropzoneActive.value = false;
 }
 </script>
@@ -74,6 +90,7 @@ function addDroppedFiles(e: DragEvent) {
         here
       </div>
       <slot></slot>
+      <error-list v-if="errors.length" :errors="errors" class="mt-2" />
     </div>
   </div>
 </template>
@@ -97,5 +114,9 @@ function addDroppedFiles(e: DragEvent) {
 
 .mb-1 {
   margin-bottom: 1rem;
+}
+
+.mt-2 {
+  margin-top: 2rem;
 }
 </style>

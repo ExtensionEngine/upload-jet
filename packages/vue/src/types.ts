@@ -20,7 +20,7 @@ export type Policy = {
 export type FileName = string;
 export type PolicyResponse = Record<FileName, Policy>;
 
-export const predefinedTypes = {
+export const predefinedType = {
   IMAGE: 'image',
   AUDIO: 'audio',
   VIDEO: 'video',
@@ -28,14 +28,17 @@ export const predefinedTypes = {
   TEXT: 'text'
 } as const;
 
-type MimeType = string & {};
-export type FileType = 'image' | 'audio' | 'video' | 'pdf' | 'text' | MimeType;
+export type MimeType = string & {};
+export type FileType =
+  | (typeof predefinedType)[keyof typeof predefinedType]
+  | MimeType;
 
-export type Errors = {
-  [key: string]: File[];
-};
+export const errorCode = {
+  INVALID_FILE_TYPE: 'INVALID_FILE_TYPE'
+} as const;
+export type ErrorCode = (typeof errorCode)[keyof typeof errorCode];
 
-export type ErrorPayload = {
-  errorType: string;
-  errorPayload: File[];
+export type FileValidationError = {
+  code: ErrorCode;
+  file: File;
 };
