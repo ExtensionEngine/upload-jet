@@ -1,5 +1,3 @@
-import { ErrorCodes } from 'vue';
-
 export type UploadedFile = {
   name: string;
   key: string;
