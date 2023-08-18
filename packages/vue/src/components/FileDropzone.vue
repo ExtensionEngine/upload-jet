@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import accept from 'attr-accept';
-import { errorCode } from '@/types';
+import { FileValidationError, errorCode } from '@/types';
+import ErrorList from './ErrorList.vue';
 
-const emit = defineEmits(['update:selected-files', 'error']);
+const emit = defineEmits(['update:selected-files']);
 
 const props = defineProps({
   selectedFiles: { type: Array, default: () => [] },
@@ -12,6 +13,7 @@ const props = defineProps({
 });
 
 const isDropzoneActive = ref(false);
+const errors = ref<FileValidationError[]>([]);
 
 const selectedFiles = computed({
   get() {
@@ -34,15 +36,13 @@ function addDroppedFiles(e: DragEvent) {
     ({ type }) => !accept({ type }, props.fileType)
   );
 
-  if (invalidFiles.length) {
-    const errors = invalidFiles.map(file => ({
-      code: errorCode.INVALID_FILE_TYPE,
-      file
-    }));
-    emit('error', errors);
-  }
-
   selectedFiles.value = [...selectedFiles.value, ...validFiles];
+  errors.value = invalidFiles.length
+    ? invalidFiles.map(file => ({
+        code: errorCode.INVALID_FILE_TYPE,
+        file
+      }))
+    : [];
   isDropzoneActive.value = false;
 }
 </script>
@@ -63,6 +63,7 @@ function addDroppedFiles(e: DragEvent) {
         here
       </div>
       <slot></slot>
+      <error-list v-if="errors.length" :errors="errors" class="mt-2" />
     </div>
   </div>
 </template>
@@ -86,5 +87,9 @@ function addDroppedFiles(e: DragEvent) {
 
 .mb-1 {
   margin-bottom: 1rem;
+}
+
+.mt-2 {
+  margin-top: 2rem;
 }
 </style>
