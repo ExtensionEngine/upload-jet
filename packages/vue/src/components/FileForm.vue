@@ -6,7 +6,7 @@ const emit = defineEmits(['update:selected-files', 'submit']);
 const props = defineProps({
   selectedFiles: { type: Array, default: () => [] },
   multiple: { type: Boolean, default: false },
-  fileType: { type: String, default: undefined }
+  fileType: { type: String, required: false }
 });
 
 const fileInputRef = ref<HTMLInputElement>();
