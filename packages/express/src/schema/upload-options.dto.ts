@@ -1,8 +1,20 @@
 import { z } from 'zod';
 
-const predefinedTypes = z.enum(['image', 'audio', 'video', 'pdf', 'text']);
-const mimeType = z.string().and(z.object({}));
-const fileTypeSchema = z.union([predefinedTypes, mimeType]);
+export const predefinedType = {
+  IMAGE: 'image',
+  AUDIO: 'audio',
+  VIDEO: 'video',
+  PDF: 'pdf',
+  TEXT: 'text'
+} as const;
+
+const mimeType = z.string();
+const fileTypeSchema = z.union([z.nativeEnum(predefinedType), mimeType]);
+
+export type MimeType = string & {};
+export type FileType =
+  | (typeof predefinedType)[keyof typeof predefinedType]
+  | MimeType;
 
 const setFileNameSchema = z
   .function()
@@ -18,5 +30,11 @@ export const uploadOptionsSchema = z
   })
   .strict();
 
-export type UploadOptions = z.infer<typeof uploadOptionsSchema>;
 export type SetFileName = z.infer<typeof setFileNameSchema>;
+
+export type UploadOptions = Partial<{
+  fileType: FileType;
+  maxFileSize: string;
+  public: boolean;
+  setFileName: SetFileName;
+}>;
