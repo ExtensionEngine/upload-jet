@@ -1,18 +1,11 @@
-import { predefinedTypes, FileType } from './types';
+import { predefinedType, FileType, MimeType } from './types';
 
-const exportAcceptedTypes = function (fileType: FileType) {
-  switch (fileType) {
-    case predefinedTypes.IMAGE:
-    case predefinedTypes.AUDIO:
-    case predefinedTypes.VIDEO:
-      return `${fileType}/*`;
-    case predefinedTypes.PDF:
-      return `application/${fileType}`;
-    case predefinedTypes.TEXT:
-      return `${fileType}/plain`;
-    default:
-      return fileType;
-  }
-};
-
-export default exportAcceptedTypes;
+// TODO: Extract to shared library
+export function getMimeType(fileType: FileType): MimeType {
+  if (predefinedType.IMAGE === fileType) return 'image/*';
+  if (predefinedType.AUDIO === fileType) return 'audio/*';
+  if (predefinedType.VIDEO === fileType) return 'video/*';
+  if (predefinedType.PDF === fileType) return 'application/pdf';
+  if (predefinedType.TEXT === fileType) return 'text/plain';
+  return fileType;
+}

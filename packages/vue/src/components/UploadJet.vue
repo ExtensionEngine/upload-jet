@@ -3,7 +3,7 @@ import { computed, ref, type PropType } from 'vue';
 import FileList from './FileList.vue';
 import FileDropzone from './FileDropzone.vue';
 import FileForm from './FileForm.vue';
-import exportAcceptedTypes from '../validationService';
+import { getMimeType } from '../validationService';
 import { useUploadJet } from '../useUploadJet';
 import type { UploadedFile, FileType, Errors, ErrorPayload } from '@/types';
 
@@ -23,7 +23,7 @@ const props = defineProps({
 const selectedFiles = ref<File[]>([]);
 const errors = ref<Errors>({});
 const multiple = computed(() => props.maxFileCount > 1);
-const acceptedType = computed(() => exportAcceptedTypes(props.fileType));
+const acceptedType = computed(() => getMimeType(props.fileType));
 const { upload } = useUploadJet({ url: props.url });
 
 function updateErrors(errorPayload: ErrorPayload[]) {
