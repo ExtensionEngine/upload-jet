@@ -37,10 +37,9 @@ function addDroppedFiles(e: DragEvent) {
     file => !isValidFile(file, props.fileType)
   );
 
-  selectedFiles.value = checkAndReplaceDuplicate(
-    selectedFiles.value,
-    validFiles
-  );
+  selectedFiles.value = validFiles.length
+    ? checkAndReplaceDuplicate(selectedFiles.value, validFiles)
+    : [...selectedFiles.value];
 
   errors.value = invalidFiles.length
     ? invalidFiles.map(file => ({
