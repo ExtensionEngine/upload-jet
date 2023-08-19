@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { PropType, computed, ref } from 'vue';
-import {
-  isValidFileType,
-  checkAndReplaceDuplicate
-} from '../validationService';
+import { isValidFile, checkAndReplaceDuplicate } from '../validationService';
 import { FileValidationError, errorCode } from '@/types';
 import ErrorList from './ErrorList.vue';
 
@@ -31,39 +28,20 @@ function addDroppedFiles(e: DragEvent) {
   const droppedFiles = e.dataTransfer?.files;
   if (!droppedFiles?.length) return;
   const droppedFilesArray = [...droppedFiles];
-  // invalidFiles.value = [];
-  // const accumulatedErrors = [];
 
-  // selectedFiles.value = droppedFilesArray.reduce(
-  //   (currentFiles, file) => {
-  //     const isValidType = isValidFileType(file, props.fileType);
-  //     if (!isValidType) {
-  //       invalidFiles.value.push(file);
-  //       return currentFiles;
-  //     }
-  //     return checkAndReplaceDuplicate(file, currentFiles);
-  //   },
-  //   [...selectedFiles.value]
-  // );
-
-  // if (invalidFiles.value.length) {
-  //   accumulatedErrors.push({
-  //     errorType: 'invalidType',
-  //     errorPayload: invalidFiles.value
-  //   });
-  // }
-  // accumulatedErrors.length
-  //   ? emit('error', accumulatedErrors)
-  //   : emit('noErrors');
-
-  const validFiles = droppedFilesArray.filter(({ type }) =>
-    accept({ type }, props.fileType)
+  const validFiles = droppedFilesArray.filter(file =>
+    isValidFile(file, props.fileType)
   );
+
   const invalidFiles = droppedFilesArray.filter(
-    ({ type }) => !accept({ type }, props.fileType)
+    file => !isValidFile(file, props.fileType)
   );
 
-  selectedFiles.value = [...selectedFiles.value, ...validFiles];
+  selectedFiles.value = checkAndReplaceDuplicate(
+    selectedFiles.value,
+    validFiles
+  );
+
   errors.value = invalidFiles.length
     ? invalidFiles.map(file => ({
         code: errorCode.INVALID_FILE_TYPE,

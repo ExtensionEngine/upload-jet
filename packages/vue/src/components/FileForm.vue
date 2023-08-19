@@ -25,11 +25,9 @@ function addSelectedFiles(event: Event) {
   if (!inputElement.files?.length) return;
   const inputFilesArray = [...inputElement.files];
 
-  selectedFiles.value = inputFilesArray.reduce(
-    (currentFiles, file) => {
-      return checkAndReplaceDuplicate(file, currentFiles);
-    },
-    [...selectedFiles.value]
+  selectedFiles.value = checkAndReplaceDuplicate(
+    selectedFiles.value,
+    inputFilesArray
   );
 }
 </script>
