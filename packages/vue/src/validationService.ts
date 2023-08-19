@@ -19,9 +19,9 @@ export function checkAndReplaceDuplicate(
   selectedFiles: File[],
   newFiles: File[]
 ) {
-  const filteredSelectedFiles = selectedFiles.filter(selectedFile => {
+  const filteredFiles = selectedFiles.filter(selectedFile => {
     return !newFiles.some(newFile => newFile.name === selectedFile.name);
   });
 
-  return [...filteredSelectedFiles, ...newFiles];
+  return [...filteredFiles, ...newFiles];
 }
