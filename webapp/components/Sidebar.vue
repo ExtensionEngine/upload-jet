@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen bg-zinc-600">Sidebar</div>
+  <div>Sidebar</div>
 </template>
 
 <script setup></script>
