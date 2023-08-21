@@ -13,7 +13,7 @@ module.exports = {
   plugins: [
     iconsPlugin({
       // Select the icon collections you want to use
-      collections: getIconCollections(['lucide'])
+      collections: getIconCollections(['mdi'])
     })
   ],
   build: {

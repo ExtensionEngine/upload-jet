@@ -21,6 +21,6 @@
   },
   "dependencies": {
     "@egoist/tailwindcss-icons": "^1.1.0",
-    "@iconify/json": "^2.2.103"
+    "@iconify-json/mdi": "^1.1.54"
   }
 }
