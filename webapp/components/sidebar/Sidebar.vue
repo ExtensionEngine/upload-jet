@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="transition-width fixed flex h-screen w-12 flex-col overflow-hidden border-2 border-blue-400 bg-slate-200 duration-500 ease-out lg:relative"
+    class="transition-width fixed flex h-screen w-12 flex-col overflow-hidden border-2 border-gray-300 bg-slate-200 duration-500 ease-out lg:relative"
     :class="{
       'w-20': !isExpanded,
       'lg:w-64': isExpanded,

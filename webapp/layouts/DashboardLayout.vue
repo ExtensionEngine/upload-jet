@@ -4,7 +4,3 @@
     <slot name="maincontent" />
   </div>
 </template>
-
-<style scoped></style>
-
-<script setup></script>

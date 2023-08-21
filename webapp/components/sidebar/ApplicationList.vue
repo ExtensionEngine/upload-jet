@@ -20,5 +20,3 @@ const props = defineProps({
   isExpanded: { type: Boolean, required: true }
 });
 </script>
-
-<style scoped></style>
