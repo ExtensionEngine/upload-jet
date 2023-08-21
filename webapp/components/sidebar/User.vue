@@ -3,16 +3,14 @@
     <div
       :class="{ hidden: isExpanded }"
       class="relative flex h-full items-end justify-center">
-      <div
-        class="h-10 w-10 overflow-hidden rounded-full bg-gray-300 object-cover" />
+      <SidebarProfilePhoto :isExpanded="isExpanded" />
     </div>
 
     <div
       class="relative flex h-full justify-start"
       :class="{ hidden: !isExpanded }">
-      <div class="flex items-center space-x-8">
-        <div
-          class="h-20 w-20 overflow-hidden rounded-full bg-gray-300 object-cover" />
+      <div class="flex items-center space-x-6">
+        <SidebarProfilePhoto :isExpanded="isExpanded" />
         <p>Username</p>
       </div>
       <NuxtLink :to="`/login`">
@@ -27,6 +25,6 @@
 
 <script setup>
 const props = defineProps({
-  isExpanded: { type: Boolean, required: true }
+  isExpanded: { type: Boolean, default: false }
 });
 </script>

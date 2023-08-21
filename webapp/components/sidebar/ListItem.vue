@@ -11,9 +11,9 @@
 
 <script setup>
 const props = defineProps({
-  iconClass: { type: String, required: true },
-  label: { type: String, required: true },
-  isExpanded: { type: Boolean, required: true }
+  iconClass: { type: String },
+  label: { type: String },
+  isExpanded: { type: Boolean, default: false }
 });
 </script>
 
