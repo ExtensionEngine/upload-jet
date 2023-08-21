@@ -8,11 +8,11 @@
     </div>
 
     <div
-      class="relative flex h-full justify-center"
+      class="relative flex h-full justify-start"
       :class="{ hidden: !isExpanded }">
-      <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-8">
         <div
-          class="h-16 w-16 overflow-hidden rounded-full bg-gray-300 object-cover" />
+          class="h-20 w-20 overflow-hidden rounded-full bg-gray-300 object-cover" />
         <p>Username</p>
       </div>
       <NuxtLink :to="`/login`">

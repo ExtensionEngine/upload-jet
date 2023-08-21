@@ -1,11 +1,7 @@
 <template>
   <aside
-    class="transition-width fixed flex h-screen w-12 flex-col overflow-hidden border-2 border-gray-300 bg-slate-200 duration-500 ease-out lg:relative"
-    :class="{
-      'w-20': !isExpanded,
-      'lg:w-64': isExpanded,
-      'is-expanded': isExpanded
-    }">
+    class="transition-width fixed flex h-screen flex-col overflow-hidden border-2 border-gray-300 bg-slate-200 duration-500 ease-out lg:relative"
+    :class="isExpanded ? 'w-80 lg:w-80' : 'w-20'">
     <i
       class="i-mdi-arrow-right absolute right-1 z-50 h-8 w-8 justify-end duration-200 ease-out hover:translate-x-1"
       :class="{ hidden: isExpanded }"
@@ -26,9 +22,3 @@ function toggleIsExpanded() {
   isExpanded.value = !isExpanded.value;
 }
 </script>
-
-<style>
-.is-expanded {
-  width: 16rem;
-}
-</style>
