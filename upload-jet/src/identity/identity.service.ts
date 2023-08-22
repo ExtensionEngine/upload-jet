@@ -6,7 +6,6 @@ import { Logger } from 'nestjs-pino';
 import { GithubEmail } from './identity.dto';
 
 const GITHUB_API_URL = 'https://api.github.com';
-const GITHUB_URL = 'https://github.com';
 
 @Injectable()
 export class IdentityService {
@@ -18,7 +17,7 @@ export class IdentityService {
   async getAccessToken(code: string) {
     const result = await firstValueFrom(
       this.httpService.post(
-        new URL('/login/oauth/access_token', GITHUB_URL).href,
+        new URL('https://github.com/login/oauth/access_token').href,
         {
           client_id: process.env.GITHUB_CLIENT_ID,
           client_secret: process.env.GITHUB_CLIENT_SECRET,
