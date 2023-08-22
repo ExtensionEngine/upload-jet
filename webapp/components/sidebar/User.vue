@@ -13,7 +13,7 @@
         <SidebarProfilePhoto :isExpanded="isExpanded" />
         <p>Username</p>
       </div>
-      <NuxtLink :to="`/login`">
+      <NuxtLink :to="`/homepage`">
         <p
           class="absolute bottom-0 right-0 text-sm text-gray-400 hover:cursor-pointer hover:underline">
           Signout
