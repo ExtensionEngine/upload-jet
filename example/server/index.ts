@@ -1,7 +1,8 @@
 import express from 'express';
-import { UploadOptions } from '../src/index';
 import cors from 'cors';
-import { UploadJet } from '../src/index';
+// TODO: Change this import to package name after publishing to npm
+import { UploadJet } from '../../packages/express/src';
+import { UploadOptions } from '../../packages/express/src/schema/upload-options.dto';
 
 const app = express();
 const router = express.Router();
