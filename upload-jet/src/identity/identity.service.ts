@@ -67,6 +67,6 @@ export class IdentityService {
       (email: GithubEmail) => email.primary
     );
 
-    return primaryEmail.email;
+    return primaryEmail ? primaryEmail.email : emails[0].email;
   }
 }
