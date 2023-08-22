@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PropType, computed, ref } from 'vue';
-import { isValidFile, checkAndReplaceDuplicate } from '../validationService';
+import { removeDuplicates, isValidFileType } from '../validationService';
 import { FileValidationError, errorCode } from '@/types';
 import ErrorList from './ErrorList.vue';
 
@@ -29,17 +29,13 @@ function addDroppedFiles(e: DragEvent) {
   if (!droppedFiles?.length) return;
   const droppedFilesArray = [...droppedFiles];
 
-  const validFiles = droppedFilesArray.filter(file =>
-    isValidFile(file, props.fileType)
-  );
+  const isValid = (file: File) => isValidFileType(file, props.fileType);
+  const validFiles = droppedFilesArray.filter(isValid);
+  const invalidFiles = droppedFilesArray.filter(file => !isValid(file));
 
-  const invalidFiles = droppedFilesArray.filter(
-    file => !isValidFile(file, props.fileType)
-  );
-
-  selectedFiles.value = validFiles.length
-    ? checkAndReplaceDuplicate(selectedFiles.value, validFiles)
-    : [...selectedFiles.value];
+  if (validFiles.length) {
+    selectedFiles.value = removeDuplicates(selectedFiles.value, validFiles);
+  }
 
   errors.value = invalidFiles.length
     ? invalidFiles.map(file => ({

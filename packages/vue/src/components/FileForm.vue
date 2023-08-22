@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PropType, computed, ref } from 'vue';
-import { checkAndReplaceDuplicate } from '@/validationService';
+import { removeDuplicates } from '@/validationService';
 
 const emit = defineEmits(['update:selected-files', 'submit']);
 
@@ -25,10 +25,7 @@ function addSelectedFiles(event: Event) {
   if (!inputElement.files?.length) return;
   const inputFilesArray = [...inputElement.files];
 
-  selectedFiles.value = checkAndReplaceDuplicate(
-    selectedFiles.value,
-    inputFilesArray
-  );
+  selectedFiles.value = removeDuplicates(selectedFiles.value, inputFilesArray);
 }
 </script>
 

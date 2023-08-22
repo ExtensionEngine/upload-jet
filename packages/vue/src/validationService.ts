@@ -11,17 +11,16 @@ export function getMimeType(fileType: FileType): MimeType {
   return fileType;
 }
 
-export function isValidFile(droppedFile: File, fileType: string) {
-  return accept({ type: droppedFile.type }, fileType);
+export function isValidFileType({ type }: File, fileType: string) {
+  return accept({ type }, fileType);
 }
 
-export function checkAndReplaceDuplicate(
-  selectedFiles: File[],
-  newFiles: File[]
-) {
-  const filteredFiles = selectedFiles.filter(selectedFile => {
-    return !newFiles.some(newFile => newFile.name === selectedFile.name);
-  });
+export function removeDuplicates(existingFiles: File[], newFiles: File[]) {
+  const isNotDuplicate = (file: File) => {
+    return !newFiles.some(it => it.name === file.name);
+  };
 
-  return [...filteredFiles, ...newFiles];
+  const files = existingFiles.filter(isNotDuplicate);
+
+  return [...files, ...newFiles];
 }
