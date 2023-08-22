@@ -1,11 +1,15 @@
 <template>
+  <i
+    class="i-mdi-menu absolute left-2 z-50 h-8 w-8 cursor-pointer justify-end lg:left-6"
+    @click="toggleIsExpanded"
+    :class="{ hidden: isExpanded }" />
+
   <aside
-    class="fixed flex h-screen flex-col overflow-hidden border-2 border-gray-300 bg-slate-50 duration-500 ease-out lg:relative"
-    :class="isExpanded ? 'w-80 lg:w-80' : 'w-20'">
-    <i
-      class="i-mdi-arrow-right absolute right-1 z-50 h-8 w-8 justify-end duration-200 ease-out hover:translate-x-1"
-      :class="{ hidden: isExpanded }"
-      @click="toggleIsExpanded" />
+    class="fixed flex h-screen flex-col overflow-hidden border-0 border-gray-300 bg-slate-50 duration-500 ease-out lg:relative"
+    :class="{
+      'w-0 lg:w-20 lg:border-2': !isExpanded,
+      'w-80 border-2 lg:w-80': isExpanded
+    }">
     <i
       class="i-mdi-arrow-left absolute right-1 z-50 h-8 w-8 justify-end duration-200 ease-out hover:-translate-x-1"
       :class="{ hidden: !isExpanded }"
@@ -16,7 +20,7 @@
 </template>
 
 <script setup>
-const isExpanded = ref(false);
+const isExpanded = ref(true);
 
 function toggleIsExpanded() {
   isExpanded.value = !isExpanded.value;
