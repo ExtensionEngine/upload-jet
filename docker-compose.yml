@@ -3,6 +3,8 @@ services:
   upload-jet:
     build: ./upload-jet
     ports:
-      - '${UPLOAD_JET_PORT}:3000'
+      - '3000:3000'
+    environment:
+      - PORT=3000
     env_file:
       - ./upload-jet/.env
