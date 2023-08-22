@@ -5,6 +5,9 @@ import * as querystring from 'querystring';
 import { Logger } from 'nestjs-pino';
 import { GithubEmail } from './login.dto';
 
+const GITHUB_API_URL = 'https://api.github.com';
+const GITHUB_URL = 'https://github.com';
+
 @Injectable()
 export class LoginService {
   constructor(
@@ -14,11 +17,14 @@ export class LoginService {
 
   async getAccessToken(code: string) {
     const result = await firstValueFrom(
-      this.httpService.post('https://github.com/login/oauth/access_token', {
-        client_id: process.env.GITHUB_CLIENT_ID,
-        client_secret: process.env.GITHUB_SECRET,
-        code
-      })
+      this.httpService.post(
+        new URL('/login/oauth/access_token', GITHUB_URL).href,
+        {
+          client_id: process.env.GITHUB_CLIENT_ID,
+          client_secret: process.env.GITHUB_SECRET,
+          code
+        }
+      )
     );
 
     const accessTokenResult = querystring.parse(result.data);
@@ -33,7 +39,7 @@ export class LoginService {
 
   async getGithubUser(accessToken: string) {
     const { data: user } = await firstValueFrom(
-      this.httpService.get('https://api.github.com/user', {
+      this.httpService.get(new URL('/user', GITHUB_API_URL).href, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -50,7 +56,7 @@ export class LoginService {
 
   async getGithubUserPrimaryEmail(accessToken: string) {
     const { data: emails } = await firstValueFrom(
-      this.httpService.get('https://api.github.com/user/emails', {
+      this.httpService.get(new URL('/user/emails', GITHUB_API_URL).href, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
