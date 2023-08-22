@@ -14,6 +14,16 @@ export class IdentityService {
     private readonly logger: Logger
   ) {}
 
+  async authorize(code: string) {
+    const accessToken = await this.getAccessToken(code);
+
+    if (accessToken) {
+      // TODO: Use this data to verify if user exists in our database
+      const user = await this.getGithubUser(accessToken);
+      console.log('GITHUB_USER', user);
+    }
+  }
+
   async getAccessToken(code: string) {
     const result = await firstValueFrom(
       this.httpService.post(
