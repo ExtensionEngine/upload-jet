@@ -9,3 +9,11 @@
     </template>
   </NuxtLayout>
 </template>
+
+<script setup>
+const router = useRouter();
+
+if (router.currentRoute.value.path === '/dashboard/') {
+  router.replace('/dashboard/applications');
+}
+</script>
