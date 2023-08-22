@@ -10,12 +10,7 @@ module.exports = {
   theme: {
     extend: {}
   },
-  plugins: [
-    iconsPlugin({
-      // Select the icon collections you want to use
-      collections: getIconCollections(['mdi'])
-    })
-  ],
+  plugins: [],
   build: {
     postcss: {
       postcssOptions: {

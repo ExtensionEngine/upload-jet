@@ -3,7 +3,7 @@
     <NuxtLink
       :to="`/dashboard/${label.toLowerCase()}`"
       class="flex h-10 cursor-pointer items-center gap-8 pl-6">
-      <i :class="iconClass"></i>
+      <Icon :name="iconName" size="24" />
       <p :class="{ hidden: !isExpanded }">{{ label }}</p>
     </NuxtLink>
   </div>
@@ -11,7 +11,7 @@
 
 <script setup>
 const props = defineProps({
-  iconClass: { type: String },
+  iconName: { type: String },
   label: { type: String },
   isExpanded: { type: Boolean }
 });
