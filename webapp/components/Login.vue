@@ -5,10 +5,12 @@ const authConfig = {
   scope: 'user:email',
   client_id: config.public.githubClientId
 };
+const searchParams = new URLSearchParams(authConfig).toString();
 
-const authParams = new URLSearchParams(authConfig).toString();
-const githubLoginUrl = `https://github.com/login/oauth/authorize?${authParams}`;
+const githubLoginUrl = new URL('/login/oauth/authorize', 'https://github.com');
+githubLoginUrl.search = searchParams;
 </script>
+
 <template>
   <a :href="githubLoginUrl">Login with GitHub</a>
 </template>
