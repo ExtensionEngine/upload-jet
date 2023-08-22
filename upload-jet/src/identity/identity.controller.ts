@@ -1,9 +1,9 @@
 import { Controller, Get, Redirect, Req } from '@nestjs/common';
-import { LoginService } from './login.service';
+import { IdentityService } from './identity.service';
 
 @Controller('login')
-export class LoginController {
-  constructor(private readonly loginService: LoginService) {}
+export class IdentityController {
+  constructor(private readonly loginService: IdentityService) {}
 
   @Get('callback')
   @Redirect()

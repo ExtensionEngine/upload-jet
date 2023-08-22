@@ -3,13 +3,13 @@ import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import * as querystring from 'querystring';
 import { Logger } from 'nestjs-pino';
-import { GithubEmail } from './login.dto';
+import { GithubEmail } from './identity.dto';
 
 const GITHUB_API_URL = 'https://api.github.com';
 const GITHUB_URL = 'https://github.com';
 
 @Injectable()
-export class LoginService {
+export class IdentityService {
   constructor(
     private readonly httpService: HttpService,
     private readonly logger: Logger
