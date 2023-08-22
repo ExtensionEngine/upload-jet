@@ -5,7 +5,7 @@
     :class="{ hidden: isExpanded }" />
 
   <aside
-    class="fixed flex h-screen flex-col overflow-hidden border-0 border-gray-300 bg-slate-50 duration-500 ease-out lg:relative"
+    class="fixed flex h-screen flex-col overflow-hidden border-gray-300 bg-slate-50 duration-500 ease-out lg:relative"
     :class="{
       'w-0 lg:w-20 lg:border-2': !isExpanded,
       'w-80 border-2 lg:w-80': isExpanded
