@@ -3,3 +3,4 @@ packages:
   - "upload-jet"
   - "webapp"
   - "infrastructure"
+  - "example/**"
