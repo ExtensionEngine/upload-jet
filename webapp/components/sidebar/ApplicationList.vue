@@ -17,6 +17,6 @@
 
 <script setup>
 const props = defineProps({
-  isExpanded: { type: Boolean, default: false }
+  isExpanded: { type: Boolean }
 });
 </script>

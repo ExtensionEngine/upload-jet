@@ -13,7 +13,7 @@
 const props = defineProps({
   iconClass: { type: String },
   label: { type: String },
-  isExpanded: { type: Boolean, default: false }
+  isExpanded: { type: Boolean }
 });
 </script>
 

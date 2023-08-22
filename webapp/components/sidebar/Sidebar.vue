@@ -20,7 +20,8 @@
 </template>
 
 <script setup>
-const isExpanded = ref(true);
+const { isMobile } = useDevice();
+const isExpanded = ref(!isMobile);
 
 function toggleIsExpanded() {
   isExpanded.value = !isExpanded.value;
