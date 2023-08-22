@@ -21,7 +21,7 @@ export class IdentityService {
         new URL('/login/oauth/access_token', GITHUB_URL).href,
         {
           client_id: process.env.GITHUB_CLIENT_ID,
-          client_secret: process.env.GITHUB_SECRET,
+          client_secret: process.env.GITHUB_CLIENT_SECRET,
           code
         }
       )
