@@ -18,7 +18,7 @@ export class IdentityController {
       console.log('GITHUB_USER', user);
     }
 
-    const callbackUrl = new URL('/logincallback', process.env.APP_URL).href;
+    const callbackUrl = new URL(process.env.APP_URL).href;
     return { url: callbackUrl };
   }
 }

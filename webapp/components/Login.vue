@@ -12,5 +12,5 @@ githubLoginUrl.search = searchParams;
 </script>
 
 <template>
-  <a :href="githubLoginUrl">Login with GitHub</a>
+  <a :href="githubLoginUrl.href">Login with GitHub</a>
 </template>
