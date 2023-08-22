@@ -16,11 +16,11 @@ export function isValidFileType({ type }: File, fileType: string) {
 }
 
 export function removeDuplicates(existingFiles: File[], newFiles: File[]) {
-  const isNotDuplicate = (file: File) => {
+  const isDuplicate = (file: File) => {
     return !newFiles.some(it => it.name === file.name);
   };
 
-  const files = existingFiles.filter(isNotDuplicate);
+  const files = existingFiles.filter(isDuplicate);
 
   return [...files, ...newFiles];
 }
