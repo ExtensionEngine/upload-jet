@@ -2,3 +2,4 @@ packages:
   - "packages/**"
   - "upload-jet"
   - "webapp"
+  - "infrastructure"
