@@ -18,7 +18,7 @@ export class LoginController {
       console.log('GITHUB_USER', user);
     }
 
-    const callbackUrl = new URL('logincallback', process.env.CLIENT_URL).href;
+    const callbackUrl = new URL('logincallback', process.env.APP_URL).href;
     return { url: callbackUrl };
   }
 }
