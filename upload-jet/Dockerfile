@@ -12,7 +12,7 @@ RUN pnpm run --filter="./upload-jet" build
 
 FROM build as pruned
 WORKDIR /app
-RUN pnpm --filter "./upload-jet" deploy pruned
+RUN pnpm --filter "./upload-jet" --prod deploy pruned
 
 FROM base as deploy
 WORKDIR /app
