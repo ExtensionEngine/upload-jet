@@ -1,0 +1,17 @@
+infrastructure
+webapp
+
+**/node_modules
+**/dist
+**/.env
+README.md
+.git
+.gitignore
+npm-debug.log
+.dockerignore
+Dockerfile
+docker-compose.yml
+LICENSE.md
+
+.github
+.vscode
