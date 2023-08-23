@@ -8,6 +8,7 @@ import {
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { Request } from 'express';
+import { MockedUser } from './userTable';
 
 @Controller('auth')
 export class AuthController {
@@ -15,14 +16,7 @@ export class AuthController {
 
   @Get('generate')
   async generateToken(@Req() req, @Res({ passthrough: true }) res: Response) {
-    // mocked user from database
-    const user = {
-      login: 'MockedUuser',
-      email: 'mocked.user@gmail.com',
-      permission: 'create app'
-    };
-
-    const access_token = await this.authService.generateJwtToken(user);
+    const access_token = await this.authService.generateJwtToken(MockedUser);
     res.cookie('jwt', access_token, { httpOnly: true });
 
     return { message: 'success' };
