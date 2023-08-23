@@ -13,7 +13,6 @@ export class AuthService {
       'GetAllUsers'
     ];
     const userPermission: permissions[] = ['CreateApp'];
-
     const payload = {
       username: user.login,
       email: user.email,
