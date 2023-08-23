@@ -4,10 +4,6 @@ RUN npm i -g pnpm
 FROM base AS dependencies
 WORKDIR /app
 COPY . .
-# Workaround 
-# https://github.com/animavita/animavita/pull/134
-RUN rm .npmrc
-RUN mv .npmrc-default-node-linker .npmrc
 RUN pnpm install
 
 FROM dependencies as build

@@ -11,10 +11,6 @@
     "skipLibCheck": true,
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "skipLibCheck": true,
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "bundler"
+    }
   }
 }
