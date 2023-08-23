@@ -1,5 +1,7 @@
 infrastructure
 webapp
+images
+example
 
 **/node_modules
 **/dist
