@@ -4,6 +4,7 @@ import { UploadPolicyModule } from './upload-policy/upload-policy.module';
 import awsConfig from './config/aws.config';
 import appConfig from './config/app.config';
 import { LoggerModule } from 'nestjs-pino';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { LoggerModule } from 'nestjs-pino';
       }
     }),
     ConfigModule.forRoot({ isGlobal: true, load: [appConfig, awsConfig] }),
-    UploadPolicyModule
+    UploadPolicyModule,
+    AuthModule
   ],
   controllers: [],
   providers: []
