@@ -25,14 +25,16 @@ export class IdentityService {
   }
 
   async getAccessToken(code: string) {
+    const requestBody = {
+      client_id: process.env.GITHUB_CLIENT_ID,
+      client_secret: process.env.GITHUB_CLIENT_SECRET,
+      code
+    };
+
     const result = await firstValueFrom(
       this.httpService.post(
         new URL('https://github.com/login/oauth/access_token').href,
-        {
-          client_id: process.env.GITHUB_CLIENT_ID,
-          client_secret: process.env.GITHUB_CLIENT_SECRET,
-          code
-        }
+        requestBody
       )
     );
 
