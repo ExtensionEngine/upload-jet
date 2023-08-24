@@ -11,7 +11,6 @@ export class IdentityService {
     if (accessToken) {
       // TODO: Use this data to verify if user exists in our database
       const user = await this.githubProvider.getGithubUser(accessToken);
-      console.log('GITHUB_USER', user);
     }
   }
 }
