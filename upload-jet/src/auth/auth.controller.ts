@@ -6,6 +6,7 @@ import { MockedUser } from './userTable';
 import { Permissions } from './permission.decorator';
 import { PermissionsGuard } from './permissions.guard';
 
+// TODO: retrieve an actual user from the database, for now use mocked user
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

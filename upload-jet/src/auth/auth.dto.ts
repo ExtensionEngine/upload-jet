@@ -27,6 +27,7 @@ export type userPermissionsType =
 export type AllPermissions =
   (typeof AllPermissions)[keyof typeof AllPermissions];
 
+// TODO: adjust user type based on data from the database
 export type userType = {
   login: string;
   email: string;
