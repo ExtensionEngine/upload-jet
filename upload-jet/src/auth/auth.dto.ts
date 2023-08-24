@@ -9,11 +9,11 @@ const Roles = {
   User: 'User'
 } as const;
 
-export type roles = (typeof Roles)[keyof typeof Roles];
-export type permissions = (typeof Permissions)[keyof typeof Permissions];
+type rolesType = (typeof Roles)[keyof typeof Roles];
+export type permissionsType = (typeof Permissions)[keyof typeof Permissions];
 
-export type user = {
+export type userType = {
   login: string;
   email: string;
-  role: roles;
+  role: rolesType;
 };

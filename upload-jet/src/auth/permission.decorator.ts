@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import { permissions } from './auth.dto';
+import { permissionsType } from './auth.dto';
 
-export const Permissions = (...permissions: permissions[]) =>
+export const Permissions = (...permissions: permissionsType[]) =>
   SetMetadata('permissions', permissions);
