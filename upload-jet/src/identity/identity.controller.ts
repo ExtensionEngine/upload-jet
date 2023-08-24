@@ -3,12 +3,12 @@ import { IdentityService } from './identity.service';
 
 @Controller('identity')
 export class IdentityController {
-  constructor(private readonly loginService: IdentityService) {}
+  constructor(private readonly identityService: IdentityService) {}
 
   @Get('callback')
   @Redirect()
   async login(@Req() request) {
-    await this.loginService.authorize(request.query.code);
+    await this.identityService.authorize(request.query.code);
 
     const callbackUrl = new URL(process.env.APP_URL).href;
     return { url: callbackUrl };
