@@ -45,12 +45,13 @@ export class GithubProviderService {
   }
 
   async getGithubUser(accessToken: string) {
+    const url = new URL('/user', GITHUB_API_URL);
+    const headers = {
+      Authorization: `Bearer ${accessToken}`
+    };
+
     const { data: user } = await firstValueFrom(
-      this.httpService.get(new URL('/user', GITHUB_API_URL).href, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
+      this.httpService.get(url.href, { headers })
     );
 
     if (!user.email) {
@@ -62,12 +63,13 @@ export class GithubProviderService {
   }
 
   async getGithubUserPrimaryEmail(accessToken: string) {
+    const url = new URL('/user/emails', GITHUB_API_URL);
+    const headers = {
+      Authorization: `Bearer ${accessToken}`
+    };
+
     const { data: emails } = await firstValueFrom(
-      this.httpService.get(new URL('/user/emails', GITHUB_API_URL).href, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
+      this.httpService.get<GithubEmail[]>(url.href, { headers })
     );
 
     const primaryEmail: GithubEmail = emails.find(
