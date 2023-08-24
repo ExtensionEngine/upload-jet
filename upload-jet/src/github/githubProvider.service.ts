@@ -1,7 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-import * as querystring from 'querystring';
 import { Logger } from 'nestjs-pino';
 
 const GITHUB_API_URL = 'https://api.github.com';
