@@ -20,19 +20,6 @@ export type Policy = {
 export type FileName = string;
 export type PolicyResponse = Record<FileName, Policy>;
 
-export const predefinedType = {
-  IMAGE: 'image',
-  AUDIO: 'audio',
-  VIDEO: 'video',
-  PDF: 'pdf',
-  TEXT: 'text'
-} as const;
-
-export type MimeType = string & {};
-export type FileType =
-  | (typeof predefinedType)[keyof typeof predefinedType]
-  | MimeType;
-
 export const errorCode = {
   INVALID_FILE_TYPE: 'INVALID_FILE_TYPE'
 } as const;

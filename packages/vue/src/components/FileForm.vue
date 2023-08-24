@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { PropType, computed, ref } from 'vue';
+import { removeDuplicates } from '@/validationService';
 
 const emit = defineEmits(['update:selected-files', 'submit']);
 
 const props = defineProps({
-  selectedFiles: { type: Array, default: () => [] },
+  selectedFiles: { type: Array as PropType<File[]>, default: () => [] },
   multiple: { type: Boolean, default: false },
   fileType: { type: String, required: false }
 });
@@ -22,7 +23,8 @@ const selectedFiles = computed({
 function addSelectedFiles(event: Event) {
   const inputElement = event.target as HTMLInputElement;
   if (!inputElement.files?.length) return;
-  selectedFiles.value = [...selectedFiles.value, ...inputElement.files];
+  const addedFiles = [...inputElement.files];
+  selectedFiles.value = removeDuplicates(selectedFiles.value, addedFiles);
 }
 </script>
 

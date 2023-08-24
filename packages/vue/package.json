@@ -5,13 +5,13 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/upload-jet-lib.umd.cjs",
-  "module": "./dist/upload-jet-lib.js",
+  "main": "./dist/upload-jet.umd.cjs",
+  "module": "./dist/upload-jet.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/upload-jet-lib.js",
-      "require": "./dist/upload-jet-lib.umd.cjs"
+      "import": "./dist/upload-jet.js",
+      "require": "./dist/upload-jet.umd.cjs"
     }
   },
   "types": "./dist/index.d.ts",
@@ -21,6 +21,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@upload-jet/shared": "workspace:^",
     "attr-accept": "^2.2.2",
     "vue": "^3.3.4"
   },
