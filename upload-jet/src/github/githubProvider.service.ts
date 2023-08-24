@@ -44,7 +44,7 @@ export class GithubProviderService {
     return accessTokenResult.access_token.toString();
   }
 
-  async getGithubUser(accessToken: string) {
+  async getUser(accessToken: string) {
     const url = new URL('/user', GITHUB_API_URL);
     const headers = {
       Authorization: `Bearer ${accessToken}`
@@ -55,14 +55,14 @@ export class GithubProviderService {
     );
 
     if (!user.email) {
-      const email = await this.getGithubUserPrimaryEmail(accessToken);
+      const email = await this.getUserEmail(accessToken);
       user.email = email;
     }
 
     return user;
   }
 
-  async getGithubUserPrimaryEmail(accessToken: string) {
+  async getUserEmail(accessToken: string) {
     const url = new URL('/user/emails', GITHUB_API_URL);
     const headers = {
       Authorization: `Bearer ${accessToken}`
