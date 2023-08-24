@@ -7,7 +7,7 @@ const authConfig = {
 };
 const searchParams = new URLSearchParams(authConfig).toString();
 
-const githubLoginUrl = new URL('/login/oauth/authorize', 'https://github.com');
+const githubLoginUrl = new URL('https://github.com/login/oauth/authorize');
 githubLoginUrl.search = searchParams;
 </script>
 
