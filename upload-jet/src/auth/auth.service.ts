@@ -1,18 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { userType, permissionsType } from './auth.dto';
+import { userType } from './auth.dto';
+import { adminPermission, userPermission } from 'config/permission.config';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
   async generateJwtToken(user: userType): Promise<string> {
-    const adminPermission: permissionsType[] = [
-      'CreateApp',
-      'DeleteApp',
-      'GetAllUsers'
-    ];
-    const userPermission: permissionsType[] = ['CreateApp'];
     const payload = {
       username: user.login,
       email: user.email,

@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { permissionsType } from './auth.dto';
+import { AllPermissions } from './auth.dto';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
@@ -8,7 +8,7 @@ export class PermissionsGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const requirePermissions = this.reflector.getAllAndOverride<
-      permissionsType[]
+      AllPermissions[]
     >('permissions', [context.getHandler(), context.getClass()]);
 
     if (!requirePermissions.length) {

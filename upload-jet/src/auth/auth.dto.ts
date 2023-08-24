@@ -1,7 +1,17 @@
-const Permissions = {
+const AllPermissions = {
   CreateApp: 'CreateApp',
   DeleteApp: 'DeleteApp',
   GetUsers: 'GetAllUsers'
+} as const;
+
+const AdminPermissions = {
+  CreateApp: 'CreateApp',
+  DeleteApp: 'DeleteApp',
+  GetUsers: 'GetAllUsers'
+} as const;
+
+const UserPermissions = {
+  CreateApp: 'CreateApp'
 } as const;
 
 const Roles = {
@@ -10,7 +20,12 @@ const Roles = {
 } as const;
 
 type rolesType = (typeof Roles)[keyof typeof Roles];
-export type permissionsType = (typeof Permissions)[keyof typeof Permissions];
+export type adminPermissionsType =
+  (typeof AdminPermissions)[keyof typeof AdminPermissions];
+export type userPermissionsType =
+  (typeof UserPermissions)[keyof typeof UserPermissions];
+export type AllPermissions =
+  (typeof AllPermissions)[keyof typeof AllPermissions];
 
 export type userType = {
   login: string;
