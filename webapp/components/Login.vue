@@ -1,8 +1,10 @@
 <script setup lang="ts">
 const config = useRuntimeConfig();
+const route = useRoute();
 
 const authConfig = {
   scope: 'user:email',
+  state: route.href,
   client_id: config.public.githubClientId
 };
 const searchParams = new URLSearchParams(authConfig).toString();

@@ -8,9 +8,10 @@ export class IdentityController {
   @Get('callback')
   @Redirect()
   async login(@Req() request) {
-    await this.identityService.authorize(request.query.code);
+    const { code, state } = request.query;
+    await this.identityService.authorize(code);
 
-    const callbackUrl = new URL(process.env.APP_URL).href;
-    return { url: callbackUrl };
+    const redirectUrl = new URL(state, process.env.APP_URL).href;
+    return { url: redirectUrl };
   }
 }
