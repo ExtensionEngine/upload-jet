@@ -15,7 +15,7 @@ export class AuthController {
   async generateToken(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response
-  ) {
+  ): Promise<{ message: string }> {
     const access_token = await this.authService.generateJwtToken(MockedUser);
     res.cookie('jwt', access_token, { httpOnly: true });
 

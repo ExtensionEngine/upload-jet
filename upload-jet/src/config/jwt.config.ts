@@ -1,12 +1,4 @@
-import { z } from 'zod';
-
-const expiresInType = z.union([z.string(), z.number(), z.undefined()]);
-
-const expiresInSchema = z
-  .object({
-    expiresIn: expiresInType
-  })
-  .strict();
+import { expiresInSchema } from 'auth/jwt.dto';
 
 const expiresInOption = { expiresIn: '3600s' };
 
