@@ -1,20 +1,8 @@
 import { z } from 'zod';
+import { FileType, predefinedType } from '@upload-jet/shared';
 
-export const predefinedType = {
-  IMAGE: 'image',
-  AUDIO: 'audio',
-  VIDEO: 'video',
-  PDF: 'pdf',
-  TEXT: 'text'
-} as const;
-
-const mimeType = z.string();
-const fileTypeSchema = z.union([z.nativeEnum(predefinedType), mimeType]);
-
-export type MimeType = string & {};
-export type FileType =
-  | (typeof predefinedType)[keyof typeof predefinedType]
-  | MimeType;
+const mimeTypeSchema = z.string();
+const fileTypeSchema = z.union([z.nativeEnum(predefinedType), mimeTypeSchema]);
 
 const setFileNameSchema = z
   .function()

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PropType, computed, ref } from 'vue';
-import { removeDuplicates, isValidFileType } from '../validationService';
+import { removeDuplicates, isValidFileType } from '@/validationService';
 import { FileValidationError, errorCode } from '@/types';
 import ErrorList from './ErrorList.vue';
 

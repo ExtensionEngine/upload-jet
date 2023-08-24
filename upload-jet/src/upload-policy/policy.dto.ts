@@ -1,22 +1,9 @@
+import { predefinedType } from '@upload-jet/shared';
 import { z } from 'zod';
 
-export const predefinedType = {
-  IMAGE: 'image',
-  AUDIO: 'audio',
-  VIDEO: 'video',
-  PDF: 'pdf',
-  TEXT: 'text'
-} as const;
-
 const fileNameSchema = z.string();
-const predefinedTypes = z.nativeEnum(predefinedType);
-const mimeType = z.string();
-const fileTypeSchema = z.union([predefinedTypes, mimeType]);
-
-export type MimeType = string & {};
-export type FileType =
-  | (typeof predefinedType)[keyof typeof predefinedType]
-  | MimeType;
+const mimeTypeSchema = z.string();
+const fileTypeSchema = z.union([z.nativeEnum(predefinedType), mimeTypeSchema]);
 
 const policyOptionsSchema = z
   .object({

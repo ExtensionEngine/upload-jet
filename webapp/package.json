@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "upload-jet-webapp",
   "private": true,
   "scripts": {
     "build": "nuxt build",

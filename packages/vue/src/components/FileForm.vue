@@ -23,9 +23,8 @@ const selectedFiles = computed({
 function addSelectedFiles(event: Event) {
   const inputElement = event.target as HTMLInputElement;
   if (!inputElement.files?.length) return;
-  const inputFilesArray = [...inputElement.files];
-
-  selectedFiles.value = removeDuplicates(selectedFiles.value, inputFilesArray);
+  const addedFiles = [...inputElement.files];
+  selectedFiles.value = removeDuplicates(selectedFiles.value, addedFiles);
 }
 </script>
 
