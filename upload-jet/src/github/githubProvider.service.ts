@@ -54,10 +54,10 @@ export class GithubProviderService {
       this.httpService.get(url.href, { headers })
     );
 
-    if (!user.email) {
-      const email = await this.getUserEmail(accessToken);
-      user.email = email;
-    }
+    if (user?.email) return user;
+
+    const email = await this.getUserEmail(accessToken);
+    user.email = email;
 
     return user;
   }
