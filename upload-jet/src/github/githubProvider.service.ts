@@ -25,14 +25,17 @@ export class GithubProviderService {
       code
     };
 
-    const result = await firstValueFrom(
+    const { data: accessTokenResult } = await firstValueFrom(
       this.httpService.post(
         new URL('https://github.com/login/oauth/access_token').href,
-        requestBody
+        requestBody,
+        {
+          headers: {
+            Accept: 'application/json'
+          }
+        }
       )
     );
-
-    const accessTokenResult = querystring.parse(result.data);
 
     if (accessTokenResult.error) {
       this.logger.error(accessTokenResult);
