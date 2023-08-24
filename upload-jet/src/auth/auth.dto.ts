@@ -4,12 +4,6 @@ export const AllPermissions = {
   GetUsers: 'GetAllUsers'
 } as const;
 
-const AdminPermissions = {
-  CreateApp: 'CreateApp',
-  DeleteApp: 'DeleteApp',
-  GetUsers: 'GetAllUsers'
-} as const;
-
 const UserPermissions = {
   CreateApp: 'CreateApp'
 } as const;
@@ -22,11 +16,13 @@ export const Roles = {
 type rolesType = (typeof Roles)[keyof typeof Roles];
 
 export type adminPermissionsType =
-  (typeof AdminPermissions)[keyof typeof AdminPermissions];
-export type userPermissionsType =
-  (typeof UserPermissions)[keyof typeof UserPermissions];
+  (typeof AllPermissions)[keyof typeof AllPermissions];
+
 export type AllPermissions =
   (typeof AllPermissions)[keyof typeof AllPermissions];
+
+export type userPermissionsType =
+  (typeof UserPermissions)[keyof typeof UserPermissions];
 
 // TODO: adjust user type based on data from the database
 export type userType = {
