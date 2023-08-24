@@ -5,22 +5,24 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/upload-jet-lib.umd.cjs",
-  "module": "./dist/upload-jet-lib.js",
+  "main": "./dist/upload-jet.umd.cjs",
+  "module": "./dist/upload-jet.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/upload-jet-lib.js",
-      "require": "./dist/upload-jet-lib.umd.cjs"
+      "import": "./dist/upload-jet.js",
+      "require": "./dist/upload-jet.umd.cjs"
     }
   },
   "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vue-tsc",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@upload-jet/shared": "workspace:^",
+    "attr-accept": "^2.2.2",
     "vue": "^3.3.4"
   },
   "devDependencies": {
@@ -37,6 +39,7 @@
     "prettier": "^3.0.0",
     "typescript": "~5.1.6",
     "vite": "^4.4.6",
+    "vite-plugin-dts": "^3.5.2",
     "vue-tsc": "^1.8.6"
   }
 }

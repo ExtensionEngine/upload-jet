@@ -1,0 +1,12 @@
+version: '3'
+services:
+  upload-jet:
+    build:
+      context: .
+      dockerfile: upload-jet/Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - PORT=3000
+    env_file:
+      - ./upload-jet/.env

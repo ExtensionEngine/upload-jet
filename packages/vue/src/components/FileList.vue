@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const props = defineProps<{ files: File[] }>();
+const props = defineProps<{
+  files: File[];
+}>();
 </script>
 
 <template>

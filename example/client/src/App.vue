@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import UploadJet from './components/UploadJet.vue';
+import { UploadJet } from '@upload-jet/vue';
+
+const showSuccessDialog = (data: any) => {
+  console.log('Success: ', data);
+};
 
 const showErrorDialog = (data: any) => {
   console.log('Error: ', data);
-};
-const showSuccessDialog = (data: any) => {
-  console.log('Success: ', data);
 };
 </script>
 
 <template>
   <UploadJet
-    @upload-error="showErrorDialog"
     @upload-complete="showSuccessDialog"
-    :maxFileCount="3"
+    @upload-error="showErrorDialog"
     url="http://localhost:3001/api/images"
-    file-type="image" />
+    :maxFileCount="3" />
 </template>
 
 <style scoped></style>

@@ -14,7 +14,9 @@ async function bootstrap() {
 
   process.on('uncaughtException', err => logUncaughtException(err, logger));
 
-  await app.listen(port);
+  await app.listen(port, () => {
+    logger.log(`🚀 Application is listening on port ${port}`);
+  });
 }
 bootstrap();
 

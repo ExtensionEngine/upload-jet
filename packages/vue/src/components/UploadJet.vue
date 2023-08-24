@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useUploadJet } from '../useUploadJet';
-import type { UploadedFile } from '@/types';
+import { computed, ref, type PropType } from 'vue';
+import { getMimeType, FileType } from '@upload-jet/shared';
 import FileList from './FileList.vue';
 import FileDropzone from './FileDropzone.vue';
 import FileForm from './FileForm.vue';
+import { useUploadJet } from '../useUploadJet';
+import type { UploadedFile } from '@/types';
 
 const emit = defineEmits<{
   (event: 'upload-complete', payload: UploadedFile[]): void;
@@ -13,11 +14,17 @@ const emit = defineEmits<{
 
 const props = defineProps({
   url: { type: String, required: true },
-  maxFileCount: { type: Number, default: 1 }
+  maxFileCount: { type: Number, default: 1 },
+  fileType: {
+    type: String as PropType<FileType>,
+    required: false
+  }
 });
-
 const selectedFiles = ref<File[]>([]);
 const multiple = computed(() => props.maxFileCount > 1);
+const acceptedType = computed(() => {
+  return props.fileType && getMimeType(props.fileType);
+});
 const { upload } = useUploadJet({ url: props.url });
 
 async function uploadFiles() {
@@ -32,11 +39,14 @@ async function uploadFiles() {
 </script>
 
 <template>
-  <file-dropzone v-model:selected-files="selectedFiles">
+  <file-dropzone
+    v-model:selected-files="selectedFiles"
+    :fileType="acceptedType">
     <file-form
       @submit="uploadFiles"
       v-model:selected-files="selectedFiles"
-      :multiple="multiple" />
+      :multiple="multiple"
+      :fileType="acceptedType" />
     <file-list :files="selectedFiles" />
   </file-dropzone>
 </template>
