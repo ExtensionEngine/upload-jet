@@ -3,12 +3,8 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { ConfigType } from '@nestjs/config';
 import awsConfig from 'config/aws.config';
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
-import {
-  predefinedType,
-  PolicyOptions,
-  FileType,
-  MimeType
-} from './policy.dto';
+import { PolicyOptions } from './policy.dto';
+import { FileType, getMimeType } from '@upload-jet/shared';
 
 @Injectable()
 export class S3ClientService {
@@ -67,14 +63,4 @@ export class S3ClientService {
     }
     return { 'Content-Type': fileType };
   }
-}
-
-// TODO: Extract to shared library
-function getMimeType(fileType: FileType): MimeType {
-  if (predefinedType.IMAGE === fileType) return 'image/*';
-  if (predefinedType.AUDIO === fileType) return 'audio/*';
-  if (predefinedType.VIDEO === fileType) return 'video/*';
-  if (predefinedType.PDF === fileType) return 'application/pdf';
-  if (predefinedType.TEXT === fileType) return 'text/plain';
-  return fileType;
 }

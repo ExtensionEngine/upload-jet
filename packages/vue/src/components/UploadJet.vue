@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, ref, type PropType } from 'vue';
+import { getMimeType, FileType } from '@upload-jet/shared';
 import FileList from './FileList.vue';
 import FileDropzone from './FileDropzone.vue';
 import FileForm from './FileForm.vue';
-import { getMimeType } from '../validationService';
 import { useUploadJet } from '../useUploadJet';
-import type { UploadedFile, FileType } from '@/types';
+import type { UploadedFile } from '@/types';
 
 const emit = defineEmits<{
   (event: 'upload-complete', payload: UploadedFile[]): void;

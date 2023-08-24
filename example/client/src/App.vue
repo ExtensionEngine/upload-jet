@@ -1,19 +1,19 @@
 <script setup lang="ts">
-// TODO: Change this import to package name after publishing to npm
-import UploadJet from '../../../packages/vue/src/components/UploadJet.vue';
+import { UploadJet } from '@upload-jet/vue';
+
+const showSuccessDialog = (data: any) => {
+  console.log('Success: ', data);
+};
 
 const showErrorDialog = (data: any) => {
   console.log('Error: ', data);
-};
-const showSuccessDialog = (data: any) => {
-  console.log('Success: ', data);
 };
 </script>
 
 <template>
   <UploadJet
-    @upload-error="showErrorDialog"
     @upload-complete="showSuccessDialog"
+    @upload-error="showErrorDialog"
     url="http://localhost:3001/api/images"
     :maxFileCount="3" />
 </template>
