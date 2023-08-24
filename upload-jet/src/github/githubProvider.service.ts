@@ -50,7 +50,10 @@ export class GithubProviderService {
     return accessTokenResult.access_token.toString();
   }
 
-  async getUser(accessToken: string): Promise<GithubUser> {
+  async getUser(code: string): Promise<GithubUser> {
+    const accessToken = await this.getAccessToken(code);
+    if (!accessToken) return null;
+
     const url = new URL('/user', GITHUB_API_URL);
     const headers = {
       Authorization: `Bearer ${accessToken}`
