@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { IdentityController } from './identity.controller';
 import { IdentityService } from './identity.service';
-import { GithubProviderModule } from 'github/githubProvider.module';
+import { GithubProviderService } from 'github/githubProvider.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   controllers: [IdentityController],
-  imports: [GithubProviderModule],
-  providers: [IdentityService]
+  imports: [HttpModule],
+  providers: [IdentityService, GithubProviderService]
 })
 export class IdentityModule {}
