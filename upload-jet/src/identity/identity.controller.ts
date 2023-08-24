@@ -11,7 +11,8 @@ export class IdentityController {
     const { code, state } = request.query;
     await this.identityService.authorize(code);
 
-    const redirectUrl = new URL(state, process.env.APP_URL).href;
+    const redirectRoute = state || '/';
+    const redirectUrl = new URL(redirectRoute, process.env.APP_URL).href;
     return { url: redirectUrl };
   }
 }
