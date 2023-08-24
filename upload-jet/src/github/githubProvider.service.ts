@@ -10,6 +10,12 @@ type GithubEmail = {
   primary: boolean;
 };
 
+type GithubUser = {
+  id: number;
+  login: string;
+  email: string | null;
+};
+
 @Injectable()
 export class GithubProviderService {
   constructor(
@@ -17,7 +23,7 @@ export class GithubProviderService {
     private readonly logger: Logger
   ) {}
 
-  async getAccessToken(code: string) {
+  async getAccessToken(code: string): Promise<string> {
     const requestBody = {
       client_id: process.env.GITHUB_CLIENT_ID,
       client_secret: process.env.GITHUB_CLIENT_SECRET,
@@ -44,14 +50,14 @@ export class GithubProviderService {
     return accessTokenResult.access_token.toString();
   }
 
-  async getUser(accessToken: string) {
+  async getUser(accessToken: string): Promise<GithubUser> {
     const url = new URL('/user', GITHUB_API_URL);
     const headers = {
       Authorization: `Bearer ${accessToken}`
     };
 
     const { data: user } = await firstValueFrom(
-      this.httpService.get(url.href, { headers })
+      this.httpService.get<GithubUser>(url.href, { headers })
     );
 
     if (user?.email) return user;
