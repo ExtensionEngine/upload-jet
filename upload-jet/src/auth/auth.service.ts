@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { userType } from './auth.dto';
 import { adminPermission, userPermission } from 'config/permission.config';
@@ -17,7 +17,12 @@ export class AuthService {
     return await this.jwtService.signAsync(payload);
   }
 
-  async verifyJwtToken(token) {
-    return await this.jwtService.verifyAsync(token);
+  async verifyJwtToken(token: string) {
+    try {
+      const decodedToken = await this.jwtService.verifyAsync(token);
+      return decodedToken;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }

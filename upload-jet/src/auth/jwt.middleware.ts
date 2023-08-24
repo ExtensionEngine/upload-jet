@@ -1,6 +1,10 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import {
+  Injectable,
+  NestMiddleware,
+  UnauthorizedException
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Request, NextFunction } from 'express';
+import { Request, NextFunction, Response } from 'express';
 
 @Injectable()
 export class JwtMiddleware implements NestMiddleware {
@@ -8,12 +12,17 @@ export class JwtMiddleware implements NestMiddleware {
 
   async use(req: Request, res: Response, next: NextFunction) {
     const token = req.cookies['jwt'];
-    const user = await this.authService.verifyJwtToken(token);
 
-    if (user) {
-      req['user'] = user;
+    if (!token) {
+      throw new UnauthorizedException('No token provided');
     }
-
-    next();
+    try {
+      const user = await this.authService.verifyJwtToken(token);
+      if (!user) throw new UnauthorizedException('No user found');
+      req['user'] = user;
+      next();
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
+    }
   }
 }
