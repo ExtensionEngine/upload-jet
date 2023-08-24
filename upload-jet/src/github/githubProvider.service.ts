@@ -3,9 +3,13 @@ import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import * as querystring from 'querystring';
 import { Logger } from 'nestjs-pino';
-import { GithubEmail } from './githubProvider.dto';
 
 const GITHUB_API_URL = 'https://api.github.com';
+
+type GithubEmail = {
+  email: string;
+  primary: boolean;
+};
 
 @Injectable()
 export class GithubProviderService {
