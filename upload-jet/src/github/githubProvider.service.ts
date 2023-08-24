@@ -72,10 +72,12 @@ export class GithubProviderService {
       this.httpService.get<GithubEmail[]>(url.href, { headers })
     );
 
-    const primaryEmail: GithubEmail = emails.find(
-      (email: GithubEmail) => email.primary
-    );
+    if (!emails || !emails.length) {
+      this.logger.error('User email not found');
+      return null;
+    }
 
-    return primaryEmail ? primaryEmail.email : emails[0].email;
+    const { email } = emails.find(email => email.primary) ?? emails[0];
+    return email;
   }
 }
