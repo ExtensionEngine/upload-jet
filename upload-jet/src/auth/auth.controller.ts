@@ -5,7 +5,6 @@ import { Request } from 'express';
 import { MockedUser } from './userTable';
 import { Permissions } from './permission.decorator';
 import { PermissionsGuard } from './permissions.guard';
-import { JwtGuard } from './jwt.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -22,7 +21,7 @@ export class AuthController {
     return { message: 'success' };
   }
 
-  @UseGuards(JwtGuard, PermissionsGuard)
+  @UseGuards(PermissionsGuard)
   @Get('protected')
   @Permissions('CreateApp')
   grantAccess() {
