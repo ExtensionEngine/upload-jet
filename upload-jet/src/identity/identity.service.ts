@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GithubProviderService } from 'identity/githubProvider.service';
+import { GithubProviderService } from 'identity/github-provider.service';
 
 @Injectable()
 export class IdentityService {
