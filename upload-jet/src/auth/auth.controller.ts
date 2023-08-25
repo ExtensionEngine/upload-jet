@@ -1,9 +1,16 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
-import { MockedUser } from './userTable';
 import { Permissions } from './permission.decorator';
 import { PermissionsGuard } from './permissions.guard';
+
+import { userType } from './auth.types';
+
+const MockedUser: userType = {
+  login: 'MockedUser1',
+  email: 'mocked.user1@gmail.com',
+  role: 'User'
+};
 
 // TODO: retrieve an actual user from the database, for now use mocked user
 @Controller('auth')
