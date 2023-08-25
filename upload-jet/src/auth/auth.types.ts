@@ -13,20 +13,19 @@ export const Roles = {
   User: 'User'
 } as const;
 
-type rolesType = (typeof Roles)[keyof typeof Roles];
+type Role = (typeof Roles)[keyof typeof Roles];
 
-export type adminPermissionsType =
+export type AdminPermission =
   (typeof AllPermissions)[keyof typeof AllPermissions];
 
-export type AllPermissions =
-  (typeof AllPermissions)[keyof typeof AllPermissions];
+export type Permission = (typeof AllPermissions)[keyof typeof AllPermissions];
 
-export type userPermissionsType =
+export type UserPermission =
   (typeof UserPermissions)[keyof typeof UserPermissions];
 
 // TODO: adjust user type based on data from the database
 export type userType = {
   login: string;
   email: string;
-  role: rolesType;
+  role: Role;
 };

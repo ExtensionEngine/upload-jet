@@ -1,8 +1,8 @@
-import { adminPermissionsType, userPermissionsType } from 'auth/auth.dto';
+import { AdminPermission, UserPermission } from 'auth/auth.types';
 
-export const adminPermission: adminPermissionsType[] = [
+export const adminPermission: AdminPermission[] = [
   'CreateApp',
   'DeleteApp',
   'GetAllUsers'
 ];
-export const userPermission: userPermissionsType[] = ['CreateApp'];
+export const userPermission: UserPermission[] = ['CreateApp'];

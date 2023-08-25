@@ -1,4 +1,4 @@
-import { userType } from './auth.dto';
+import { userType } from './auth.types';
 
 export const MockedUser: userType = {
   login: 'MockedUser1',

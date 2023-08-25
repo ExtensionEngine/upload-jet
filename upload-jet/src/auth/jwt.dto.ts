@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AllPermissions } from './auth.dto';
+import { AllPermissions } from './auth.types';
 
 const expiresInType = z.union([z.string(), z.number(), z.undefined()]);
 
@@ -9,8 +9,8 @@ export const expiresInSchema = z
   })
   .strict();
 
-export type payloadType = {
+export type Payload = {
   username: string;
   email: string;
-  permission: (typeof AllPermissions)[keyof typeof AllPermissions][];
+  permissions: (typeof AllPermissions)[keyof typeof AllPermissions][];
 };

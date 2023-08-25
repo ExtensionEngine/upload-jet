@@ -1,7 +1,6 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
-import { Request } from 'express';
 import { MockedUser } from './userTable';
 import { Permissions } from './permission.decorator';
 import { PermissionsGuard } from './permissions.guard';
@@ -13,11 +12,10 @@ export class AuthController {
 
   @Get('generate')
   async generateToken(
-    @Req() req: Request,
     @Res({ passthrough: true }) res: Response
   ): Promise<{ message: string }> {
-    const access_token = await this.authService.generateJwtToken(MockedUser);
-    res.cookie('jwt', access_token, { httpOnly: true });
+    const accessToken = await this.authService.generateJwtToken(MockedUser);
+    res.cookie('jwt', accessToken, { httpOnly: true, secure: true });
 
     return { message: 'success' };
   }
