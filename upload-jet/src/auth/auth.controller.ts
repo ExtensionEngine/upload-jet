@@ -4,9 +4,9 @@ import { Response } from 'express';
 import { Permissions } from './permission.decorator';
 import { AuthorizationGuard } from './authorization.guard';
 
-import { userType } from './auth.types';
+import { User } from './auth.types';
 
-const MockedUser: userType = {
+const MockedUser: User = {
   id: 1,
   login: 'MockedUser1',
   email: 'mocked.user1@gmail.com',

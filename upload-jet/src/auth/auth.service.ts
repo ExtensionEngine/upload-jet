@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { userType } from './auth.types';
+import { User } from './auth.types';
 import { adminPermission, userPermission } from 'config/permission.config';
 import { Payload } from './jwt.dto';
 
@@ -8,7 +8,7 @@ import { Payload } from './jwt.dto';
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
-  async generateJwtToken(user: userType): Promise<string> {
+  async generateJwtToken(user: User): Promise<string> {
     const payload: Payload = {
       id: user.id,
       permissions: user.role === 'Admin' ? adminPermission : userPermission
