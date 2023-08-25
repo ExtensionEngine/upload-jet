@@ -1,7 +1,7 @@
-import { Entity, Property, PrimaryKey } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 @Entity()
-class IdentityEntity {
+export default class Identity {
   @PrimaryKey()
   id: number;
 
@@ -14,5 +14,3 @@ class IdentityEntity {
   @Property()
   email: string;
 }
-
-export default IdentityEntity;

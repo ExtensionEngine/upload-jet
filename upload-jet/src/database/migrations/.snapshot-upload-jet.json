@@ -43,11 +43,11 @@
           "mappedType": "string"
         }
       },
-      "name": "identity_entity",
+      "name": "identity",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "identity_entity_pkey",
+          "keyName": "identity_pkey",
           "columnNames": [
             "id"
           ],
