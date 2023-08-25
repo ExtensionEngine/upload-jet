@@ -4,7 +4,7 @@ import { Permission } from './auth.types';
 import { Payload } from './jwt.dto';
 
 @Injectable()
-export class PermissionsGuard implements CanActivate {
+export class AuthoizationGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {

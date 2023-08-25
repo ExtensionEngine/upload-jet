@@ -10,7 +10,6 @@ export const expiresInSchema = z
   .strict();
 
 export type Payload = {
-  username: string;
-  email: string;
+  id: number;
   permissions: (typeof AllPermissions)[keyof typeof AllPermissions][];
 };

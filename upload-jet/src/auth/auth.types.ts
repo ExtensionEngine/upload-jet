@@ -25,6 +25,7 @@ export type UserPermission =
 
 // TODO: adjust user type based on data from the database
 export type userType = {
+  id: number;
   login: string;
   email: string;
   role: Role;

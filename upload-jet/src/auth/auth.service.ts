@@ -10,8 +10,7 @@ export class AuthService {
 
   async generateJwtToken(user: userType): Promise<string> {
     const payload: Payload = {
-      username: user.login,
-      email: user.email,
+      id: user.id,
       permissions: user.role === 'Admin' ? adminPermission : userPermission
     };
 
@@ -20,9 +19,8 @@ export class AuthService {
 
   async verifyJwtToken(token: string): Promise<Payload> {
     try {
-      const { username, email, permissions } =
-        await this.jwtService.verifyAsync(token);
-      const payload: Payload = { username, email, permissions };
+      const { id, permissions } = await this.jwtService.verifyAsync(token);
+      const payload: Payload = { id, permissions };
       return payload;
     } catch (error) {
       throw new UnauthorizedException('Invalid token');

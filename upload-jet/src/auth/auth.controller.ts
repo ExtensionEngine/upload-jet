@@ -2,11 +2,12 @@ import { Controller, Get, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { Permissions } from './permission.decorator';
-import { PermissionsGuard } from './permissions.guard';
+import { AuthoizationGuard } from './authorization.guard';
 
 import { userType } from './auth.types';
 
 const MockedUser: userType = {
+  id: 1,
   login: 'MockedUser1',
   email: 'mocked.user1@gmail.com',
   role: 'User'
@@ -27,7 +28,7 @@ export class AuthController {
     return { message: 'success' };
   }
 
-  @UseGuards(PermissionsGuard)
+  @UseGuards(AuthoizationGuard)
   @Get('protected')
   @Permissions('CreateApp')
   grantAccess() {
