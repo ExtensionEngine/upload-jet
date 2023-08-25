@@ -4,13 +4,13 @@ import { Permission } from './auth.types';
 import { Payload } from './jwt.dto';
 
 @Injectable()
-export class AuthoizationGuard implements CanActivate {
+export class AuthorizationGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
     const requirePermissions = this.reflector.getAllAndOverride<Permission[]>(
       'permissions',
-      [context.getHandler(), context.getClass()]
+      [context.getHandler()]
     );
 
     if (!requirePermissions.length) {

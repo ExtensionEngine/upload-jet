@@ -2,7 +2,7 @@ import { Controller, Get, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { Permissions } from './permission.decorator';
-import { AuthoizationGuard } from './authorization.guard';
+import { AuthorizationGuard } from './authorization.guard';
 
 import { userType } from './auth.types';
 
@@ -19,16 +19,14 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('generate')
-  async generateToken(
-    @Res({ passthrough: true }) res: Response
-  ): Promise<{ message: string }> {
+  async generateToken(@Res({ passthrough: true }) res: Response) {
     const accessToken = await this.authService.generateJwtToken(MockedUser);
     res.cookie('jwt', accessToken, { httpOnly: true, secure: true });
 
-    return { message: 'success' };
+    res.status(200);
   }
 
-  @UseGuards(AuthoizationGuard)
+  @UseGuards(AuthorizationGuard)
   @Get('protected')
   @Permissions('CreateApp')
   grantAccess() {
