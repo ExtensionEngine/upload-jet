@@ -47,7 +47,7 @@ export class GithubProviderService {
       return null;
     }
 
-    return accessTokenResult.access_token.toString();
+    return accessTokenResult.access_token;
   }
 
   async getUser(code: string): Promise<GithubUser> {
