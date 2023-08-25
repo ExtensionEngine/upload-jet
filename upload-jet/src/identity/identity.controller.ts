@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Redirect, Req } from '@nestjs/common';
+import { Controller, Get, Inject, Query, Redirect } from '@nestjs/common';
 import { IdentityService } from './identity.service';
 import appConfig from 'config/app.config';
 import { ConfigType } from '@nestjs/config';
@@ -13,8 +13,7 @@ export class IdentityController {
 
   @Get('callback')
   @Redirect()
-  async login(@Req() request) {
-    const { code, state } = request.query;
+  async login(@Query('code') code: string, @Query('state') state: string) {
     await this.identityService.authorize(code);
 
     const redirectRoute = state || '/';
