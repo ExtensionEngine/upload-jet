@@ -14,23 +14,9 @@ githubLoginUrl.search = searchParams;
 </script>
 
 <template>
-  <a class="github-login" :href="githubLoginUrl.href">Login with GitHub</a>
+  <a
+    :href="githubLoginUrl.href"
+    class="cursor-pointer rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
+    Login with GitHub
+  </a>
 </template>
-
-<style scoped>
-.github-login {
-  cursor: pointer;
-  outline: 0;
-  color: #fff;
-  background-color: #0d6efd;
-  border-color: #0d6efd;
-  display: inline-block;
-  font-weight: 400;
-  line-height: 1.5;
-  text-align: center;
-  border: 1px solid transparent;
-  padding: 6px 12px;
-  font-size: 16px;
-  border-radius: 0.25rem;
-}
-</style>
