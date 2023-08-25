@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { IdentityController } from './identity.controller';
 import { IdentityService } from './identity.service';
-import { GithubProviderService } from 'github/githubProvider.service';
+import { GithubProviderService } from 'identity/githubProvider.service';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
