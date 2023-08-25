@@ -12,8 +12,8 @@ type GithubEmail = {
 
 type GithubUser = {
   id: number;
-  login: string;
   email: string | null;
+  avatar_url: string;
 };
 
 @Injectable()
@@ -67,6 +67,8 @@ export class GithubProviderService {
 
     const email = await this.getUserEmail(accessToken);
     user.email = email;
+
+    console.log(user);
 
     return user;
   }
