@@ -15,7 +15,8 @@ export class IdentityController {
   @Redirect()
   async login(@Query('code') code: string, @Query('state') state: string) {
     await this.identityService.authorize(code);
-    const redirectUrl = new URL(state || '/', this.config.appUrl).href;
+    const { targetUrl = '/' } = JSON.parse(state);
+    const redirectUrl = new URL(targetUrl, this.config.appUrl).href;
     return { url: redirectUrl };
   }
 }

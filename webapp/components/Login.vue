@@ -4,7 +4,7 @@ const route = useRoute();
 
 const authConfig = {
   scope: 'user:email',
-  state: route.path,
+  state: JSON.stringify({ targetUrl: route.fullPath }),
   client_id: config.public.githubClientId
 };
 const searchParams = new URLSearchParams(authConfig).toString();
