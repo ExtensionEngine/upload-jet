@@ -5,7 +5,7 @@ import { IdentityModule } from './identity/identity.module';
 import awsConfig from './config/aws.config';
 import appConfig from './config/app.config';
 import { LoggerModule } from 'nestjs-pino';
-import githubConfig from 'config/oauth.config';
+import oauthConfig from 'config/oauth.config';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import githubConfig from 'config/oauth.config';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, awsConfig, githubConfig]
+      load: [appConfig, awsConfig, oauthConfig]
     }),
     UploadPolicyModule,
     IdentityModule
