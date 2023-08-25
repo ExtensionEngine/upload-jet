@@ -31,6 +31,7 @@
     "@nestjs/jwt": "^10.1.0",
     "@nestjs/platform-express": "^10.0.0",
     "@upload-jet/shared": "workspace:^",
+    "cookie-parser": "^1.4.6",
     "nestjs-pino": "^3.3.0",
     "pino-http": "^8.3.3",
     "pino-pretty": "^10.2.0",

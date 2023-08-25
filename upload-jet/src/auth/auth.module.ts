@@ -3,7 +3,6 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { expiresIn } from 'config/jwt.config';
 import { JwtMiddleware } from './jwt.middleware';
 
 @Module({
@@ -14,7 +13,7 @@ import { JwtMiddleware } from './jwt.middleware';
       useFactory(config: ConfigService) {
         return {
           secret: config.get('app.jwt.secret'),
-          signOptions: expiresIn
+          signOptions: config.get('app.jwt.jwtOptions')
         };
       },
       inject: [ConfigService]
