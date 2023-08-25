@@ -11,7 +11,8 @@ const appSchema = z.object({
         expiresIn: z.string()
       })
       .optional()
-  })
+  }),
+  appUrl: z.string().nonempty()
 });
 
 export default registerAs('app', () => {
@@ -20,7 +21,8 @@ export default registerAs('app', () => {
     jwt: {
       secret: process.env.JWT_SECRET,
       jwtOptions: jwtOptions
-    }
+    },
+    appUrl: process.env.APP_URL
   });
   return config;
 });

@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { UploadPolicyModule } from './upload-policy/upload-policy.module';
+import { IdentityModule } from './identity/identity.module';
 import awsConfig from './config/aws.config';
 import appConfig from './config/app.config';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module';
+import oauthConfig from 'config/oauth.config';
 
 @Module({
   imports: [
@@ -15,9 +17,13 @@ import { AuthModule } from './auth/auth.module';
         quietReqLogger: true
       }
     }),
-    ConfigModule.forRoot({ isGlobal: true, load: [appConfig, awsConfig] }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [appConfig, awsConfig, oauthConfig]
+    }),
     UploadPolicyModule,
-    AuthModule
+    AuthModule,
+    IdentityModule
   ],
   controllers: [],
   providers: []
