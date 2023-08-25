@@ -5,7 +5,7 @@ import { IdentityModule } from './identity/identity.module';
 import awsConfig from './config/aws.config';
 import appConfig from './config/app.config';
 import { LoggerModule } from 'nestjs-pino';
-import githubConfig from 'config/github.config';
+import githubConfig from 'config/oauth.config';
 
 @Module({
   imports: [

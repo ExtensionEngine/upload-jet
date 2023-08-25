@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { Logger } from 'nestjs-pino';
-import githubConfig from 'config/github.config';
+import oauthConfig from 'config/oauth.config';
 import { ConfigType } from '@nestjs/config';
 
 const GITHUB_API_URL = 'https://api.github.com';
@@ -21,16 +21,16 @@ type GithubUser = {
 @Injectable()
 export class GithubProviderService {
   constructor(
-    @Inject(githubConfig.KEY)
-    private readonly config: ConfigType<typeof githubConfig>,
+    @Inject(oauthConfig.KEY)
+    private readonly config: ConfigType<typeof oauthConfig>,
     private readonly httpService: HttpService,
     private readonly logger: Logger
   ) {}
 
   async getAccessToken(code: string): Promise<string> {
     const requestBody = {
-      client_id: this.config.githubClientId,
-      client_secret: this.config.githubSecret,
+      client_id: this.config.clientId,
+      client_secret: this.config.clientSecret,
       code
     };
 
