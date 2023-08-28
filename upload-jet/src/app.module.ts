@@ -7,7 +7,7 @@ import appConfig from './config/app.config';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module';
 import oauthConfig from 'config/oauth.config';
-import { AbilityModule } from './ability/ability.module';
+import { AbilityModule } from 'auth/ability/ability.module';
 
 @Module({
   imports: [
