@@ -1,15 +1,25 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UploadPolicyModule } from './upload-policy/upload-policy.module';
 import { IdentityModule } from './identity/identity.module';
 import awsConfig from './config/aws.config';
 import appConfig from './config/app.config';
 import { LoggerModule } from 'nestjs-pino';
+import { LoadStrategy } from '@mikro-orm/core';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import databaseConfig from 'config/database.config';
 
 @Module({
   imports: [
-    MikroOrmModule.forRoot(),
+    MikroOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        loadStrategy: LoadStrategy.JOINED,
+        ...config.get('database'),
+        autoLoadEntities: true
+      })
+    }),
     LoggerModule.forRoot({
       pinoHttp: {
         transport: { target: 'pino-pretty' },
@@ -17,7 +27,10 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
         quietReqLogger: true
       }
     }),
-    ConfigModule.forRoot({ isGlobal: true, load: [appConfig, awsConfig] }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [appConfig, awsConfig, databaseConfig]
+    }),
     UploadPolicyModule,
     IdentityModule
   ],
