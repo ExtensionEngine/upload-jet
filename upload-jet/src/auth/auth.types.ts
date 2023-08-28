@@ -1,12 +1,14 @@
-export const AllPermissions = {
-  CreateApp: 'CreateApp',
-  DeleteApp: 'DeleteApp',
-  GetUsers: 'GetAllUsers'
+import { InferSubjects } from '@casl/ability';
+
+export const Actions = {
+  Manage: 'manage',
+  Create: 'create',
+  Delete: 'delete',
+  Read: 'read',
+  Update: 'update'
 } as const;
 
-const UserPermissions = {
-  CreateApp: 'CreateApp'
-} as const;
+export type Subjects = InferSubjects<typeof User | typeof App> | 'all';
 
 export const Roles = {
   Admin: 'Admin',
@@ -15,18 +17,30 @@ export const Roles = {
 
 type Role = (typeof Roles)[keyof typeof Roles];
 
-export type AdminPermission =
-  (typeof AllPermissions)[keyof typeof AllPermissions];
+export type Action = (typeof Actions)[keyof typeof Actions];
 
-export type Permission = (typeof AllPermissions)[keyof typeof AllPermissions];
+export type Permission = (typeof Actions)[keyof typeof Actions];
 
-export type UserPermission =
-  (typeof UserPermissions)[keyof typeof UserPermissions];
-
-// TODO: adjust user type based on data from the database
-export type User = {
+export class User {
   id: number;
   login: string;
   email: string;
   role: Role;
+}
+
+export type AppData = {
+  id: number;
+  userId: number;
+  name: string;
 };
+
+export class App {
+  id: number;
+  userId: number;
+  name: string;
+  constructor(data: AppData) {
+    this.id = data.id;
+    this.userId = data.userId;
+    this.name = data.name;
+  }
+}

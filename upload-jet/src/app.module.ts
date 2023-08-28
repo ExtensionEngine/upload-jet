@@ -7,6 +7,7 @@ import appConfig from './config/app.config';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module';
 import oauthConfig from 'config/oauth.config';
+import { AbilityModule } from './ability/ability.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import oauthConfig from 'config/oauth.config';
     }),
     UploadPolicyModule,
     AuthModule,
-    IdentityModule
+    IdentityModule,
+    AbilityModule
   ],
   controllers: [],
   providers: []

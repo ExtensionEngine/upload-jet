@@ -1,6 +1,6 @@
-import { AllPermissions } from './auth.types';
+import { Roles } from './auth.types';
 
 export type Payload = {
   id: number;
-  permissions: (typeof AllPermissions)[keyof typeof AllPermissions][];
+  role: (typeof Roles)[keyof typeof Roles];
 };
