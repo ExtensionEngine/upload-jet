@@ -11,7 +11,7 @@ const databaseSchema = z.object({
   migrations: z.object({
     path: z.string().nonempty(),
     disableForeignKeys: z.boolean().default(false),
-    pattern: z.object({}),
+    pattern: z.any(),
     fileName: z.function()
   })
 });
