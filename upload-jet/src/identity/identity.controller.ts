@@ -1,18 +1,22 @@
-import { Controller, Get, Redirect, Req } from '@nestjs/common';
+import { Controller, Get, Inject, Query, Redirect } from '@nestjs/common';
 import { IdentityService } from './identity.service';
+import appConfig from 'config/app.config';
+import { ConfigType } from '@nestjs/config';
 
 @Controller('identity')
 export class IdentityController {
-  constructor(private readonly identityService: IdentityService) {}
+  constructor(
+    @Inject(appConfig.KEY)
+    private readonly config: ConfigType<typeof appConfig>,
+    private readonly identityService: IdentityService
+  ) {}
 
   @Get('callback')
   @Redirect()
-  async login(@Req() request) {
-    const { code, state } = request.query;
+  async login(@Query('code') code: string, @Query('state') state: string) {
     await this.identityService.authorize(code);
-
-    const redirectRoute = state || '/';
-    const redirectUrl = new URL(redirectRoute, process.env.APP_URL).href;
+    const { targetUrl = '/' } = JSON.parse(state);
+    const redirectUrl = new URL(targetUrl, this.config.appUrl).href;
     return { url: redirectUrl };
   }
 }

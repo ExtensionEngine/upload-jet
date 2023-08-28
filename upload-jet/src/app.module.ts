@@ -8,6 +8,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { LoadStrategy } from '@mikro-orm/core';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import databaseConfig from 'config/database.config';
+import oauthConfig from 'config/oauth.config';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import databaseConfig from 'config/database.config';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, awsConfig, databaseConfig]
+      load: [appConfig, awsConfig, databaseConfig, oauthConfig]
     }),
     UploadPolicyModule,
     IdentityModule

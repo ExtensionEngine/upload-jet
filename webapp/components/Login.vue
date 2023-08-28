@@ -4,7 +4,7 @@ const route = useRoute();
 
 const authConfig = {
   scope: 'user:email',
-  state: route.path,
+  state: JSON.stringify({ targetUrl: route.fullPath }),
   client_id: config.public.githubClientId
 };
 const searchParams = new URLSearchParams(authConfig).toString();
@@ -14,5 +14,9 @@ githubLoginUrl.search = searchParams;
 </script>
 
 <template>
-  <a :href="githubLoginUrl.href">Login with GitHub</a>
+  <a
+    :href="githubLoginUrl.href"
+    class="cursor-pointer rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
+    Login with GitHub
+  </a>
 </template>
