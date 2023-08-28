@@ -2,24 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { User, App } from 'auth/auth.types';
 import {
   MongoAbility,
-  InferSubjects,
   AbilityBuilder,
   ExtractSubjectType,
   createMongoAbility
 } from '@casl/ability';
 import { Payload } from 'auth/jwt.dto';
-
-export const Actions = {
-  Manage: 'manage',
-  Create: 'create',
-  Delete: 'delete',
-  Read: 'read',
-  Update: 'update'
-} as const;
-
-export type Action = (typeof Actions)[keyof typeof Actions];
-
-export type Subjects = InferSubjects<typeof User | typeof App> | 'all';
+import { Action, Subjects } from 'auth/auth.types';
 
 export type AppAbility = MongoAbility<[Action, Subjects]>;
 
@@ -34,6 +22,7 @@ export class AbilityFactory {
       can('manage', 'all');
     } else {
       can('create', App);
+      can('read', User);
       can('delete', App, { userId: user.id });
       can('update', App, { userId: user.id });
       can('manage', App, { userId: user.id });
