@@ -76,15 +76,6 @@
           "unique": true
         },
         {
-          "columnNames": [
-            "email"
-          ],
-          "composite": false,
-          "keyName": "user_email_unique",
-          "primary": false,
-          "unique": true
-        },
-        {
           "keyName": "user_pkey",
           "columnNames": [
             "id"

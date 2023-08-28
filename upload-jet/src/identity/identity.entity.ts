@@ -7,7 +7,6 @@ export default class Identity extends BaseEntity {
   @Property()
   githubId: number;
 
-  @Unique()
   @Property()
   email: string;
 
@@ -16,7 +15,7 @@ export default class Identity extends BaseEntity {
 
   constructor(githubId: number, email: string, avatarUrl: string) {
     super();
-    this.id = githubId;
+    this.githubId = githubId;
     this.email = email;
     this.avatarUrl = avatarUrl;
   }
