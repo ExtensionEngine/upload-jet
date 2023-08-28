@@ -13,6 +13,8 @@ services:
   db:
     image: postgres:latest
     container_name: database
+    environment:
+      - POSTGRES_PORT=5432
     env_file:
       - ./upload-jet/.env
     ports:
