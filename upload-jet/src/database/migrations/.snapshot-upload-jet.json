@@ -15,8 +15,8 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "username": {
-          "name": "username",
+        "email": {
+          "name": "email",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -24,17 +24,8 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "github_id": {
-          "name": "github_id",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "email": {
-          "name": "email",
+        "avatar_url": {
+          "name": "avatar_url",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,

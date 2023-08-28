@@ -6,11 +6,8 @@ export default class Identity {
   id: number;
 
   @Property()
-  username: string;
-
-  @Property()
-  githubId: number;
-
-  @Property()
   email: string;
+
+  @Property()
+  avatarUrl: string;
 }
