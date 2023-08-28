@@ -7,6 +7,7 @@ import {
   ExtractSubjectType,
   createMongoAbility
 } from '@casl/ability';
+import { Payload } from 'auth/jwt.dto';
 
 export const Actions = {
   Manage: 'manage',
@@ -24,7 +25,7 @@ export type AppAbility = MongoAbility<[Action, Subjects]>;
 
 @Injectable()
 export class AbilityFactory {
-  defineAbility(user: User) {
+  defineAbility(user: Payload) {
     const { can, cannot, build } = new AbilityBuilder<AppAbility>(
       createMongoAbility
     );

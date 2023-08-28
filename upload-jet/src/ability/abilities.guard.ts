@@ -5,9 +5,9 @@ import {
   ForbiddenException
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { MockedUser } from 'auth/auth.controller';
 import { RequiredRule, CHECK_ABILITY } from './abilities.decorator';
 import { AbilityFactory } from './ability.factory';
+import { Payload } from 'auth/jwt.dto';
 
 @Injectable()
 export class AbilitiesGuard implements CanActivate {
@@ -20,7 +20,10 @@ export class AbilitiesGuard implements CanActivate {
     const rules =
       this.reflector.get<RequiredRule[]>(CHECK_ABILITY, context.getHandler()) ||
       [];
-    const user = MockedUser;
+
+    const { user }: { user: Payload } = context.switchToHttp().getRequest();
+    if (!user || !user.role) return false;
+
     const ability = this.caslAbilityFactory.defineAbility(user);
 
     rules.forEach(rule => {
