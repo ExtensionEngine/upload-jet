@@ -1,18 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from './auth.types';
 import { Payload } from './jwt.dto';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
-  async generateJwtToken(user: User): Promise<string> {
-    const payload: Payload = {
-      id: user.id,
-      role: user.role
-    };
-
+  async generateJwtToken(payload: Payload): Promise<string> {
     return this.jwtService.signAsync(payload);
   }
 

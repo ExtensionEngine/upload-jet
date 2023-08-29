@@ -4,6 +4,7 @@ import { Response } from 'express';
 import { CheckAbilities } from './authorization/authorization.decorator';
 import { AbilitiesGuard } from './authorization/authorization.guard';
 import { MockedApp, MockedUser } from './mockedDBData';
+import { Payload } from './jwt.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -11,7 +12,11 @@ export class AuthController {
 
   @Get('generate')
   async generateToken(@Res({ passthrough: true }) res: Response) {
-    const accessToken = await this.authService.generateJwtToken(MockedUser);
+    const payload: Payload = {
+      id: MockedUser.id,
+      role: MockedUser.role
+    };
+    const accessToken = await this.authService.generateJwtToken(payload);
     res.cookie('jwt', accessToken, { httpOnly: true, secure: true });
     res.status(200);
   }
