@@ -5,8 +5,8 @@ import {
   ForbiddenException
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { RequiredRule, CHECK_ABILITY } from './abilities.decorator';
-import { AbilityFactory } from './ability.factory';
+import { RequiredRule, CHECK_ABILITY } from './authorization.decorator';
+import { AbilityFactory } from './authorization.factory';
 import { Payload } from 'auth/jwt.dto';
 
 @Injectable()

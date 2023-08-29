@@ -4,7 +4,7 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtMiddleware } from './jwt.middleware';
-import { AbilityModule } from './ability/ability.module';
+import { AbilityModule } from './authorization/authorization.module';
 
 @Module({
   controllers: [AuthController],

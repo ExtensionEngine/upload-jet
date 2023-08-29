@@ -1,8 +1,8 @@
 import { Controller, Get, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
-import { CheckAbilities } from './ability/abilities.decorator';
-import { AbilitiesGuard } from './ability/abilities.guard';
+import { CheckAbilities } from './authorization/authorization.decorator';
+import { AbilitiesGuard } from './authorization/authorization.guard';
 import { MockedApp, MockedUser } from './mockedDBData';
 
 @Controller('auth')
