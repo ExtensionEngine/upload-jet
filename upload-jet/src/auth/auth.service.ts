@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { Payload } from './jwt.dto';
 
@@ -13,12 +13,8 @@ export class AuthService {
   }
 
   async verifyJwtToken(token: string): Promise<Payload> {
-    try {
-      const { id, role } = await this.jwtService.verifyAsync(token);
-      const payload: Payload = { id, role };
-      return payload;
-    } catch (error) {
-      throw new UnauthorizedException('Invalid token');
-    }
+    const { id, role } = await this.jwtService.verifyAsync(token);
+    const payload: Payload = { id, role };
+    return payload;
   }
 }

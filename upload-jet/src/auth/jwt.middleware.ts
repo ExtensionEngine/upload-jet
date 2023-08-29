@@ -22,7 +22,10 @@ export class JwtMiddleware implements NestMiddleware {
       req['user'] = user;
       next();
     } catch (error) {
-      throw new UnauthorizedException(error.message);
+      if (error.name === 'JsonWebTokenError') {
+        throw new UnauthorizedException('Invalid Token');
+      }
+      throw new UnauthorizedException(error);
     }
   }
 }
