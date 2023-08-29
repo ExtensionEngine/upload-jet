@@ -1,10 +1,10 @@
-import { Entity, Property, Unique } from '@mikro-orm/core';
+import { Entity, Property, Unique, r } from '@mikro-orm/core';
 import BaseEntity from '../shared/database/base.entity';
 
 @Entity({ tableName: 'user' })
 export default class Identity extends BaseEntity {
   @Unique()
-  @Property()
+  @Property({ nullable: false })
   githubId: number;
 
   @Property()
