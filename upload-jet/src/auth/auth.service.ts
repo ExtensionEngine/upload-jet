@@ -1,13 +1,15 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { Payload } from './jwt.dto';
+
+const JWT_OPTIONS: JwtSignOptions = { expiresIn: '3600s' };
 
 @Injectable()
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
   async generateJwtToken(payload: Payload): Promise<string> {
-    return this.jwtService.signAsync(payload);
+    return this.jwtService.signAsync(payload, JWT_OPTIONS);
   }
 
   async verifyJwtToken(token: string): Promise<Payload> {
