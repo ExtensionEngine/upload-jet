@@ -13,8 +13,7 @@ import { AuthorizationModule } from './authorization/authorization.module';
     JwtModule.registerAsync({
       useFactory(config: ConfigService) {
         return {
-          secret: config.get('app.jwt.secret'),
-          signOptions: config.get('app.jwt.jwtOptions')
+          secret: config.get('app.jwt.secret')
         };
       },
       inject: [ConfigService]

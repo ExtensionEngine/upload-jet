@@ -25,6 +25,9 @@ export class JwtMiddleware implements NestMiddleware {
       if (error.name === 'JsonWebTokenError') {
         throw new UnauthorizedException('Invalid Token');
       }
+      if (error.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('Token expired');
+      }
       throw new UnauthorizedException(error);
     }
   }

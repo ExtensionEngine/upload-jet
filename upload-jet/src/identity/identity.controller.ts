@@ -1,7 +1,9 @@
-import { Controller, Get, Inject, Query, Redirect } from '@nestjs/common';
+import { Controller, Get, Inject, Query, Redirect, Res } from '@nestjs/common';
 import { IdentityService } from './identity.service';
 import appConfig from 'config/app.config';
 import { ConfigType } from '@nestjs/config';
+import { Payload } from 'auth/jwt.dto';
+import { Response } from 'express';
 
 @Controller('identity')
 export class IdentityController {
@@ -13,8 +15,18 @@ export class IdentityController {
 
   @Get('callback')
   @Redirect()
-  async login(@Query('code') code: string, @Query('state') state: string) {
-    await this.identityService.authorize(code);
+  async login(
+    @Res({ passthrough: true }) res: Response,
+    @Query('code') code: string,
+    @Query('state') state: string
+  ) {
+    const user = await this.identityService.authorize(code);
+    const payload: Payload = {
+      id: user.id,
+      role: user.role
+    };
+    const accessToken = await this.identityService.generateJwtToken(payload);
+    res.cookie('jwt', accessToken, { httpOnly: true, secure: true });
     const { targetUrl = '/' } = JSON.parse(state);
     const redirectUrl = new URL(targetUrl, this.config.appUrl).href;
     return { url: redirectUrl };
