@@ -1,3 +1,3 @@
 <template>
-  <div>Applications</div>
+  <h1>Applications</h1>
 </template>

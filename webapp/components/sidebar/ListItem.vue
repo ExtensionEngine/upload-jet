@@ -19,9 +19,6 @@ const props = defineProps({
 
 <style>
 .router-link-active {
-  background-color: rgb(214, 214, 214);
-  border-right: rgb(73, 73, 72);
-  border-right-width: 0.5rem;
-  border-right-style: solid;
+  @apply border-r-4 border-gray-800 bg-gray-300;
 }
 </style>
