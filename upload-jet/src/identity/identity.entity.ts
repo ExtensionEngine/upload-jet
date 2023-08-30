@@ -1,4 +1,4 @@
-import { Entity, Property, Unique, r } from '@mikro-orm/core';
+import { Entity, Property, Unique } from '@mikro-orm/core';
 import BaseEntity from '../shared/database/base.entity';
 
 @Entity({ tableName: 'user' })
