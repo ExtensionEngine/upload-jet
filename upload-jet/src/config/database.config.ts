@@ -1,13 +1,22 @@
 import { registerAs } from '@nestjs/config';
 import { z } from 'zod';
 
+const databaseTypes = [
+  'mongo',
+  'mysql',
+  'mariadb',
+  'postgresql',
+  'sqlite',
+  'better-sqlite'
+] as const;
+
 const databaseSchema = z.object({
   port: z.coerce.number().default(5432),
   host: z.string().nonempty(),
   dbName: z.string().nonempty(),
   user: z.string().nonempty(),
   password: z.string().nonempty(),
-  type: z.string().nonempty(),
+  type: z.enum(databaseTypes),
   migrations: z.object({
     path: z.string().nonempty(),
     disableForeignKeys: z.boolean().default(false),
