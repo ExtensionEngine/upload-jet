@@ -3,13 +3,13 @@ import {
   NestMiddleware,
   UnauthorizedException
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { AuthorizationService } from './authorization.service';
 import { Request, NextFunction } from 'express';
-import { Payload } from './jwt.dto';
+import { Payload } from './jwt.types';
 
 @Injectable()
 export class JwtMiddleware implements NestMiddleware {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthorizationService) {}
 
   async use(req: Request, res, next: NextFunction) {
     const token: string = req.cookies['jwt'];

@@ -2,7 +2,7 @@ import { Controller, Get, Inject, Query, Redirect, Res } from '@nestjs/common';
 import { IdentityService } from './identity.service';
 import appConfig from 'config/app.config';
 import { ConfigType } from '@nestjs/config';
-import { Payload } from 'auth/jwt.dto';
+import { Payload } from 'authorization/jwt.types';
 import { Response } from 'express';
 
 @Controller('identity')

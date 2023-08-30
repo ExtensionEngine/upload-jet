@@ -1,4 +1,4 @@
-import { Roles } from './auth.types';
+import { Roles } from './authorization.types';
 
 export type Payload = {
   id: number;

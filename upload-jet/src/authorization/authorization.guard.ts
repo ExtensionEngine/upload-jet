@@ -6,14 +6,14 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RequiredRule, CHECK_ABILITY } from './authorization.decorator';
-import { AbilityFactory } from './authorization.factory';
-import { Payload } from 'auth/jwt.dto';
+import { AuthorizationFactory } from './authorization.factory';
+import { Payload } from './jwt.types';
 
 @Injectable()
-export class AbilitiesGuard implements CanActivate {
+export class AuthorizationGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private caslAbilityFactory: AbilityFactory
+    private caslAbilityFactory: AuthorizationFactory
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

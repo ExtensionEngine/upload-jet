@@ -1,14 +1,14 @@
 import { Module, MiddlewareConsumer } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
+import { AuthorizationService } from './authorization.service';
+import { AuthorizationController } from './authorization.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtMiddleware } from './jwt.middleware';
-import { AuthorizationModule } from './authorization/authorization.module';
+import { AuthorizationFactory } from './authorization.factory';
 
 @Module({
-  controllers: [AuthController],
-  providers: [AuthService],
+  controllers: [AuthorizationController],
+  providers: [AuthorizationService, AuthorizationFactory],
   imports: [
     JwtModule.registerAsync({
       useFactory(config: ConfigService) {
@@ -17,8 +17,7 @@ import { AuthorizationModule } from './authorization/authorization.module';
         };
       },
       inject: [ConfigService]
-    }),
-    AuthorizationModule
+    })
   ]
 })
 export class AuthModule {

@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { User, App } from 'auth/auth.types';
+import { User, App } from './authorization.types';
 import {
   MongoAbility,
   AbilityBuilder,
   ExtractSubjectType,
   createMongoAbility
 } from '@casl/ability';
-import { Payload } from 'auth/jwt.dto';
-import { Action, Subjects } from 'auth/auth.types';
+import { Payload } from './jwt.types';
+import { Action, Subjects } from './authorization.types';
 
 export type AppAbility = MongoAbility<[Action, Subjects]>;
 
 @Injectable()
-export class AbilityFactory {
+export class AuthorizationFactory {
   defineAbility(user: Payload) {
     const { can, cannot, build } = new AbilityBuilder<AppAbility>(
       createMongoAbility
