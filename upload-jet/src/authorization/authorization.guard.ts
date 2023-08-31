@@ -22,7 +22,7 @@ export class AuthorizationGuard implements CanActivate {
       [];
 
     const { user }: { user: Payload } = context.switchToHttp().getRequest();
-    if (!user || !user.role) return false;
+    if (!user?.role) return false;
 
     const ability = this.permissionService.getPermission(user);
 
