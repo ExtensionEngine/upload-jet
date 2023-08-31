@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import { Action, Subjects } from './authorization.types';
+import { Action, Subjects } from './auth.types';
 
 export type RequiredRule = {
   action: Action;

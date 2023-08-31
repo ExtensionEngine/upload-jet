@@ -1,4 +1,4 @@
-import { Role } from './authorization.types';
+import { Role } from './auth.types';
 
 export type JWTPayload = {
   id: number;

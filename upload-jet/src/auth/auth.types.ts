@@ -1,5 +1,5 @@
 import { InferSubjects } from '@casl/ability';
-import { Application, User } from './authorization.entities';
+import { Application, User } from './auth.entities';
 
 const Actions = {
   Manage: 'manage',

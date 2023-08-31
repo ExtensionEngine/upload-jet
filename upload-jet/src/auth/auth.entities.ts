@@ -1,4 +1,4 @@
-import { ApplicationData, Role } from './authorization.types';
+import { ApplicationData, Role } from './auth.types';
 
 export class Application {
   id: number;

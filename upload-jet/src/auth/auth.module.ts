@@ -1,5 +1,5 @@
 import { Module, MiddlewareConsumer } from '@nestjs/common';
-import { AuthorizationService } from './authorization.service';
+import { AuthService } from './auth.service';
 import { AuthorizationController } from './authorization.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -8,7 +8,7 @@ import { PermissionService } from './permission.service';
 
 @Module({
   controllers: [AuthorizationController],
-  providers: [AuthorizationService, PermissionService],
+  providers: [AuthService, PermissionService],
   imports: [
     JwtModule.registerAsync({
       useFactory(config: ConfigService) {

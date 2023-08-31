@@ -3,7 +3,7 @@ import { Response } from 'express';
 import appConfig from 'config/app.config';
 import { ConfigType } from '@nestjs/config';
 import { IdentityService } from './identity.service';
-import { JWTPayload } from 'authorization/jwt.types';
+import { JWTPayload } from 'auth/jwt.types';
 
 @Controller('identity')
 export class IdentityController {

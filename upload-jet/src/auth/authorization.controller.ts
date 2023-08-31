@@ -1,8 +1,8 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { CheckAbilities } from './authorization.decorator';
 import { AuthorizationGuard } from './authorization.guard';
-import { ApplicationData } from './authorization.types';
-import { Application } from './authorization.entities';
+import { ApplicationData } from './auth.types';
+import { Application } from './auth.entities';
 
 const appPayload: ApplicationData = {
   id: 2,
