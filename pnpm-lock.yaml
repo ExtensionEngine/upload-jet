@@ -199,6 +199,9 @@ importers:
       '@aws-sdk/s3-presigned-post':
         specifier: ^3.374.0
         version: 3.374.0
+      '@mikro-orm/core':
+        specifier: ^5.7.14
+        version: 5.7.14(@mikro-orm/migrations@5.7.14)(@mikro-orm/postgresql@5.7.14)
       '@mikro-orm/nestjs':
         specifier: ^5.2.1
         version: 5.2.1(@mikro-orm/core@5.7.14)(@nestjs/common@10.0.0)(@nestjs/core@10.0.0)
@@ -254,9 +257,6 @@ importers:
       '@mikro-orm/cli':
         specifier: ^5.7.14
         version: 5.7.14(@mikro-orm/migrations@5.7.14)(@mikro-orm/postgresql@5.7.14)(pg@8.11.1)
-      '@mikro-orm/core':
-        specifier: ^5.7.14
-        version: 5.7.14(@mikro-orm/migrations@5.7.14)(@mikro-orm/postgresql@5.7.14)
       '@mikro-orm/migrations':
         specifier: ^5.7.14
         version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)
