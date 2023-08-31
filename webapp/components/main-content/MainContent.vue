@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 pl-20" :class="{ 'pl-0': isDesktop }">
+  <div class="flex-1" :class="{ 'pl-0': isDesktop, 'pl-20': !isDesktop }">
     <NuxtPage />
   </div>
 </template>
@@ -8,4 +8,5 @@
 const props = defineProps({
   isDesktop: { type: Boolean }
 });
+console.log(props.isDesktop);
 </script>
