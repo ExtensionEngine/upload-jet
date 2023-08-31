@@ -24,10 +24,10 @@ export class AuthorizationGuard implements CanActivate {
     const { user }: { user: JWTPayload } = context.switchToHttp().getRequest();
     if (!user?.role) return false;
 
-    const ability = this.permissionService.getPermission(user);
+    const hasPermission = this.permissionService.getPermission(user);
 
     rules.forEach(rule => {
-      const isAllowed = ability.can(rule.action, rule.subjects);
+      const isAllowed = hasPermission.can(rule.action, rule.subjects);
       if (!isAllowed) {
         throw new ForbiddenException('Not allowed');
       }
