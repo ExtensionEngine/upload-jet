@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User, Application } from './authorization.types';
+import { User, Application } from './authorization.entities';
 import {
   MongoAbility,
   AbilityBuilder,
