@@ -1,14 +1,14 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { CheckAbilities } from './authorization.decorator';
 import { AuthorizationGuard } from './authorization.guard';
-import { App, AppData } from './authorization.types';
+import { Application, ApplicationData } from './authorization.types';
 
-const appPayload: AppData = {
+const appPayload: ApplicationData = {
   id: 2,
   userId: 3,
   name: 'MyApp'
 };
-export const MockedApp = new App(appPayload);
+export const MockedApp = new Application(appPayload);
 
 @Controller('auth')
 export class AuthorizationController {

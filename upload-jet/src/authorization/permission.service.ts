@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User, App } from './authorization.types';
+import { User, Application } from './authorization.types';
 import {
   MongoAbility,
   AbilityBuilder,
@@ -21,12 +21,12 @@ export class PermissionService {
     if (user.role === 'Admin') {
       can('manage', 'all');
     } else {
-      can('create', App);
+      can('create', Application);
       can('read', User);
-      can('delete', App, { userId: user.id });
-      can('update', App, { userId: user.id });
-      can('manage', App, { userId: user.id });
-      can('read', App, { userId: user.id });
+      can('delete', Application, { userId: user.id });
+      can('update', Application, { userId: user.id });
+      can('manage', Application, { userId: user.id });
+      can('read', Application, { userId: user.id });
     }
 
     return build({

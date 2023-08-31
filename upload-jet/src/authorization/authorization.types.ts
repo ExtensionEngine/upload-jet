@@ -9,16 +9,16 @@ const Actions = {
 } as const;
 export type Action = (typeof Actions)[keyof typeof Actions];
 
-export type AppData = {
+export type ApplicationData = {
   id: number;
   userId: number;
   name: string;
 };
-export class App {
+export class Application {
   id: number;
   userId: number;
   name: string;
-  constructor(data: AppData) {
+  constructor(data: ApplicationData) {
     this.id = data.id;
     this.userId = data.userId;
     this.name = data.name;
@@ -30,7 +30,7 @@ export class User {
   email: string;
   role: Role;
 }
-export type Subjects = InferSubjects<typeof User | typeof App> | 'all';
+export type Subjects = InferSubjects<typeof User | typeof Application> | 'all';
 
 export const Roles = {
   Admin: 'Admin',
