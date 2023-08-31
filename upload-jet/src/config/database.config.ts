@@ -22,11 +22,11 @@ const databaseSchema = z.object({
 
 export default registerAs('database', () => {
   const config = databaseSchema.parse({
-    port: parseInt(process.env.POSTGRES_PORT, 10),
-    host: process.env.POSTGRES_HOST,
-    dbName: process.env.POSTGRES_DB,
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
+    port: parseInt(process.env.DATABASE_PORT, 10),
+    host: process.env.DATABASE_HOST,
+    dbName: process.env.DATABASE_NAME,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
     type: 'postgresql',
     migrations: {
       path: `${process.cwd()}/src/database/migrations`,
