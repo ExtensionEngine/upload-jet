@@ -38,11 +38,7 @@ function toggleIsExpanded() {
 watch(
   () => props.isDesktop,
   newIsDesktop => {
-    if (newIsDesktop) {
-      isExpanded.value = true;
-    } else {
-      isExpanded.value = false;
-    }
+    isExpanded.value = newIsDesktop;
   }
 );
 </script>

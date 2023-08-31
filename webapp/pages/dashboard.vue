@@ -13,7 +13,7 @@
 <script setup>
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 const breakpoints = useBreakpoints(breakpointsTailwind);
-const isMobile = breakpoints.smallerOrEqual('lg');
+const isMobile = breakpoints.smaller('lg');
 const isDesktop = breakpoints.greaterOrEqual('lg');
 
 const router = useRouter();
