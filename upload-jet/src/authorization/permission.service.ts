@@ -12,8 +12,8 @@ import { Action, Subjects } from './authorization.types';
 export type AppAbility = MongoAbility<[Action, Subjects]>;
 
 @Injectable()
-export class AuthorizationFactory {
-  defineAbility(user: Payload) {
+export class PermissionService {
+  getPermission(user: Payload) {
     const { can, cannot, build } = new AbilityBuilder<AppAbility>(
       createMongoAbility
     );

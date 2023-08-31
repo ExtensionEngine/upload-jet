@@ -5,11 +5,7 @@ const appSchema = z.object({
   port: z.coerce.number().default(3000),
   jwt: z.object({
     secret: z.string().nonempty(),
-    jwtOptions: z
-      .object({
-        expiresIn: z.string()
-      })
-      .optional()
+    jwtOptions: z.object({ expiresIn: z.string() }).optional()
   }),
   appUrl: z.string().nonempty()
 });

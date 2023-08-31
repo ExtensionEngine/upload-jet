@@ -6,14 +6,14 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RequiredRule, CHECK_ABILITY } from './authorization.decorator';
-import { AuthorizationFactory } from './authorization.factory';
+import { PermissionService } from './permission.service';
 import { Payload } from './jwt.types';
 
 @Injectable()
 export class AuthorizationGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private caslAbilityFactory: AuthorizationFactory
+    private permissionService: PermissionService
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -24,7 +24,7 @@ export class AuthorizationGuard implements CanActivate {
     const { user }: { user: Payload } = context.switchToHttp().getRequest();
     if (!user || !user.role) return false;
 
-    const ability = this.caslAbilityFactory.defineAbility(user);
+    const ability = this.permissionService.getPermission(user);
 
     rules.forEach(rule => {
       const isAllowed = ability.can(rule.action, rule.subjects);

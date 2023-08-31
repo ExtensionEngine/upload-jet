@@ -4,11 +4,11 @@ import { AuthorizationController } from './authorization.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtMiddleware } from './jwt.middleware';
-import { AuthorizationFactory } from './authorization.factory';
+import { PermissionService } from './permission.service';
 
 @Module({
   controllers: [AuthorizationController],
-  providers: [AuthorizationService, AuthorizationFactory],
+  providers: [AuthorizationService, PermissionService],
   imports: [
     JwtModule.registerAsync({
       useFactory(config: ConfigService) {

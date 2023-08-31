@@ -6,7 +6,7 @@ export type RequiredRule = {
   subjects: Subjects;
 };
 
-export const CHECK_ABILITY = 'check_ability';
+export const CHECK_ABILITY = Symbol('check_ability');
 
 export const CheckAbilities = (...requirements: RequiredRule[]) =>
   SetMetadata(CHECK_ABILITY, requirements);
