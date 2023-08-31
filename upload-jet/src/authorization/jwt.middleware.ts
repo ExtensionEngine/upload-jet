@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { AuthorizationService } from './authorization.service';
 import { Request, NextFunction } from 'express';
-import { Payload } from './jwt.types';
+import { JWTPayload } from './jwt.types';
 
 @Injectable()
 export class JwtMiddleware implements NestMiddleware {
@@ -17,7 +17,7 @@ export class JwtMiddleware implements NestMiddleware {
     if (!token) throw new UnauthorizedException('No token provided');
 
     try {
-      const user: Payload = await this.authService.verifyJwtToken(token);
+      const user: JWTPayload = await this.authService.verifyJwtToken(token);
       if (!user) throw new UnauthorizedException('No user found');
       req['user'] = user;
       next();

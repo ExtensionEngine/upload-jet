@@ -11,7 +11,7 @@ export type User = {
   role: Role;
 };
 
-export type Payload = {
+export type JWTPayload = {
   id: number;
   role: (typeof Roles)[keyof typeof Roles];
 };

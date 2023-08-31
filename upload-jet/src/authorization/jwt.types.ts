@@ -1,6 +1,6 @@
 import { Role } from './authorization.types';
 
-export type Payload = {
+export type JWTPayload = {
   id: number;
   role: Role;
 };

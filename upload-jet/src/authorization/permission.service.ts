@@ -6,14 +6,14 @@ import {
   ExtractSubjectType,
   createMongoAbility
 } from '@casl/ability';
-import { Payload } from './jwt.types';
+import { JWTPayload } from './jwt.types';
 import { Action, Subjects } from './authorization.types';
 
 export type AppAbility = MongoAbility<[Action, Subjects]>;
 
 @Injectable()
 export class PermissionService {
-  getPermission(user: Payload) {
+  getPermission(user: JWTPayload) {
     const { can, cannot, build } = new AbilityBuilder<AppAbility>(
       createMongoAbility
     );

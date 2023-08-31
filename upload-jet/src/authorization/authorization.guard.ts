@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { RequiredRule, CHECK_ABILITY } from './authorization.decorator';
 import { PermissionService } from './permission.service';
-import { Payload } from './jwt.types';
+import { JWTPayload } from './jwt.types';
 
 @Injectable()
 export class AuthorizationGuard implements CanActivate {
@@ -21,7 +21,7 @@ export class AuthorizationGuard implements CanActivate {
       this.reflector.get<RequiredRule[]>(CHECK_ABILITY, context.getHandler()) ||
       [];
 
-    const { user }: { user: Payload } = context.switchToHttp().getRequest();
+    const { user }: { user: JWTPayload } = context.switchToHttp().getRequest();
     if (!user?.role) return false;
 
     const ability = this.permissionService.getPermission(user);
