@@ -15,3 +15,9 @@ export type JWTPayload = {
   id: number;
   role: (typeof Roles)[keyof typeof Roles];
 };
+
+export type GithubUser = {
+  id: number;
+  avatarUrl: string;
+  email: string;
+};

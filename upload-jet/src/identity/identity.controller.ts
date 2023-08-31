@@ -1,9 +1,9 @@
 import { Controller, Get, Inject, Query, Redirect, Res } from '@nestjs/common';
-import { IdentityService } from './identity.service';
+import { Response } from 'express';
 import appConfig from 'config/app.config';
 import { ConfigType } from '@nestjs/config';
+import { IdentityService } from './identity.service';
 import { JWTPayload } from 'authorization/jwt.types';
-import { Response } from 'express';
 
 @Controller('identity')
 export class IdentityController {
@@ -20,7 +20,8 @@ export class IdentityController {
     @Query('code') code: string,
     @Query('state') state: string
   ) {
-    const user = await this.identityService.authorize(code);
+    const githubUser = await this.identityService.getGithubUser(code);
+    const user = await this.identityService.hydrateUser(githubUser);
     const payload: JWTPayload = {
       id: user.id,
       role: user.role
