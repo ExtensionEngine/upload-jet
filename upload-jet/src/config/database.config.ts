@@ -16,13 +16,8 @@ const databaseSchema = z.object({
   dbName: z.string().nonempty(),
   user: z.string().nonempty(),
   password: z.string().nonempty(),
-  type: z.enum(databaseTypes),
-  migrations: z.object({
-    path: z.string().nonempty(),
-    disableForeignKeys: z.boolean().default(false),
-    pattern: z.any(),
-    fileName: z.function()
-  })
+  type: z.any(),
+  migrations: z.any()
 });
 
 export default registerAs('database', () => {
