@@ -8,5 +8,4 @@
 const props = defineProps({
   isDesktop: { type: Boolean }
 });
-console.log(props.isDesktop);
 </script>
