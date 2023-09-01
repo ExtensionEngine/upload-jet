@@ -8,7 +8,7 @@
       </button>
     </div>
 
-    <div class="max-h-[90vh] overflow-y-auto p-10 pb-8">
+    <div class="max-h-[90vh] overflow-y-auto p-4 pb-8 pt-10">
       <li
         class="mb-6 flex h-14 list-none items-center justify-between rounded-lg border-2 bg-slate-50 pl-4 pr-2 duration-200 ease-out hover:translate-x-1 hover:cursor-pointer hover:border-cyan-500"
         v-for="app in mockedApps"
