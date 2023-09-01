@@ -11,8 +11,9 @@
     <div class="max-h-[90vh] overflow-y-auto p-10 pb-8">
       <li
         class="mb-6 flex h-14 list-none items-center justify-between rounded-lg border-2 bg-slate-50 pl-4 pr-2 duration-200 ease-out hover:translate-x-1 hover:cursor-pointer hover:border-cyan-500"
-        v-for="app in mockedApps">
-        <div class="font-semibold">{{ app }}</div>
+        v-for="app in mockedApps"
+        :key="app.id">
+        <div class="font-semibold">{{ app.name }}</div>
         <p class="hover:text-red-600">Delete</p>
       </li>
     </div>
@@ -37,7 +38,11 @@ const showModal = ref(false);
 
 const inputValue = ref('');
 
-const mockedApps = ref(['Mocked App 1', 'Mocked App 2', 'Mocked App 3']);
+const mockedApps = ref([
+  { id: 1, name: 'Mocked App 1' },
+  { id: 2, name: 'Mocked App 2' },
+  { id: 3, name: 'Mocked App 3' }
+]);
 
 const handleCreateApp = function (inputValue) {
   mockedApps.value.push(inputValue);
