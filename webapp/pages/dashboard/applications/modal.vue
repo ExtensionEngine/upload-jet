@@ -13,7 +13,12 @@ const inputValue = ref('');
       v-if="show"
       class="fixed left-0 top-0 z-50 flex h-screen w-screen bg-gray-700 bg-opacity-50 transition-opacity duration-100 ease-in-out">
       <div
-        class="m-auto flex w-96 flex-col gap-7 rounded-xl bg-white p-5 pl-7 shadow-md">
+        class="relative m-auto flex w-96 flex-col gap-7 rounded-xl bg-white p-5 pl-7 shadow-md">
+        <Icon
+          :name="'mdi:close'"
+          size="24"
+          class="hover: absolute right-2 top-2 ease-out hover:cursor-pointer"
+          @click="emit('close')" />
         <div class="modal-header">
           <slot name="header">
             <h2 class="text-center text-xl uppercase">Create Application</h2>
