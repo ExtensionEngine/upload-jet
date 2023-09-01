@@ -1,10 +1,24 @@
 <script setup>
 const props = defineProps({
-  show: { type: Boolean }
+  show: { type: Boolean },
+  inputValue: { type: String }
 });
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'update:inputValue', 'createApp']);
 
-const inputValue = ref('');
+const inputValue = computed({
+  get() {
+    return props.inputValue;
+  },
+  set(newValue) {
+    emit('update:inputValue', newValue);
+  }
+});
+
+const handleCreateApp = () => {
+  emit('createApp', inputValue.value);
+  emit('close');
+  inputValue.value = '';
+};
 </script>
 
 <template>
@@ -26,7 +40,7 @@ const inputValue = ref('');
         </div>
         <div class="modal-input">
           <slot name="input">
-            <form>
+            <form @submit.prevent>
               <label for="appname"></label>
               <input
                 v-model="inputValue"
@@ -44,7 +58,7 @@ const inputValue = ref('');
               class="float-right"
               :class="inputValue ? 'text-green-600' : 'text-red-500'"
               :disabled="!inputValue"
-              @click="emit('close'), (inputValue = '')">
+              @click="handleCreateApp">
               Create
             </button>
           </slot>
