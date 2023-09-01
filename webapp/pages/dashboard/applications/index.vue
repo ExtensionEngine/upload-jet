@@ -14,7 +14,7 @@
         v-for="app in mockedApps"
         :key="app.id">
         <div class="font-semibold">{{ app.name }}</div>
-        <p class="hover:text-red-600">Delete</p>
+        <p class="hover:text-red-600" @click="deleteApp(app.id)">Delete</p>
       </li>
     </div>
   </div>
@@ -38,13 +38,25 @@ const showModal = ref(false);
 
 const inputValue = ref('');
 
+// Below is a test code just for the client side to showcase the render functionality, will be deleted before merging
+// TODO:
+// 1. Should retrieve a list of apps from the database that will be rendered on the client side
+// 2. When user creates an app it should send a post request to authorized route and add it to dabatabase and retrieve a new list of apps to render
+// 3. When user deletes an app it should send a post request to authorized route and delete it from the dabatabase and retrieve a new list of apps to render
+
 const mockedApps = ref([
   { id: 1, name: 'Mocked App 1' },
   { id: 2, name: 'Mocked App 2' },
   { id: 3, name: 'Mocked App 3' }
 ]);
 
-const handleCreateApp = function (inputValue) {
-  mockedApps.value.push(inputValue);
+const handleCreateApp = inputValue => {
+  const randomId = Math.floor(Math.random() * 1000);
+  const newApp = { id: randomId, name: inputValue };
+  mockedApps.value.push(newApp);
+};
+
+const deleteApp = id => {
+  mockedApps.value = mockedApps.value.filter(app => app.id !== id);
 };
 </script>
