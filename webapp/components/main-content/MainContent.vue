@@ -1,6 +1,8 @@
 <template>
-  <div class="flex-1" :class="{ 'pl-0': isDesktop, 'pl-20': !isDesktop }">
-    <NuxtPage />
+  <div
+    class="relative flex-1"
+    :class="{ 'ml-0': isDesktop, 'ml-20': !isDesktop }">
+    <NuxtPage :is-desktop="isDesktop" />
   </div>
 </template>
 
