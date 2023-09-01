@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="fixed flex h-screen flex-col overflow-hidden border-2 border-gray-300 bg-slate-50 duration-500 ease-out"
+    class="fixed z-50 flex h-screen flex-col overflow-hidden border-2 border-gray-300 bg-slate-50 duration-500 ease-out"
     :class="{
       'w-20': isMobile && !isExpanded,
       'w-80': (isMobile && isExpanded) || isDesktop,
