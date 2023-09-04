@@ -13,6 +13,20 @@ export type AppAbility = MongoAbility<[Action, Subject]>;
 
 @Injectable()
 export class PermissionService {
+  getPermission(user: JWTPayload) {
+    const builder = new AbilityBuilder<AppAbility>(createMongoAbility);
+
+    if (user.role === 'Admin') {
+      this.getAdminPermissions(builder);
+    } else {
+      this.getUserPermissions(user, builder);
+    }
+
+    return builder.build({
+      detectSubjectType: item => item.constructor as ExtractSubjectType<Subject>
+    });
+  }
+
   private getUserPermissions(
     user: JWTPayload,
     builder: AbilityBuilder<AppAbility>
@@ -26,19 +40,5 @@ export class PermissionService {
   }
   private getAdminPermissions(builder: AbilityBuilder<AppAbility>) {
     builder.can('manage', 'all');
-  }
-
-  getPermission(user: JWTPayload) {
-    const builder = new AbilityBuilder<AppAbility>(createMongoAbility);
-
-    if (user.role === 'Admin') {
-      this.getAdminPermissions(builder);
-    } else {
-      this.getUserPermissions(user, builder);
-    }
-
-    return builder.build({
-      detectSubjectType: item => item.constructor as ExtractSubjectType<Subject>
-    });
   }
 }

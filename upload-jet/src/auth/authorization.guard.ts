@@ -16,13 +16,6 @@ export class AuthorizationGuard implements CanActivate {
     private permissionService: PermissionService
   ) {}
 
-  private getRules(context: ExecutionContext): RequiredRule[] {
-    return (
-      this.reflector.get<RequiredRule[]>(CHECK_ABILITY, context.getHandler()) ||
-      []
-    );
-  }
-
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const rules = this.getRules(context);
 
@@ -38,5 +31,12 @@ export class AuthorizationGuard implements CanActivate {
       }
     });
     return true;
+  }
+
+  private getRules(context: ExecutionContext): RequiredRule[] {
+    return (
+      this.reflector.get<RequiredRule[]>(CHECK_ABILITY, context.getHandler()) ||
+      []
+    );
   }
 }
