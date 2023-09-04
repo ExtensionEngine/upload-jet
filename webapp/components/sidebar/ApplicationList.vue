@@ -3,15 +3,15 @@
     <SidebarListItem
       icon-name="mdi:application-brackets"
       label="Applications"
-      :is-expanded="isExpanded" />
+      :hidden="!isExpanded" />
     <SidebarListItem
       icon-name="mdi:chart-areaspline"
       label="Usage"
-      :is-expanded="isExpanded" />
+      :hidden="!isExpanded" />
     <SidebarListItem
       icon-name="mdi:cash-usd"
       label="Billings"
-      :is-expanded="isExpanded" />
+      :hidden="!isExpanded" />
   </div>
 </template>
 

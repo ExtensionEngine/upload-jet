@@ -16,7 +16,7 @@
         'absolute right-1 duration-200 ease-out hover:-translate-x-1 hover:cursor-pointer':
           isExpanded
       }"
-      @click="toggleIsExpanded" />
+      @click="toggle" />
 
     <SidebarUser :is-expanded="isExpanded" />
     <SidebarApplicationList :is-expanded="isExpanded" />
@@ -31,7 +31,7 @@ const props = defineProps({
 
 const isExpanded = ref(props.isDesktop);
 
-function toggleIsExpanded() {
+function toggle() {
   isExpanded.value = !isExpanded.value;
 }
 
