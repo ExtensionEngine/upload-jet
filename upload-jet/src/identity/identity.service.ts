@@ -13,7 +13,7 @@ export class IdentityService {
   ) {}
 
   async getGithubUser(code: string) {
-    return await this.githubProvider.getUser(code);
+    return this.githubProvider.getUser(code);
   }
 
   async hydrateUser(user: GithubUser): Promise<User> {
@@ -29,7 +29,7 @@ export class IdentityService {
     return MockedUser;
   }
 
-  async generateJwtToken(payload: JWTPayload): Promise<string> {
+  async generateAccessToken(payload: JWTPayload): Promise<string> {
     return this.jwtService.signAsync(payload, JWT_OPTIONS);
   }
 }

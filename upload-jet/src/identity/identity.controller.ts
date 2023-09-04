@@ -26,7 +26,7 @@ export class IdentityController {
       id: user.id,
       role: user.role
     };
-    const accessToken = await this.identityService.generateJwtToken(payload);
+    const accessToken = await this.identityService.generateAccessToken(payload);
     res.cookie('jwt', accessToken, { httpOnly: true, secure: true });
     const { targetUrl = '/' } = JSON.parse(state);
     const redirectUrl = new URL(targetUrl, this.config.appUrl).href;
