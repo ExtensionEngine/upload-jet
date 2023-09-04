@@ -19,8 +19,8 @@ export class AuthorizationGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const rules = this.getRules(context);
 
-    const { user }: { user: JWTPayload } = context.switchToHttp().getRequest();
-    if (!user?.role) return false;
+    const user: JWTPayload = context.switchToHttp().getRequest();
+    if (!user.user?.role) return false;
 
     const hasPermission = this.permissionService.getPermission(user);
 

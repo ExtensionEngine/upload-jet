@@ -20,11 +20,13 @@ export class IdentityController {
     @Query('code') code: string,
     @Query('state') state: string
   ) {
-    const githubUser = await this.identityService.getGithubUser(code);
-    const user = await this.identityService.hydrateUser(githubUser);
+    const userProfile = await this.identityService.getUserProfile(code);
+    const user = await this.identityService.hydrateUser(userProfile);
     const payload: JWTPayload = {
-      id: user.id,
-      role: user.role
+      user: {
+        id: user.id,
+        role: user.role
+      }
     };
     const accessToken = await this.identityService.generateAccessToken(payload);
     res.cookie('jwt', accessToken, { httpOnly: true, secure: true });

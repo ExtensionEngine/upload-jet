@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { GithubProviderService } from 'identity/github-provider.service';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
-import { User, JWTPayload, GithubUser } from './identity.types';
+import { User, JWTPayload, UserProfile } from './identity.types';
 
 const JWT_OPTIONS: JwtSignOptions = { expiresIn: '3600s' };
 
@@ -12,11 +12,11 @@ export class IdentityService {
     private readonly jwtService: JwtService
   ) {}
 
-  async getGithubUser(code: string) {
+  async getUserProfile(code: string) {
     return this.githubProvider.getUser(code);
   }
 
-  async hydrateUser(user: GithubUser): Promise<User> {
+  async hydrateUser(user: UserProfile): Promise<User> {
     //TODO: Upsert user to the database
 
     //TODO: Return the user from the database

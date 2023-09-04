@@ -12,11 +12,10 @@ export type User = {
 };
 
 export type JWTPayload = {
-  id: number;
-  role: (typeof Roles)[keyof typeof Roles];
+  user: { id: number; role: Role };
 };
 
-export type GithubUser = {
+export type UserProfile = {
   id: number;
   avatarUrl: string;
   email: string;

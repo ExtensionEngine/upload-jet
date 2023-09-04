@@ -17,7 +17,7 @@ export class JwtMiddleware implements NestMiddleware {
     if (!token) throw new UnauthorizedException('No token provided');
 
     try {
-      const user: JWTPayload = await this.authService.verifyJwtToken(token);
+      const { user }: JWTPayload = await this.authService.verifyJwtToken(token);
       if (!user) throw new UnauthorizedException('No user found');
       req['user'] = user;
       next();

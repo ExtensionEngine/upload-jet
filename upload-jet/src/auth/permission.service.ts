@@ -15,11 +15,10 @@ export type AppAbility = MongoAbility<[Action, Subject]>;
 export class PermissionService {
   getPermission(user: JWTPayload) {
     const builder = new AbilityBuilder<AppAbility>(createMongoAbility);
-
-    if (user.role === 'Admin') {
-      this.getAdminPermissions(builder);
+    if (user.user.role === 'Admin') {
+      this.setAdminPermissions(builder);
     } else {
-      this.getUserPermissions(user, builder);
+      this.setUserPermissions(user, builder);
     }
 
     return builder.build({
@@ -27,18 +26,18 @@ export class PermissionService {
     });
   }
 
-  private getUserPermissions(
+  private setUserPermissions(
     user: JWTPayload,
     builder: AbilityBuilder<AppAbility>
   ) {
     builder.can('create', Application);
     builder.can('read', User);
-    builder.can('delete', Application, { userId: user.id });
-    builder.can('update', Application, { userId: user.id });
-    builder.can('manage', Application, { userId: user.id });
-    builder.can('read', Application, { userId: user.id });
+    builder.can('delete', Application, { userId: user.user.id });
+    builder.can('update', Application, { userId: user.user.id });
+    builder.can('manage', Application, { userId: user.user.id });
+    builder.can('read', Application, { userId: user.user.id });
   }
-  private getAdminPermissions(builder: AbilityBuilder<AppAbility>) {
+  private setAdminPermissions(builder: AbilityBuilder<AppAbility>) {
     builder.can('manage', 'all');
   }
 }
