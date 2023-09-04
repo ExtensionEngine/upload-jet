@@ -1,9 +1,9 @@
 import { SetMetadata } from '@nestjs/common';
-import { Action, Subjects } from './auth.types';
+import { Action, Subject } from './auth.types';
 
 export type RequiredRule = {
   action: Action;
-  subjects: Subjects;
+  subjects: Subject;
 };
 
 export const CHECK_ABILITY = Symbol('check_ability');

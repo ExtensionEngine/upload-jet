@@ -16,10 +16,15 @@ export class AuthorizationGuard implements CanActivate {
     private permissionService: PermissionService
   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const rules =
+  private getRules(context: ExecutionContext): RequiredRule[] {
+    return (
       this.reflector.get<RequiredRule[]>(CHECK_ABILITY, context.getHandler()) ||
-      [];
+      []
+    );
+  }
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const rules = this.getRules(context);
 
     const { user }: { user: JWTPayload } = context.switchToHttp().getRequest();
     if (!user?.role) return false;

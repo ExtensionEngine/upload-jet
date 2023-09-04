@@ -16,7 +16,7 @@ export type ApplicationData = {
   name: string;
 };
 
-export type Subjects = InferSubjects<typeof User | typeof Application> | 'all';
+export type Subject = InferSubjects<typeof User | typeof Application> | 'all';
 
 export const Roles = {
   Admin: 'Admin',

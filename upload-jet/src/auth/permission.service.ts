@@ -7,9 +7,9 @@ import {
   createMongoAbility
 } from '@casl/ability';
 import { JWTPayload } from './jwt.types';
-import { Action, Subjects } from './auth.types';
+import { Action, Subject } from './auth.types';
 
-export type AppAbility = MongoAbility<[Action, Subjects]>;
+export type AppAbility = MongoAbility<[Action, Subject]>;
 
 @Injectable()
 export class PermissionService {
@@ -38,8 +38,7 @@ export class PermissionService {
     }
 
     return builder.build({
-      detectSubjectType: item =>
-        item.constructor as ExtractSubjectType<Subjects>
+      detectSubjectType: item => item.constructor as ExtractSubjectType<Subject>
     });
   }
 }
