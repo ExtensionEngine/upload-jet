@@ -6,19 +6,18 @@ import {
   ExtractSubjectType,
   createMongoAbility
 } from '@casl/ability';
-import { JWTPayload } from './jwt.types';
 import { Action, Subject } from './auth.types';
 
 export type AppAbility = MongoAbility<[Action, Subject]>;
 
 @Injectable()
 export class PermissionService {
-  getPermission(user: JWTPayload) {
+  getPermission(user: Pick<User, 'id' | 'role'>) {
     const builder = new AbilityBuilder<AppAbility>(createMongoAbility);
-    if (user.user.role === 'Admin') {
+    if (user.role === 'Admin') {
       this.setAdminPermissions(builder);
     } else {
-      this.setUserPermissions(user, builder);
+      this.setUserPermissions(user.id, builder);
     }
 
     return builder.build({
@@ -27,15 +26,15 @@ export class PermissionService {
   }
 
   private setUserPermissions(
-    user: JWTPayload,
+    userId: User['id'],
     builder: AbilityBuilder<AppAbility>
   ) {
     builder.can('create', Application);
     builder.can('read', User);
-    builder.can('delete', Application, { userId: user.user.id });
-    builder.can('update', Application, { userId: user.user.id });
-    builder.can('manage', Application, { userId: user.user.id });
-    builder.can('read', Application, { userId: user.user.id });
+    builder.can('delete', Application, { userId });
+    builder.can('update', Application, { userId });
+    builder.can('manage', Application, { userId });
+    builder.can('read', Application, { userId });
   }
   private setAdminPermissions(builder: AbilityBuilder<AppAbility>) {
     builder.can('manage', 'all');

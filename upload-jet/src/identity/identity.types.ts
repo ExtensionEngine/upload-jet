@@ -12,11 +12,9 @@ export type User = {
 };
 
 export type JWTPayload = {
-  user: { id: number; role: Role };
+  user: Pick<User, 'id' | 'role'>;
 };
 
-export type UserProfile = {
-  id: number;
+export type UserProfile = Pick<User, 'id' | 'email'> & {
   avatarUrl: string;
-  email: string;
 };

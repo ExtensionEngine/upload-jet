@@ -4,9 +4,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtMiddleware } from './jwt.middleware';
 import { PermissionService } from './permission.service';
+import { TestController } from './test.controller';
 
 @Module({
-  controllers: [],
+  controllers: [TestController],
   providers: [AuthService, PermissionService],
   imports: [
     JwtModule.registerAsync({

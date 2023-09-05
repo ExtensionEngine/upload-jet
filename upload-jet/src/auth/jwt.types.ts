@@ -1,5 +1,5 @@
-import { Role } from './auth.types';
+import { User } from './auth.entities';
 
 export type JWTPayload = {
-  user: { id: number; role: Role };
+  user: Pick<User, 'id' | 'role'>;
 };
