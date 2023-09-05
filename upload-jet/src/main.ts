@@ -11,6 +11,7 @@ async function bootstrap() {
   const port = config.get<number>('app.port');
 
   app.useLogger(logger);
+  app.enableCors();
 
   process.on('uncaughtException', err => logUncaughtException(err, logger));
 
