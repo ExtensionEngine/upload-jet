@@ -1,4 +1,5 @@
 import { registerAs } from '@nestjs/config';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { z } from 'zod';
 
 const databaseSchema = z.object({
@@ -20,7 +21,7 @@ export default registerAs('database', () => {
 
   return {
     ...config,
-    type: 'postgresql',
+    driver: PostgreSqlDriver,
     migrations: {
       path: `${process.cwd()}/src/database/migrations`,
       disableForeignKeys: false,
