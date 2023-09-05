@@ -13,8 +13,7 @@ export class ApplicationController {
 
   @Get('list')
   async getAll() {
-    const applications = await this.applicationService.getAll();
-    return applications;
+    return await this.applicationService.getAll();
   }
 
   @Get(':id')
