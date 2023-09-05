@@ -36,4 +36,4 @@ lerna-debug.log*
 
 .env
 
-/database/migrations/*.json
+*/database/migrations/*.json
