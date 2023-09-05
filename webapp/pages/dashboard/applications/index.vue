@@ -2,7 +2,7 @@
   <div class="flex flex-col pb-2">
     <div class="mb-4 flex w-full flex-row justify-end p-4 pb-0">
       <button
-        @click="showCreateAppModal = true"
+        @click="showCreateApplicationModal = true"
         class="w-32 rounded-lg bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600">
         Create App
       </button>
@@ -11,10 +11,10 @@
     <div class="max-h-[90vh] overflow-y-auto p-4 pb-8 pt-10">
       <li
         class="mb-6 flex h-14 list-none items-center justify-between rounded-lg border-2 bg-slate-50 pl-4 pr-2 duration-200 ease-out hover:translate-x-1 hover:cursor-pointer hover:border-cyan-500"
-        v-for="app in mockedApps"
+        v-for="app in mockedApplications"
         :key="app.id">
         <div class="font-semibold">{{ app.name }}</div>
-        <p class="hover:text-red-600" @click="handleDeleteApp(app.id)">
+        <p class="hover:text-red-600" @click="handleDeleteApplication(app.id)">
           Delete
         </p>
       </li>
@@ -22,29 +22,29 @@
   </div>
 
   <Teleport to="body">
-    <CreateAppModal
-      :show="showCreateAppModal"
-      @close="showCreateAppModal = false"
-      @createApp="handleCreateApp"
+    <CreateApplicationModal
+      :show="showCreateApplicationModal"
+      @close="showCreateApplicationModal = false"
+      @createApplication="handleCreateApplication"
       v-model:input-value="inputValue" />
-    <DeleteAppModal
-      :show="showDeleteAppModal"
+    <DeleteApplicationModal
+      :show="showDeleteApplicationModal"
       :id="appId"
-      @close="showDeleteAppModal = false"
-      @deleteApp="deleteApp(appId)" />
+      @close="showDeleteApplicationModal = false"
+      @deleteApplication="deleteApplication(appId)" />
   </Teleport>
 </template>
 
 <script setup>
-import CreateAppModal from './createAppModal.vue';
-import DeleteAppModal from './deleteAppModal.vue';
-const showCreateAppModal = ref(false);
-const showDeleteAppModal = ref(false);
+import CreateApplicationModal from './createApplicationModal.vue';
+import DeleteApplicationModal from './deleteApplicationModal.vue';
+const showCreateApplicationModal = ref(false);
+const showDeleteApplicationModal = ref(false);
 const appId = ref(null);
 const inputValue = ref('');
 
-function handleDeleteApp(id) {
-  showDeleteAppModal.value = true;
+function handleDeleteApplication(id) {
+  showDeleteApplicationModal.value = true;
   appId.value = id;
 }
 
@@ -54,19 +54,21 @@ function handleDeleteApp(id) {
 // 2. When user creates an app it should send a post request to authorized route and add it to dabatabase and retrieve a new list of apps to render
 // 3. When user deletes an app it should send a post request to authorized route and delete it from the dabatabase and retrieve a new list of apps to render
 
-const mockedApps = ref([
+const mockedApplications = ref([
   { id: 1, name: 'Mocked App 1' },
   { id: 2, name: 'Mocked App 2' },
   { id: 3, name: 'Mocked App 3' }
 ]);
 
-const handleCreateApp = inputValue => {
+const handleCreateApplication = inputValue => {
   const randomId = Math.floor(Math.random() * 1000);
-  const newApp = { id: randomId, name: inputValue };
-  mockedApps.value.push(newApp);
+  const newApplication = { id: randomId, name: inputValue };
+  mockedApplications.value.push(newApplication);
 };
 
-const deleteApp = id => {
-  mockedApps.value = mockedApps.value.filter(app => app.id !== id);
+const deleteApplication = id => {
+  mockedApplications.value = mockedApplications.value.filter(
+    app => app.id !== id
+  );
 };
 </script>

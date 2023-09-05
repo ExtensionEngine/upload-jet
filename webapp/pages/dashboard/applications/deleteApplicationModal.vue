@@ -3,15 +3,15 @@ const props = defineProps({
   show: { type: Boolean },
   id: { type: Number }
 });
-const emit = defineEmits(['close', 'deleteApp']);
-const handleDeleteApp = () => {
-  emit('deleteApp', props.id);
+const emit = defineEmits(['close', 'deleteApplication']);
+const handleDeleteApplication = () => {
+  emit('deleteApplication', props.id);
   emit('close');
 };
 </script>
 
 <template>
-  <Transition name="deleteAppModal">
+  <Transition name="deleteApplicationlicationModal">
     <div
       v-if="show"
       class="fixed left-0 top-0 z-50 flex h-screen w-screen bg-gray-700 bg-opacity-50 transition-opacity duration-100 ease-in-out">
@@ -41,7 +41,7 @@ const handleDeleteApp = () => {
               </button>
               <button
                 class="rounded-sm border-2 bg-red-400 p-2 text-white hover:bg-red-500"
-                @click="handleDeleteApp">
+                @click="handleDeleteApplication">
                 Delete
               </button>
             </div>

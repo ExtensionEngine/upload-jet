@@ -3,7 +3,7 @@ const props = defineProps({
   show: { type: Boolean },
   inputValue: { type: String }
 });
-const emit = defineEmits(['close', 'update:inputValue', 'createApp']);
+const emit = defineEmits(['close', 'update:inputValue', 'createApplication']);
 
 const inputValue = computed({
   get() {
@@ -14,15 +14,15 @@ const inputValue = computed({
   }
 });
 
-const handleCreateApp = () => {
-  emit('createApp', inputValue.value);
+const handleCreateApplication = () => {
+  emit('createApplication', inputValue.value);
   emit('close');
   inputValue.value = '';
 };
 </script>
 
 <template>
-  <Transition name="createAppModal">
+  <Transition name="createApplicationModal">
     <div
       v-if="show"
       class="fixed left-0 top-0 z-50 flex h-screen w-screen bg-gray-700 bg-opacity-50 transition-opacity duration-100 ease-in-out">
@@ -58,7 +58,7 @@ const handleCreateApp = () => {
               class="float-right"
               :class="inputValue ? 'text-green-600' : 'text-red-500'"
               :disabled="!inputValue"
-              @click="handleCreateApp">
+              @click="handleCreateApplication">
               Create
             </button>
           </slot>
