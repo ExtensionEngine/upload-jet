@@ -25,7 +25,7 @@ export class IdentityService {
     }
   }
 
-  mapUser(user: GetUserResult): User {
+  private mapUser(user: GetUserResult): User {
     return new User(user.id, user.email, user.avatarUrl);
   }
 
