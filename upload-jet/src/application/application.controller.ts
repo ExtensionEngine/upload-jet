@@ -1,9 +1,15 @@
 import { BadRequestException, Controller, Get, Param } from '@nestjs/common';
 import { ApplicationService } from './application.service';
+import { fetchApplicationSchema } from 'config/application.config';
+import { ZodService } from 'shared/zod.service';
+import { logger } from '@mikro-orm/nestjs';
 
 @Controller('application')
 export class ApplicationController {
-  constructor(private readonly applicationService: ApplicationService) {}
+  constructor(
+    private readonly applicationService: ApplicationService,
+    private readonly zodService: ZodService
+  ) {}
 
   @Get('list')
   async getAll() {
@@ -13,10 +19,18 @@ export class ApplicationController {
 
   @Get(':id')
   async getById(@Param() params: { id: string }) {
-    const id = parseInt(params.id);
-    if (isNaN(id)) throw new BadRequestException();
+    const validationResult = await fetchApplicationSchema.safeParseAsync(
+      params
+    );
 
-    const application = await this.applicationService.getById(id);
-    return application;
+    if (validationResult.success === true)
+      return await this.applicationService.getById(validationResult.data.id);
+
+    const error = this.zodService.mapZodError(validationResult.error);
+    logger.error(error);
+    throw new BadRequestException({
+      message: 'Error fetching application',
+      error
+    });
   }
 }
