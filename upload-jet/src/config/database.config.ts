@@ -6,9 +6,7 @@ const databaseSchema = z.object({
   host: z.string().nonempty(),
   dbName: z.string().nonempty(),
   user: z.string().nonempty(),
-  password: z.string().nonempty(),
-  type: z.any(),
-  migrations: z.any()
+  password: z.string().nonempty()
 });
 
 export default registerAs('database', () => {
@@ -17,7 +15,11 @@ export default registerAs('database', () => {
     host: process.env.DATABASE_HOST,
     dbName: process.env.DATABASE_NAME,
     user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
+    password: process.env.DATABASE_PASSWORD
+  });
+
+  return {
+    ...config,
     type: 'postgresql',
     migrations: {
       path: `${process.cwd()}/src/database/migrations`,
@@ -25,6 +27,5 @@ export default registerAs('database', () => {
       pattern: /^\d+[\w-]+\.ts$/,
       fileName: (timestamp: string) => `${timestamp}-new-migration`
     }
-  });
-  return config;
+  };
 });
