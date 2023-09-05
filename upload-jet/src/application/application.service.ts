@@ -1,6 +1,6 @@
-import { EntityRepository } from '@mikro-orm/core';
-import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
+import { DriverException, EntityRepository } from '@mikro-orm/core';
+import { InjectRepository, logger } from '@mikro-orm/nestjs';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import Application from './application.entity';
 
 @Injectable()
@@ -11,7 +11,14 @@ export class ApplicationService {
   ) {}
 
   async getAll() {
-    return await this.applicationRepository.findAll();
+    try {
+      return await this.applicationRepository.findAll();
+    } catch (error) {
+      if (error instanceof DriverException) {
+        logger.error(error);
+        throw new InternalServerErrorException();
+      }
+    }
   }
 
   async getById(id: number) {
