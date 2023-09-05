@@ -1,6 +1,7 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
+import User from './user.entity';
 import {
   GetUserResult,
   GithubProviderService
