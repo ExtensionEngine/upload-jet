@@ -12,7 +12,7 @@ export class ApplicationService {
 
   async getAll() {
     try {
-      return await this.applicationRepository.findAll();
+      return this.applicationRepository.findAll();
     } catch (error) {
       if (error instanceof DriverException) {
         logger.error(error);
@@ -23,7 +23,7 @@ export class ApplicationService {
 
   async getById(id: number) {
     try {
-      return await this.applicationRepository.findOne({ id });
+      return this.applicationRepository.findOne({ id });
     } catch (error) {
       if (error instanceof DriverException) {
         logger.error(error);
