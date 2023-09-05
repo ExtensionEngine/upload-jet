@@ -57,6 +57,9 @@ const handleCreateApp = inputValue => {
 };
 
 const deleteApp = id => {
-  mockedApps.value = mockedApps.value.filter(app => app.id !== id);
+  const confirmed = window.confirm('Are you sure you want to delete this app?');
+  if (confirmed) {
+    mockedApps.value = mockedApps.value.filter(app => app.id !== id);
+  }
 };
 </script>
