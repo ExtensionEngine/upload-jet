@@ -35,7 +35,7 @@
               class="float-right"
               :class="inputValue ? 'text-green-600' : 'text-red-500'"
               :disabled="!inputValue"
-              @click="handleCreateApplication">
+              @click="createApplication">
               Create
             </button>
           </slot>
@@ -61,7 +61,7 @@ const inputValue = computed({
   }
 });
 
-const handleCreateApplication = () => {
+const createApplication = () => {
   emit('createApplication', inputValue.value);
   emit('close');
   inputValue.value = '';

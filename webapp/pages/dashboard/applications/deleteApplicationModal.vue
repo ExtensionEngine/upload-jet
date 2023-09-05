@@ -29,7 +29,7 @@
               </button>
               <button
                 class="rounded-sm border-2 bg-red-400 p-2 text-white hover:bg-red-500"
-                @click="handleDeleteApplication">
+                @click="deleteApplication">
                 Delete
               </button>
             </div>
@@ -46,7 +46,7 @@ const props = defineProps({
   id: { type: Number }
 });
 const emit = defineEmits(['close', 'deleteApplication']);
-const handleDeleteApplication = () => {
+const deleteApplication = () => {
   emit('deleteApplication', props.id);
   emit('close');
 };
