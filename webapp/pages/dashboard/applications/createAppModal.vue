@@ -22,7 +22,7 @@ const handleCreateApp = () => {
 </script>
 
 <template>
-  <Transition name="modal">
+  <Transition name="createAppModal">
     <div
       v-if="show"
       class="fixed left-0 top-0 z-50 flex h-screen w-screen bg-gray-700 bg-opacity-50 transition-opacity duration-100 ease-in-out">

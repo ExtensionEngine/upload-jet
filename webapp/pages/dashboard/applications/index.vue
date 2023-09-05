@@ -2,7 +2,7 @@
   <div class="flex flex-col pb-2">
     <div class="mb-4 flex w-full flex-row justify-end p-4 pb-0">
       <button
-        @click="showModal = true"
+        @click="showCreateAppModal = true"
         class="w-32 rounded-lg bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600">
         Create App
       </button>
@@ -14,29 +14,39 @@
         v-for="app in mockedApps"
         :key="app.id">
         <div class="font-semibold">{{ app.name }}</div>
-        <p class="hover:text-red-600" @click="deleteApp(app.id)">Delete</p>
+        <p class="hover:text-red-600" @click="handleDeleteApp(app.id)">
+          Delete
+        </p>
       </li>
     </div>
   </div>
 
   <Teleport to="body">
-    <Modal
-      :show="showModal"
-      @close="showModal = false"
+    <CreateAppModal
+      :show="showCreateAppModal"
+      @close="showCreateAppModal = false"
       @createApp="handleCreateApp"
-      v-model:input-value="inputValue">
-      <template>
-        <h3>Modal</h3>
-      </template>
-    </Modal>
+      v-model:input-value="inputValue" />
+    <DeleteAppModal
+      :show="showDeleteAppModal"
+      :id="appId"
+      @close="showDeleteAppModal = false"
+      @deleteApp="deleteApp(appId)" />
   </Teleport>
 </template>
 
 <script setup>
-import Modal from './modal.vue';
-const showModal = ref(false);
-
+import CreateAppModal from './createAppModal.vue';
+import DeleteAppModal from './deleteAppModal.vue';
+const showCreateAppModal = ref(false);
+const showDeleteAppModal = ref(false);
+const appId = ref(null);
 const inputValue = ref('');
+
+function handleDeleteApp(id) {
+  showDeleteAppModal.value = true;
+  appId.value = id;
+}
 
 // Below is a test code just for the client side to showcase the render functionality, will be deleted before merging
 // TODO:
@@ -57,9 +67,6 @@ const handleCreateApp = inputValue => {
 };
 
 const deleteApp = id => {
-  const confirmed = window.confirm('Are you sure you want to delete this app?');
-  if (confirmed) {
-    mockedApps.value = mockedApps.value.filter(app => app.id !== id);
-  }
+  mockedApps.value = mockedApps.value.filter(app => app.id !== id);
 };
 </script>
