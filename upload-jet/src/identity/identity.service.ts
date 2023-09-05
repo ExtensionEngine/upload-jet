@@ -19,10 +19,9 @@ export class IdentityService {
   async authorize(code: string) {
     const user = await this.githubProvider.getUser(code);
 
-    if (user) {
-      const identityEntity = this.mapUser(user);
-      this.upsert(identityEntity);
-    }
+    if (!user) return;
+    const identity = this.mapUser(user);
+    this.upsert(identity);
   }
 
   private mapUser(user: GetUserResult): User {
