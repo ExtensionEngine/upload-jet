@@ -8,7 +8,7 @@ export class ApplicationController {
   @Get('list')
   async getAll() {
     const applications = await this.applicationService.getAll();
-    return { applications };
+    return applications;
   }
 
   @Get(':id')
@@ -17,6 +17,6 @@ export class ApplicationController {
     if (isNaN(id)) throw new BadRequestException();
 
     const application = await this.applicationService.getById(id);
-    return { application };
+    return application;
   }
 }
