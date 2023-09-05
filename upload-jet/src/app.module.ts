@@ -9,6 +9,7 @@ import { LoadStrategy } from '@mikro-orm/core';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import databaseConfig from 'config/database.config';
 import oauthConfig from 'config/oauth.config';
+import { ApplicationModule } from 'application/application.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import oauthConfig from 'config/oauth.config';
       load: [appConfig, awsConfig, databaseConfig, oauthConfig]
     }),
     UploadPolicyModule,
-    IdentityModule
+    IdentityModule,
+    ApplicationModule
   ],
   controllers: [],
   providers: []
