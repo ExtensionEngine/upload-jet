@@ -11,10 +11,21 @@ export type User = {
   role: Role;
 };
 
-export type JWTPayload = {
-  user: Pick<User, 'id' | 'role'>;
+//TODO: Remove this type after we implement roles in database
+export type TemporaryUserType = {
+  id: number;
+  githubId: number;
+  email: string;
+  role: Role;
+  avatarUrl: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
-export type UserProfile = Pick<User, 'id' | 'email'> & {
+export type JWTPayload = {
+  user: Pick<TemporaryUserType, 'id' | 'role'>;
+};
+
+export type UserProfile = Pick<TemporaryUserType, 'id' | 'email'> & {
   avatarUrl: string;
 };

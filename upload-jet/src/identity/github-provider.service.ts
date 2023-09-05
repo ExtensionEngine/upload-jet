@@ -17,7 +17,7 @@ type GithubUser = {
   email?: string;
 };
 
-type GetUserResult = {
+export type GetUserResult = {
   id: number;
   email: string;
   avatarUrl: string;

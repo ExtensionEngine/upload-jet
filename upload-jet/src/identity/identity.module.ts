@@ -5,6 +5,8 @@ import { GithubProviderService } from 'identity/github-provider.service';
 import { HttpModule } from '@nestjs/axios';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import User from 'identity/user.entity';
 
 @Module({
   controllers: [IdentityController],
@@ -17,7 +19,8 @@ import { ConfigService } from '@nestjs/config';
         };
       },
       inject: [ConfigService]
-    })
+    }),
+    MikroOrmModule.forFeature([User])
   ],
   providers: [IdentityService, GithubProviderService]
 })
