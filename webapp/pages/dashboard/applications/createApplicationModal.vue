@@ -1,26 +1,3 @@
-<script setup>
-const props = defineProps({
-  show: { type: Boolean },
-  inputValue: { type: String }
-});
-const emit = defineEmits(['close', 'update:inputValue', 'createApplication']);
-
-const inputValue = computed({
-  get() {
-    return props.inputValue;
-  },
-  set(newValue) {
-    emit('update:inputValue', newValue);
-  }
-});
-
-const handleCreateApplication = () => {
-  emit('createApplication', inputValue.value);
-  emit('close');
-  inputValue.value = '';
-};
-</script>
-
 <template>
   <Transition name="createApplicationModal">
     <div
@@ -67,3 +44,26 @@ const handleCreateApplication = () => {
     </div>
   </Transition>
 </template>
+
+<script setup>
+const props = defineProps({
+  show: { type: Boolean },
+  inputValue: { type: String }
+});
+const emit = defineEmits(['close', 'update:inputValue', 'createApplication']);
+
+const inputValue = computed({
+  get() {
+    return props.inputValue;
+  },
+  set(newValue) {
+    emit('update:inputValue', newValue);
+  }
+});
+
+const handleCreateApplication = () => {
+  emit('createApplication', inputValue.value);
+  emit('close');
+  inputValue.value = '';
+};
+</script>

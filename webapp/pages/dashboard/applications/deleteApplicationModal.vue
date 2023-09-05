@@ -1,15 +1,3 @@
-<script setup>
-const props = defineProps({
-  show: { type: Boolean },
-  id: { type: Number }
-});
-const emit = defineEmits(['close', 'deleteApplication']);
-const handleDeleteApplication = () => {
-  emit('deleteApplication', props.id);
-  emit('close');
-};
-</script>
-
 <template>
   <Transition name="deleteApplicationlicationModal">
     <div
@@ -51,3 +39,15 @@ const handleDeleteApplication = () => {
     </div>
   </Transition>
 </template>
+
+<script setup>
+const props = defineProps({
+  show: { type: Boolean },
+  id: { type: Number }
+});
+const emit = defineEmits(['close', 'deleteApplication']);
+const handleDeleteApplication = () => {
+  emit('deleteApplication', props.id);
+  emit('close');
+};
+</script>
