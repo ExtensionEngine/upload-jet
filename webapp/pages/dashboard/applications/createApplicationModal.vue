@@ -8,7 +8,7 @@
         <Icon
           :name="'mdi:close'"
           size="24"
-          class="hover: absolute right-2 top-2 ease-out hover:cursor-pointer"
+          class="absolute right-2 top-2 ease-out hover:cursor-pointer"
           @click="emit('close')" />
         <div class="modal-header">
           <slot name="header">
