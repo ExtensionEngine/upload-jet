@@ -10,7 +10,6 @@ export default class Application extends BaseEntity {
 
   @ManyToOne({
     entity: () => User,
-    serializer: it => it.id,
     fieldName: 'user_id',
     serializedName: 'userId'
   })
