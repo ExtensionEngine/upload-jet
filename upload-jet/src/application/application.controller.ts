@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Param } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 
 @Controller('application')
@@ -12,10 +12,11 @@ export class ApplicationController {
   }
 
   @Get(':id')
-  async getById(@Param() params: any) {
-    const application = await this.applicationService.getById(
-      parseInt(params.id)
-    );
+  async getById(@Param() params: { id: string }) {
+    const id = parseInt(params.id);
+    if (isNaN(id)) throw new BadRequestException();
+
+    const application = await this.applicationService.getById(id);
     return { application };
   }
 }

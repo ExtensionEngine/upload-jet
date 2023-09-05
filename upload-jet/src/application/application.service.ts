@@ -22,6 +22,13 @@ export class ApplicationService {
   }
 
   async getById(id: number) {
-    return await this.applicationRepository.findOne({ id });
+    try {
+      return await this.applicationRepository.findOne({ id });
+    } catch (error) {
+      if (error instanceof DriverException) {
+        logger.error(error);
+        throw new InternalServerErrorException();
+      }
+    }
   }
 }
