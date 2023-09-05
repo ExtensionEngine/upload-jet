@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { RequiredRule, CHECK_ABILITY } from './authorization.decorator';
 import { AppAbility, PermissionService } from './permission.service';
-import { JWTPayload } from './jwt.types';
+import { User } from './auth.entities';
 
 @Injectable()
 export class AuthorizationGuard implements CanActivate {
@@ -19,32 +19,30 @@ export class AuthorizationGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const rules = this.getRules(context);
 
-    const jwtPayload: JWTPayload = this.getPayload(context);
-    if (!jwtPayload.user?.role) return false;
+    const user: User = this.getUser(context);
+    if (!user?.role) return false;
 
-    const hasPermission = this.permissionService.getPermission(jwtPayload.user);
+    const permissions = this.permissionService.getPermission(user);
 
-    if (!this.isAllowed(rules, hasPermission)) {
+    if (!this.isAllowed(rules, permissions)) {
       throw new ForbiddenException('Not allowed');
     }
     return true;
   }
 
   private getRules(context: ExecutionContext): RequiredRule[] {
-    return (
-      this.reflector.get<RequiredRule[]>(CHECK_ABILITY, context.getHandler()) ||
-      []
+    const rules = this.reflector.get<RequiredRule[]>(
+      CHECK_ABILITY,
+      context.getHandler()
     );
+    return rules || [];
   }
 
-  private getPayload(context: ExecutionContext) {
-    return context.switchToHttp().getRequest();
+  private getUser(context: ExecutionContext) {
+    return context.switchToHttp().getRequest().user;
   }
 
-  private isAllowed(rules: RequiredRule[], hasPermission: AppAbility) {
-    if (rules.some(rule => !hasPermission.can(rule.action, rule.subjects)))
-      return false;
-
-    return true;
+  private isAllowed(rules: RequiredRule[], permissions: AppAbility) {
+    return !rules.some(rule => !permissions.can(rule.action, rule.subjects));
   }
 }

@@ -36,6 +36,7 @@ export class PermissionService {
     builder.can('manage', Application, { userId });
     builder.can('read', Application, { userId });
   }
+
   private setAdminPermissions(builder: AbilityBuilder<AppAbility>) {
     builder.can('manage', 'all');
   }
