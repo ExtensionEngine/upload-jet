@@ -14,10 +14,8 @@ export class ApplicationService {
     try {
       return this.applicationRepository.findAll();
     } catch (error) {
-      if (error instanceof DriverException) {
-        logger.error(error);
-        throw new InternalServerErrorException();
-      }
+      logger.error(error);
+      throw new InternalServerErrorException();
     }
   }
 
@@ -25,10 +23,8 @@ export class ApplicationService {
     try {
       return this.applicationRepository.findOne({ id });
     } catch (error) {
-      if (error instanceof DriverException) {
-        logger.error(error);
-        throw new InternalServerErrorException();
-      }
+      logger.error(error);
+      throw new InternalServerErrorException();
     }
   }
 }
