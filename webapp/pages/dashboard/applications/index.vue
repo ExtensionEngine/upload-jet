@@ -37,7 +37,7 @@
 
 <script setup>
 import CreateApplicationModal from './createApplicationModal/createApplicationModal.vue';
-import DeleteApplicationModal from './deleteApplicationModal.vue';
+import DeleteApplicationModal from './deleteApplicationModal/deleteApplicationModal.vue';
 const showCreateApplicationModal = ref(false);
 const showDeleteApplicationModal = ref(false);
 const appId = ref(null);
