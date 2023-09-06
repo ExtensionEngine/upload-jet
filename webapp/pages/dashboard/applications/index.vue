@@ -30,6 +30,7 @@
     <DeleteApplicationModal
       :show="showDeleteApplicationModal"
       :id="appId"
+      :app-name="appName[0]?.name"
       @close="showDeleteApplicationModal = false"
       @deleteApplication="deleteApplication(appId)" />
   </Teleport>
@@ -47,6 +48,10 @@ function handleDeleteApplication(id) {
   showDeleteApplicationModal.value = true;
   appId.value = id;
 }
+
+const appName = computed(() =>
+  mockedApplications.value.filter(app => app.id === appId.value)
+);
 
 // Below is a test code just for the client side to showcase the render functionality, will be deleted before merging
 // TODO:
