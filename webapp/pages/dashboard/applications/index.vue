@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import CreateApplicationModal from './createApplicationModal.vue';
+import CreateApplicationModal from './createApplicationModal/createApplicationModal.vue';
 import DeleteApplicationModal from './deleteApplicationModal.vue';
 const showCreateApplicationModal = ref(false);
 const showDeleteApplicationModal = ref(false);

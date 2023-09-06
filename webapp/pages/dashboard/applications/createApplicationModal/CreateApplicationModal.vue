@@ -10,42 +10,32 @@
           size="24"
           class="absolute right-2 top-2 ease-out hover:cursor-pointer"
           @click="emit('close')" />
-        <div class="modal-header">
-          <slot name="header">
-            <h2 class="text-center text-xl uppercase">Create Application</h2>
-          </slot>
-        </div>
-        <div class="modal-input">
-          <slot name="input">
-            <form @submit.prevent>
-              <label for="appname"></label>
-              <input
-                v-model="inputValue"
-                type="text"
-                id="appname"
-                name="appname"
-                placeholder="Enter you Application name"
-                class="h-10 w-full border-2 p-2" />
-            </form>
-          </slot>
-        </div>
-        <div class="modal-footer">
-          <slot name="button">
-            <button
-              class="float-right"
-              :class="inputValue ? 'text-green-600' : 'text-red-500'"
-              :disabled="!inputValue"
-              @click="createApplication">
-              Create
-            </button>
-          </slot>
-        </div>
+
+        <Title title="Create Application" />
+
+        <form @submit.prevent>
+          <label for="appname" />
+          <InputField
+            v-model:model-value="inputValue"
+            placeholder="Enter your Application name"
+            name="applicationName" />
+        </form>
+
+        <Button
+          :input-value="inputValue"
+          title="Create"
+          :disabled="!inputValue"
+          @click="createApplication"
+          :class="inputValue ? 'text-green-600' : 'text-red-500'" />
       </div>
     </div>
   </Transition>
 </template>
 
 <script setup>
+import Button from './Button.vue';
+import Title from './Title.vue';
+import InputField from './InputField.vue';
 const props = defineProps({
   show: { type: Boolean },
   inputValue: { type: String }
