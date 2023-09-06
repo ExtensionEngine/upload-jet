@@ -25,7 +25,9 @@ export class IdentityService {
   }
 
   private mapUser(user: GetUserResult): User {
-    return new User(user.id, user.email, user.avatarUrl);
+    const mappedUser = new User(user.id, user.email, user.avatarUrl);
+    mappedUser.role = 'User';
+    return mappedUser;
   }
 
   async upsert(user: User): Promise<void> {
