@@ -1,11 +1,5 @@
-import { Entity, Property, Unique } from '@mikro-orm/core';
+import { Entity, Enum, Property, Unique } from '@mikro-orm/core';
 import BaseEntity from '../shared/database/base.entity';
-
-const roles = {
-  Admin: 'Admin',
-  User: 'User'
-} as const;
-type Role = (typeof roles)[keyof typeof roles];
 
 @Entity({ tableName: 'user' })
 export default class User extends BaseEntity {
@@ -19,8 +13,8 @@ export default class User extends BaseEntity {
   @Property()
   avatarUrl: string;
 
-  @Property()
-  role: Role;
+  @Enum(() => UserRole)
+  role: UserRole;
 
   constructor(githubId: number, email: string, avatarUrl: string) {
     super();
@@ -28,4 +22,9 @@ export default class User extends BaseEntity {
     this.email = email;
     this.avatarUrl = avatarUrl;
   }
+}
+
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user'
 }
