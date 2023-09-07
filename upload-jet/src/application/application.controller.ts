@@ -19,7 +19,7 @@ export class ApplicationController {
 
   @Get('list')
   async getAll() {
-    return await this.applicationService.getAll();
+    return this.applicationService.getAll();
   }
 
   @Get(':id')
