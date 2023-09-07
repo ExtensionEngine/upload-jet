@@ -1,9 +1,7 @@
 <template>
   <input
-    :type="props.type"
+    v-bind="props"
     :id="props.name"
-    :name="props.name"
-    :placeholder="props.placeholder"
     v-model="computedValue"
     class="h-10 w-full border-2 p-2" />
 </template>
