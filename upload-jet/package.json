@@ -25,7 +25,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.374.0",
     "@aws-sdk/s3-presigned-post": "^3.374.0",
-"@casl/ability": "^6.5.0",
+    "@casl/ability": "^6.5.0",
     "@mikro-orm/core": "^5.7.14",
     "@mikro-orm/nestjs": "^5.2.1",
     "@mikro-orm/postgresql": "^5.7.14",
@@ -37,7 +37,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@upload-jet/shared": "workspace:^",
     "axios": "^1.4.0",
-"cookie-parser": "^1.4.6",
+    "cookie-parser": "^1.4.6",
     "mikro-orm": "^5.7.14",
     "nestjs-pino": "^3.3.0",
     "pino-http": "^8.3.3",
