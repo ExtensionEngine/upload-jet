@@ -6,7 +6,7 @@ import {
   Param
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
-import { fetchApplicationSchema } from 'config/application.config';
+import { fetchApplicationSchema } from './application.schema';
 import { ZodService } from 'shared/zod.service';
 import { logger } from '@mikro-orm/nestjs';
 
