@@ -1,27 +1,25 @@
 <template>
-  <Transition name="deleteApplicationlicationModal">
+  <div
+    v-if="show"
+    class="fixed left-0 top-0 z-50 flex h-screen w-screen bg-gray-700 bg-opacity-50 transition-opacity duration-100 ease-in-out">
     <div
-      v-if="show"
-      class="fixed left-0 top-0 z-50 flex h-screen w-screen bg-gray-700 bg-opacity-50 transition-opacity duration-100 ease-in-out">
-      <div
-        class="relative m-auto flex w-96 flex-col gap-7 rounded-xl bg-white p-5 pl-7 shadow-md">
-        <Title title="Delete Application?" />
+      class="relative m-auto flex w-96 flex-col gap-7 rounded-xl bg-white p-5 pl-7 shadow-md">
+      <Title title="Delete Application?" />
 
-        <Description :application-name="applicationName" />
+      <Description :application-name="applicationName" />
 
-        <div class="flex justify-end gap-3">
-          <Button
-            buttonStyle="bg-gray-300 text-black hover:bg-gray-400"
-            title="Cancel"
-            @click="emit('close')" />
-          <Button
-            buttonStyle="bg-red-400 text-white hover:bg-red-500"
-            title="Delete"
-            @click="deleteApplication" />
-        </div>
+      <div class="flex justify-end gap-3">
+        <Button
+          buttonStyle="bg-gray-300 text-black hover:bg-gray-400"
+          title="Cancel"
+          @click="emit('close')" />
+        <Button
+          buttonStyle="bg-red-400 text-white hover:bg-red-500"
+          title="Delete"
+          @click="deleteApplication" />
       </div>
     </div>
-  </Transition>
+  </div>
 </template>
 
 <script setup>
