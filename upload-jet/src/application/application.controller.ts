@@ -7,14 +7,14 @@ import {
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { fetchApplicationSchema } from './application.schema';
-import { ZodService } from 'shared/zod.service';
+import { ValidationService } from 'shared/validation.service';
 import { logger } from '@mikro-orm/nestjs';
 
 @Controller('application')
 export class ApplicationController {
   constructor(
     private readonly applicationService: ApplicationService,
-    private readonly zodService: ZodService
+    private readonly validationService: ValidationService
   ) {}
 
   @Get('list')
@@ -38,7 +38,7 @@ export class ApplicationController {
       throw new NotFoundException(`Application with id ${id} not found`);
     }
 
-    const error = this.zodService.mapZodError(validationResult.error);
+    const error = this.validationService.mapZodError(validationResult.error);
     logger.error(error);
     throw new BadRequestException({
       message: 'Error fetching application',
