@@ -5,6 +5,7 @@ import { IdentityModule } from './identity/identity.module';
 import awsConfig from './config/aws.config';
 import appConfig from './config/app.config';
 import { LoggerModule } from 'nestjs-pino';
+import { AuthModule } from './auth/auth.module';
 import { LoadStrategy } from '@mikro-orm/core';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import databaseConfig from 'config/database.config';
@@ -33,6 +34,7 @@ import oauthConfig from 'config/oauth.config';
       load: [appConfig, awsConfig, databaseConfig, oauthConfig]
     }),
     UploadPolicyModule,
+    AuthModule,
     IdentityModule
   ],
   controllers: [],
