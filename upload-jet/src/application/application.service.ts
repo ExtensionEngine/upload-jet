@@ -1,4 +1,4 @@
-import { DriverException, EntityRepository } from '@mikro-orm/core';
+import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository, logger } from '@mikro-orm/nestjs';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import Application from './application.entity';

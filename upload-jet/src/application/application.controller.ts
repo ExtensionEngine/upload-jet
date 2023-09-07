@@ -1,4 +1,10 @@
-import { BadRequestException, Controller, Get, Param } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  NotFoundException,
+  Param
+} from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { fetchApplicationSchema } from 'config/application.config';
 import { ZodService } from 'shared/zod.service';
@@ -17,13 +23,20 @@ export class ApplicationController {
   }
 
   @Get(':id')
-  async getById(@Param() params: { id: string }) {
-    const validationResult = await fetchApplicationSchema.safeParseAsync(
-      params
-    );
+  async getById(@Param('id') id: string) {
+    const validationResult = await fetchApplicationSchema.safeParseAsync({
+      id
+    });
 
-    if (validationResult.success === true)
-      return await this.applicationService.getById(validationResult.data.id);
+    if (validationResult.success === true) {
+      const application = await this.applicationService.getById(
+        validationResult.data.id
+      );
+
+      if (application) return application;
+
+      throw new NotFoundException(`Application with id ${id} not found`);
+    }
 
     const error = this.zodService.mapZodError(validationResult.error);
     logger.error(error);
