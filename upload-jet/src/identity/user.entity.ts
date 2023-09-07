@@ -13,8 +13,8 @@ export default class User extends BaseEntity {
   @Property()
   avatarUrl: string;
 
-  @Enum(() => UserRole)
-  role: UserRole;
+  @Enum(() => Role)
+  role: Role;
 
   constructor(githubId: number, email: string, avatarUrl: string) {
     super();
@@ -24,7 +24,7 @@ export default class User extends BaseEntity {
   }
 }
 
-export enum UserRole {
+export enum Role {
   ADMIN = 'admin',
   USER = 'user'
 }
