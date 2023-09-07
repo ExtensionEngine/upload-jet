@@ -35,7 +35,7 @@
     <DeleteApplicationModal
       :show="showDeleteApplicationModal"
       :id="applicationId"
-      :application-name="applicationName[0]?.name"
+      :application-name="applicationName"
       @close="showDeleteApplicationModal = false"
       @deleteApplication="deleteApplication(applicationId)" />
   </Teleport>
@@ -55,9 +55,12 @@ function openDeleteApplicationModal(id) {
   applicationId.value = id;
 }
 
-const applicationName = computed(() =>
-  mockedApplications.value.filter(app => app.id === applicationId.value)
-);
+const applicationName = computed(() => {
+  const filteredApplication = mockedApplications.value.filter(
+    app => app.id === applicationId.value
+  );
+  return filteredApplication[0]?.name;
+});
 
 // Below is a test code just for the client side to showcase the render functionality, will be deleted before merging
 // TODO:
