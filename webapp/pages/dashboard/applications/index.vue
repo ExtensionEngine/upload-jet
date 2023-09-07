@@ -10,16 +10,16 @@
 
     <div class="max-h-[90vh] overflow-y-auto p-4 pb-8 pt-10">
       <NuxtLink
-        :to="`/dashboard/applications/${app.id}`"
+        :to="`/dashboard/applications/${application.id}`"
         class="mb-6 flex h-14 list-none items-center justify-between rounded-lg border-2 bg-slate-50 pl-4 pr-2 duration-200 ease-out hover:translate-x-1 hover:cursor-pointer hover:border-cyan-500"
-        v-for="app in mockedApplications"
-        :key="app.id">
+        v-for="application in mockedApplications"
+        :key="application.id">
         <div class="font-semibold">
-          {{ app.name }}
+          {{ application.name }}
         </div>
         <p
           class="hover:text-red-600"
-          @click.prevent="handleDeleteApplication(app.id)">
+          @click.prevent="handleDeleteApplication(application.id)">
           Delete
         </p>
       </NuxtLink>
@@ -30,14 +30,14 @@
     <CreateApplicationModal
       :show="showCreateApplicationModal"
       @close="showCreateApplicationModal = false"
-      @createApplication="handleCreateApplication"
+      @createApplication="createApplication"
       v-model:input-value="inputValue" />
     <DeleteApplicationModal
       :show="showDeleteApplicationModal"
-      :id="appId"
-      :app-name="appName[0]?.name"
+      :id="applicationId"
+      :application-name="applicationName[0]?.name"
       @close="showDeleteApplicationModal = false"
-      @deleteApplication="deleteApplication(appId)" />
+      @deleteApplication="deleteApplication(applicationId)" />
   </Teleport>
 </template>
 
@@ -47,16 +47,16 @@ import DeleteApplicationModal from './deleteApplicationModal/DeleteApplicationMo
 
 const showCreateApplicationModal = ref(false);
 const showDeleteApplicationModal = ref(false);
-const appId = ref(null);
+const applicationId = ref(null);
 const inputValue = ref('');
 
 function handleDeleteApplication(id) {
   showDeleteApplicationModal.value = true;
-  appId.value = id;
+  applicationId.value = id;
 }
 
-const appName = computed(() =>
-  mockedApplications.value.filter(app => app.id === appId.value)
+const applicationName = computed(() =>
+  mockedApplications.value.filter(app => app.id === applicationId.value)
 );
 
 // Below is a test code just for the client side to showcase the render functionality, will be deleted before merging
@@ -71,7 +71,7 @@ const mockedApplications = ref([
   { id: 3, name: 'Mocked App 3' }
 ]);
 
-const handleCreateApplication = inputValue => {
+const createApplication = inputValue => {
   const randomId = Math.floor(Math.random() * 1000);
   const newApplication = { id: randomId, name: inputValue };
   mockedApplications.value.push(newApplication);

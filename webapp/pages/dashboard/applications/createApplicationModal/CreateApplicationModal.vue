@@ -14,7 +14,7 @@
         <Title title="Create Application" />
 
         <form @submit.prevent>
-          <label for="appname" />
+          <label for="applicationName" />
           <InputField
             v-model:model-value="inputValue"
             placeholder="Enter your Application name"

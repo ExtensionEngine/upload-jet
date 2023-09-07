@@ -7,7 +7,7 @@
         class="relative m-auto flex w-96 flex-col gap-7 rounded-xl bg-white p-5 pl-7 shadow-md">
         <Title title="Delete Application?" />
 
-        <Description :app-name="appName" />
+        <Description :application-name="applicationName" />
 
         <div class="flex justify-end gap-3">
           <Button
@@ -32,7 +32,7 @@ import Description from './Description.vue';
 const props = defineProps({
   show: { type: Boolean },
   id: { type: Number },
-  appName: { type: String }
+  applicationName: { type: String }
 });
 const emit = defineEmits(['close', 'deleteApplication']);
 const deleteApplication = () => {

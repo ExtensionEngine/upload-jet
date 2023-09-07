@@ -1,9 +1,9 @@
 <template>
-  <h1>Are you sure you want to permanently delete {{ appName }}?</h1>
+  <h1>Are you sure you want to permanently delete {{ applicationName }}?</h1>
 </template>
 
 <script setup>
 const props = defineProps({
-  appName: { type: String }
+  applicationName: { type: String }
 });
 </script>
