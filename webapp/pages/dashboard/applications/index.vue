@@ -44,6 +44,7 @@
 <script setup>
 import CreateApplicationModal from './createApplicationModal/CreateApplicationModal.vue';
 import DeleteApplicationModal from './deleteApplicationModal/DeleteApplicationModal.vue';
+
 const showCreateApplicationModal = ref(false);
 const showDeleteApplicationModal = ref(false);
 const appId = ref(null);

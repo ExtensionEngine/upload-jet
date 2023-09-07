@@ -36,6 +36,7 @@
 import Button from './Button.vue';
 import Title from './Title.vue';
 import InputField from './InputField.vue';
+
 const props = defineProps({
   show: { type: Boolean },
   inputValue: { type: String }
