@@ -19,7 +19,7 @@
         </div>
         <p
           class="hover:text-red-600"
-          @click.prevent="handleDeleteApplication(application.id)">
+          @click.prevent="openDeleteApplicationModal(application.id)">
           Delete
         </p>
       </NuxtLink>
@@ -50,7 +50,7 @@ const showDeleteApplicationModal = ref(false);
 const applicationId = ref(null);
 const inputValue = ref('');
 
-function handleDeleteApplication(id) {
+function openDeleteApplicationModal(id) {
   showDeleteApplicationModal.value = true;
   applicationId.value = id;
 }
