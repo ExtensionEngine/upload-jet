@@ -25,7 +25,7 @@ export class IdentityController {
     const payload: JWTPayload = {
       user: {
         id: user.id,
-        role: user.role
+        role: 'User'
       }
     };
     const accessToken = await this.identityService.generateAccessToken(payload);
