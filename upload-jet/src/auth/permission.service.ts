@@ -6,7 +6,7 @@ import {
   ExtractSubjectType,
   createMongoAbility
 } from '@casl/ability';
-import { Action, Subject } from './auth.types';
+import { Action, Roles, Subject } from './auth.types';
 
 export type AppAbility = MongoAbility<[Action, Subject]>;
 
@@ -14,7 +14,7 @@ export type AppAbility = MongoAbility<[Action, Subject]>;
 export class PermissionService {
   getPermission(user: Pick<User, 'id' | 'role'>) {
     const builder = new AbilityBuilder<AppAbility>(createMongoAbility);
-    if (user.role === 'Admin') {
+    if (user.role === Roles.ADMIN) {
       this.setAdminPermissions(builder);
     } else {
       this.setUserPermissions(user.id, builder);

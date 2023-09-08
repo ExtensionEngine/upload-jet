@@ -1,13 +1,14 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
-import User, { Role } from './user.entity';
+import User from './user.entity';
 import {
   GetUserResult,
   GithubProviderService
 } from 'identity/github-provider.service';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { JWTPayload, UserProfile } from './identity.types';
+import { Roles } from 'auth/auth.types';
 
 const JWT_OPTIONS: JwtSignOptions = { expiresIn: '3600s' };
 
@@ -32,7 +33,7 @@ export class IdentityService {
 
   private mapUser(user: GetUserResult): User {
     const newUser = new User(user.id, user.email, user.avatarUrl);
-    newUser.role = Role.USER;
+    newUser.role = Roles.USER;
     return newUser;
   }
 

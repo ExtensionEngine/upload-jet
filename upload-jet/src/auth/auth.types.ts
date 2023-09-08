@@ -19,8 +19,8 @@ export type ApplicationData = {
 export type Subject = InferSubjects<typeof User | typeof Application> | 'all';
 
 export const Roles = {
-  Admin: 'Admin',
-  User: 'User'
+  ADMIN: 'admin',
+  USER: 'user'
 } as const;
 
 export type Role = (typeof Roles)[keyof typeof Roles];

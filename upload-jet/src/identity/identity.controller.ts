@@ -4,6 +4,7 @@ import appConfig from 'config/app.config';
 import { ConfigType } from '@nestjs/config';
 import { IdentityService } from './identity.service';
 import { JWTPayload } from 'auth/jwt.types';
+import { Roles } from 'auth/auth.types';
 
 @Controller('identity')
 export class IdentityController {
@@ -25,7 +26,7 @@ export class IdentityController {
     const payload: JWTPayload = {
       user: {
         id: user.id,
-        role: 'User'
+        role: Roles.USER
       }
     };
     const accessToken = await this.identityService.generateAccessToken(payload);

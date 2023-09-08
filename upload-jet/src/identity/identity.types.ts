@@ -1,15 +1,4 @@
-const Roles = {
-  Admin: 'Admin',
-  User: 'User'
-} as const;
-type Role = (typeof Roles)[keyof typeof Roles];
-
-export type User = {
-  id: number;
-  login: string;
-  email: string;
-  role: Role;
-};
+import User from './user.entity';
 
 export type JWTPayload = {
   user: Pick<User, 'id' | 'role'>;
