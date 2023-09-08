@@ -6,22 +6,44 @@ import {
   GetUserResult,
   GithubProviderService
 } from 'identity/github-provider.service';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
+import { JWTPayload, UserProfile } from './identity.types';
+import User from './user.entity';
+
+// TODO: Remove below type after we implement roles in database and use User class from above to infer type
+import { TemporaryUserType } from './identity.types';
+
+const JWT_OPTIONS: JwtSignOptions = { expiresIn: '3600s' };
 
 @Injectable()
 export class IdentityService {
   constructor(
-    private readonly em: EntityManager,
     private readonly githubProvider: GithubProviderService,
+    private readonly jwtService: JwtService,
+    private readonly em: EntityManager,
     @InjectRepository(User)
     private readonly identityRepository: EntityRepository<User>
   ) {}
 
-  async authorize(code: string) {
-    const user = await this.githubProvider.getUser(code);
+  async getUserProfile(code: string) {
+    return this.githubProvider.getUser(code);
+  }
 
-    if (!user) return;
+  async hydrateUser(user: UserProfile): Promise<TemporaryUserType> {
     const identity = this.mapUser(user);
     this.upsert(identity);
+
+    //TODO: 'return identity' with a type of User instead of MockedUser after we insert a role for the user in the database
+    const MockedUser: TemporaryUserType = {
+      id: 1,
+      githubId: 1,
+      email: 'mocked.user1@gmail.com',
+      role: 'User',
+      avatarUrl: 'someURL',
+      createdAt: new Date('2022-03-15T09:30:00Z'),
+      updatedAt: new Date('2022-03-15T09:30:00Z')
+    };
+    return MockedUser;
   }
 
   private mapUser(user: GetUserResult): User {
@@ -41,5 +63,9 @@ export class IdentityService {
     }
 
     await this.em.flush();
+  }
+
+  async generateAccessToken(payload: JWTPayload): Promise<string> {
+    return this.jwtService.signAsync(payload, JWT_OPTIONS);
   }
 }
