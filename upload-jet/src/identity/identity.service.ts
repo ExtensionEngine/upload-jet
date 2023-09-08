@@ -1,7 +1,7 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
-import User from './user.entity';
+import User, { Role } from './user.entity';
 import {
   GetUserResult,
   GithubProviderService
@@ -31,7 +31,9 @@ export class IdentityService {
   }
 
   private mapUser(user: GetUserResult): User {
-    return new User(user.id, user.email, user.avatarUrl);
+    const newUser = new User(user.id, user.email, user.avatarUrl);
+    newUser.role = Role.USER;
+    return newUser;
   }
 
   async upsert(user: User): Promise<User> {
