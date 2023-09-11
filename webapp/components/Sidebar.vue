@@ -23,6 +23,7 @@ const { menu } = useMenuLinks();
           :to="route.to"
           :key="route.text"
           class="nav-link text-primary-600 p-4 font-bold">
+          <Icon :name="route.icon" size="24" />
           {{ route.text }}
         </NuxtLink>
       </nav>
