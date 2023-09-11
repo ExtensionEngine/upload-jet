@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ZodError } from 'zod';
 
 @Injectable()
-export class ZodService {
+export class ValidationService {
   mapZodError(error: ZodError) {
     return error.issues.map(({ path, message, code }) => ({
       path,

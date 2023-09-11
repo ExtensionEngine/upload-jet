@@ -13,6 +13,9 @@ export default class User extends BaseEntity {
   @Property()
   avatarUrl: string;
 
+  @Property()
+  role: string;
+
   constructor(githubId: number, email: string, avatarUrl: string) {
     super();
     this.githubId = githubId;

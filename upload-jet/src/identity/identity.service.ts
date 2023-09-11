@@ -6,29 +6,38 @@ import {
   GetUserResult,
   GithubProviderService
 } from 'identity/github-provider.service';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
+import { JWTPayload, UserProfile } from './identity.types';
+import { Roles } from 'auth/auth.types';
+
+const JWT_OPTIONS: JwtSignOptions = { expiresIn: '3600s' };
 
 @Injectable()
 export class IdentityService {
   constructor(
-    private readonly em: EntityManager,
     private readonly githubProvider: GithubProviderService,
+    private readonly jwtService: JwtService,
+    private readonly em: EntityManager,
     @InjectRepository(User)
     private readonly identityRepository: EntityRepository<User>
   ) {}
 
-  async authorize(code: string) {
-    const user = await this.githubProvider.getUser(code);
+  async getUserProfile(code: string) {
+    return this.githubProvider.getUser(code);
+  }
 
-    if (!user) return;
+  async hydrateUser(user: UserProfile): Promise<User> {
     const identity = this.mapUser(user);
-    this.upsert(identity);
+    return this.upsert(identity);
   }
 
   private mapUser(user: GetUserResult): User {
-    return new User(user.id, user.email, user.avatarUrl);
+    const newUser = new User(user.id, user.email, user.avatarUrl);
+    newUser.role = Roles.USER;
+    return newUser;
   }
 
-  async upsert(user: User): Promise<void> {
+  async upsert(user: User): Promise<User> {
     const existingUser = await this.identityRepository.findOne({
       githubId: user.githubId
     });
@@ -41,5 +50,10 @@ export class IdentityService {
     }
 
     await this.em.flush();
+    return existingUser ? existingUser : user;
+  }
+
+  async generateAccessToken(payload: JWTPayload): Promise<string> {
+    return this.jwtService.signAsync(payload, JWT_OPTIONS);
   }
 }
