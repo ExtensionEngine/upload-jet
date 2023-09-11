@@ -8,7 +8,6 @@ import {
 } from 'identity/github-provider.service';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { JWTPayload, UserProfile } from './identity.types';
-import User from './user.entity';
 
 // TODO: Remove below type after we implement roles in database and use User class from above to infer type
 import { TemporaryUserType } from './identity.types';
