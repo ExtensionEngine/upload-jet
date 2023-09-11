@@ -15,7 +15,8 @@ const { menu } = useMenuLinks();
     :class="{ '-translate-x-full': !isOpen }"
     class="fixed left-0 top-0 z-40 h-screen w-64 border-r border-gray-200 bg-white pt-20 transition-transform duration-300"
     aria-label="Sidebar">
-    <div class="h-full overflow-y-auto bg-white px-3 py-4">
+    <div
+      class="flex h-full flex-col justify-between overflow-y-auto bg-white px-3 py-4">
       <nav class="flex flex-col space-y-2 font-medium">
         <NuxtLink
           v-for="route in menu"
@@ -27,6 +28,12 @@ const { menu } = useMenuLinks();
           {{ route.text }}
         </NuxtLink>
       </nav>
+      <NuxtLink :to="`/`">
+        <p
+          class="mb-4 mr-4 text-right text-sm text-gray-400 hover:cursor-pointer hover:underline">
+          Signout
+        </p>
+      </NuxtLink>
     </div>
   </aside>
 </template>
