@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import Identity from './identity.entity';
+import { AuthorizationService } from './authorization.service';
 
 @Module({
   controllers: [IdentityController],
@@ -15,13 +16,14 @@ import Identity from './identity.entity';
     JwtModule.registerAsync({
       useFactory(config: ConfigService) {
         return {
-          secret: config.get('app.jwt.secret')
+          secret: config.get('app.jwt.secret'),
+          signOptions: { expiresIn: '1h', issuer: 'upload-jet' }
         };
       },
       inject: [ConfigService]
     }),
     MikroOrmModule.forFeature([Identity])
   ],
-  providers: [IdentityService, GithubProviderService]
+  providers: [IdentityService, AuthorizationService, GithubProviderService]
 })
 export class IdentityModule {}

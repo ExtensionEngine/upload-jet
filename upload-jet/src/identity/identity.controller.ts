@@ -3,7 +3,6 @@ import { Response } from 'express';
 import appConfig from 'config/app.config';
 import { ConfigType } from '@nestjs/config';
 import { IdentityService } from './identity.service';
-import { JWTPayload } from 'auth/jwt.types';
 
 @Controller('identity')
 export class IdentityController {
@@ -20,16 +19,8 @@ export class IdentityController {
     @Query('code') code: string,
     @Query('state') state: string
   ) {
-    const userProfile = await this.identityService.getUserProfile(code);
-    const user = await this.identityService.hydrateUser(userProfile);
-    const payload: JWTPayload = {
-      user: {
-        id: user.id,
-        role: user.role
-      }
-    };
-    const accessToken = await this.identityService.generateAccessToken(payload);
-    res.cookie('jwt', accessToken, { httpOnly: true, secure: true });
+    const accessToken = await this.identityService.authorize(code);
+    res.cookie('access_token', accessToken, { httpOnly: true, secure: true });
     const { targetUrl = '/' } = JSON.parse(state);
     const redirectUrl = new URL(targetUrl, this.config.appUrl).href;
     return { url: redirectUrl };

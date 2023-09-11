@@ -12,7 +12,8 @@ import { PermissionService } from './permission.service';
     JwtModule.registerAsync({
       useFactory(config: ConfigService) {
         return {
-          secret: config.get('app.jwt.secret')
+          secret: config.get('app.jwt.secret'),
+          signOptions: { expiresIn: '1h', issuer: 'upload-jet' }
         };
       },
       inject: [ConfigService]
