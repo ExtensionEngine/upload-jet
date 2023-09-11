@@ -17,7 +17,7 @@ const { menu } = useMenuLinks();
     aria-label="Sidebar">
     <div
       class="flex h-full flex-col justify-between overflow-y-auto bg-white py-4">
-      <nav class="flex flex-col space-y-2 font-medium">
+      <nav class="flex flex-col space-y-2">
         <NuxtLink
           v-for="route in menu"
           @click="$emit('close')"

@@ -27,7 +27,7 @@ import User from './sidebar/User.vue';
           {{ route.text }}
         </NuxtLink>
       </nav>
-
+      
       <User />
     </Container>
   </header>
