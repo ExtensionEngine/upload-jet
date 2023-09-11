@@ -16,15 +16,15 @@ const { menu } = useMenuLinks();
     class="fixed left-0 top-0 z-40 h-screen w-64 border-r border-gray-200 bg-white pt-20 transition-transform duration-300"
     aria-label="Sidebar">
     <div
-      class="flex h-full flex-col justify-between overflow-y-auto bg-white px-3 py-4">
+      class="flex h-full flex-col justify-between overflow-y-auto bg-white py-4">
       <nav class="flex flex-col space-y-2 font-medium">
         <NuxtLink
           v-for="route in menu"
           @click="$emit('close')"
           :to="route.to"
           :key="route.text"
-          class="nav-link text-primary-600 p-4 font-bold">
-          <Icon :name="route.icon" size="24" />
+          class="nav-link text-primary-600 p-4 duration-200 ease-out hover:bg-slate-300">
+          <Icon :name="route.icon" size="24" class="mr-4" />
           {{ route.text }}
         </NuxtLink>
       </nav>
@@ -40,6 +40,6 @@ const { menu } = useMenuLinks();
 
 <style scoped>
 .nav-link.router-link-exact-active {
-  @apply text-red-600;
+  @apply border-r-4 border-gray-800 bg-gray-300 font-bold;
 }
 </style>

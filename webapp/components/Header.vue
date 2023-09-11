@@ -23,7 +23,7 @@ import User from './sidebar/User.vue';
           v-for="route in menu"
           :to="route.to"
           :key="route.text"
-          class="nav-link text-primary-600 p-4 font-bold">
+          class="nav-link text-primary-600 p-4">
           {{ route.text }}
         </NuxtLink>
       </nav>
@@ -35,6 +35,6 @@ import User from './sidebar/User.vue';
 
 <style scoped>
 .nav-link.router-link-exact-active {
-  @apply text-red-600;
+  @apply font-bold underline;
 }
 </style>
