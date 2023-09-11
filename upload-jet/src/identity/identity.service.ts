@@ -1,7 +1,7 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
-import User, { Role } from './user.entity';
+import Identity, { Role } from './identity.entity';
 import {
   GetUserResult,
   GithubProviderService
@@ -20,8 +20,8 @@ export class IdentityService {
     private readonly githubProvider: GithubProviderService,
     private readonly jwtService: JwtService,
     private readonly em: EntityManager,
-    @InjectRepository(User)
-    private readonly identityRepository: EntityRepository<User>
+    @InjectRepository(Identity)
+    private readonly identityRepository: EntityRepository<Identity>
   ) {}
 
   async getUserProfile(code: string) {
@@ -45,13 +45,13 @@ export class IdentityService {
     return MockedUser;
   }
 
-  private mapUser(user: GetUserResult): User {
-    const newUser = new User(user.id, user.email, user.avatarUrl);
+  private mapUser(user: GetUserResult): Identity {
+    const newUser = new Identity(user.id, user.email, user.avatarUrl);
     newUser.role = Role.USER;
     return newUser;
   }
 
-  async upsert(user: User): Promise<void> {
+  async upsert(user: Identity): Promise<void> {
     const existingUser = await this.identityRepository.findOne({
       githubId: user.githubId
     });
