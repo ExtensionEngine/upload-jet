@@ -38,7 +38,7 @@ const fetchApplication = async (id: number) => {
   const route = `/application/${id}`;
   const applicationUrl = new URL(route, config.public.apiUrl);
 
-  $fetch(applicationUrl.href).then(data => {
+  $fetch(applicationUrl.href, { credentials: 'include' }).then(data => {
     application.value = data as Application;
   })
 };

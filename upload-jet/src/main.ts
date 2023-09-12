@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from 'nestjs-pino';
 import * as cookieParser from 'cookie-parser';
+import appConfig from './config/app.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
@@ -13,7 +14,8 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.useLogger(logger);
-  app.enableCors();
+
+  app.enableCors({ credentials: true, origin: appConfig().appUrl });
 
   process.on('uncaughtException', err => logUncaughtException(err, logger));
 
