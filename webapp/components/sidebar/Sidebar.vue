@@ -6,10 +6,10 @@ defineEmits(['close']);
 </script>
 
 <template>
-  <Backdrop @close="$emit('close')" :is-open="isOpen" />
+  <Backdrop @close="$emit('close')" :is-open="isOpen" class="lg:hidden" />
   <aside
     :class="{ '-translate-x-full': !isOpen }"
-    class="fixed left-0 top-0 z-40 h-screen w-64 border-r border-gray-200 bg-white pt-16 transition-transform duration-300"
+    class="fixed left-0 top-0 z-40 h-screen w-64 border-r border-gray-200 bg-white pt-16 transition-transform duration-300 lg:block lg:translate-x-0"
     aria-label="Sidebar">
     <div
       class="flex h-full flex-col justify-between overflow-y-auto bg-white py-4">
