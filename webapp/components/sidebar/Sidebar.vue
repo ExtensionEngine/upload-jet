@@ -15,12 +15,17 @@ defineEmits(['close']);
     class="absolute left-0 z-40 h-screen w-64 overflow-hidden border-r border-gray-200 bg-white pt-12 transition-all duration-300 lg:relative lg:translate-x-0 lg:overflow-visible lg:pt-0"
     aria-label="Sidebar">
     <div class="flex h-full flex-col justify-start overflow-y-auto bg-white">
-      <Avatar />
+      <Avatar class="hidden lg:inline-flex" />
       <SidebarApplicationList @close="$emit('close')" />
       <NuxtLink :to="`/`" class="mt-auto p-4 text-right">
-        <p class="text-sm text-gray-400 hover:cursor-pointer hover:underline">
+        <p
+          class="hidden text-sm text-gray-400 hover:cursor-pointer hover:underline lg:inline-flex">
           Signout
         </p>
+        <button
+          class="w-full rounded-sm bg-gray-400 px-4 py-2 font-bold text-white lg:hidden">
+          Signout
+        </button>
       </NuxtLink>
     </div>
   </aside>
