@@ -14,6 +14,7 @@
 
 <script setup>
 const { menu } = useMenuLinks();
+defineEmits(['close']);
 </script>
 
 <style scoped>

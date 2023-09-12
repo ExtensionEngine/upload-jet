@@ -6,19 +6,16 @@ defineEmits(['close']);
 </script>
 
 <template>
-  <div
-    @click="$emit('close')"
-    v-show="isOpen"
-    class="fixed inset-0 z-30 bg-gray-900 bg-opacity-50"></div>
+  <Backdrop @close="$emit('close')" :is-open="isOpen" />
   <aside
     :class="{ '-translate-x-full': !isOpen }"
     class="fixed left-0 top-0 z-40 h-screen w-64 border-r border-gray-200 bg-white pt-16 transition-transform duration-300"
     aria-label="Sidebar">
     <div
       class="flex h-full flex-col justify-between overflow-y-auto bg-white py-4">
-      <SidebarApplicationList />
+      <SidebarApplicationList @close="$emit('close')" />
       <div class="pr-4">
-        <UserSignout />
+        <AvatarSignout />
       </div>
     </div>
   </aside>
