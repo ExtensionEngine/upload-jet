@@ -11,6 +11,9 @@ defineEmits(['toggle-sidebar']);
       <HeaderButton
         @toggle-sidebar="$emit('toggle-sidebar')"
         :is-open="isOpen" />
+      <div class="flex items-center">
+        <Avatar />
+      </div>
     </div>
   </header>
 </template>
