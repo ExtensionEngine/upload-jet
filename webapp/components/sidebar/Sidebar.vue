@@ -16,9 +16,9 @@ defineEmits(['close']);
     aria-label="Sidebar">
     <div
       class="flex h-full flex-col justify-between overflow-y-auto bg-white py-4">
-      <SidebarListItem />
+      <SidebarApplicationList />
       <div class="pr-4">
-        <Signout />
+        <UserSignout />
       </div>
     </div>
   </aside>

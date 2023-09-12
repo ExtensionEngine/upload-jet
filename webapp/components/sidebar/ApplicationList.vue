@@ -1,22 +1,23 @@
 <template>
-  <div class="mt-4 flex flex-grow flex-col">
-    <SidebarListItem
-      icon-name="mdi:application-brackets"
-      label="Applications"
-      :hidden="!isExpanded" />
-    <SidebarListItem
-      icon-name="mdi:chart-areaspline"
-      label="Usage"
-      :hidden="!isExpanded" />
-    <SidebarListItem
-      icon-name="mdi:cash-usd"
-      label="Billings"
-      :hidden="!isExpanded" />
-  </div>
+  <nav class="flex flex-col space-y-2">
+    <NuxtLink
+      v-for="route in menu"
+      @click="$emit('close')"
+      :to="route.to"
+      :key="route.text"
+      class="nav-link text-primary-600 p-4 duration-200 ease-out hover:bg-slate-300">
+      <Icon :name="route.icon" size="24" class="mr-4" />
+      {{ route.text }}
+    </NuxtLink>
+  </nav>
 </template>
 
 <script setup>
-const props = defineProps({
-  isExpanded: { type: Boolean }
-});
+const { menu } = useMenuLinks();
 </script>
+
+<style scoped>
+.router-link-active {
+  @apply border-r-4 border-gray-800 bg-gray-300;
+}
+</style>
