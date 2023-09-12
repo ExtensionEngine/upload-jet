@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Button from './Button.vue';
-import User from '../User/User.vue';
+import Container from './Container.vue';
 
 defineProps({
   isOpen: { type: Boolean, default: false }
@@ -13,7 +13,7 @@ defineEmits(['toggle-sidebar']);
     <Container class="flex h-full items-center justify-between px-4">
       <Button @toggle-sidebar="$emit('toggle-sidebar')" :is-open="isOpen" />
       <HeaderListItem />
-      <User />
+      <Avatar />
     </Container>
   </header>
 </template>
