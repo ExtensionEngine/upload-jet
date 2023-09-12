@@ -6,15 +6,18 @@ import {
   Query,
   Redirect,
   Req,
-  Res
+  Res,
+  UseGuards
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import appConfig from 'config/app.config';
 import { ConfigType } from '@nestjs/config';
 import { IdentityService } from './identity.service';
-import { checkPermission, hasPermission } from 'shared/auth/authorization';
+import { hasPermission } from 'shared/auth/authorization';
+import { Permission, PermissionGuard } from 'shared/auth/permission.guard';
 
 @Controller('identity')
+@UseGuards(PermissionGuard)
 export class IdentityController {
   constructor(
     @Inject(appConfig.KEY)
@@ -46,7 +49,7 @@ export class IdentityController {
   }
 
   @Get('simple')
-  @checkPermission({ action: 'read', resource: 'Identity' })
+  @Permission('read', 'Identity')
   async simple() {
     return 'ok';
   }

@@ -12,7 +12,7 @@ export class AuthenticationMiddleware implements NestMiddleware {
   constructor(private readonly jwtService: JwtService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    const { accessToken } = req.cookies;
+    const { access_token: accessToken } = req.cookies;
     if (!accessToken) throw new UnauthorizedException('No access token found');
     try {
       const { permissions, sub } = await this.jwtService.verifyAsync(
