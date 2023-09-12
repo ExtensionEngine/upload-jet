@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import Button from './Button.vue';
-import Container from './Container.vue';
-
 defineProps({
   isOpen: { type: Boolean, default: false }
 });
@@ -10,8 +7,10 @@ defineEmits(['toggle-sidebar']);
 
 <template>
   <header class="z-50 w-full bg-white shadow-md">
-    <Container class="flex h-full items-center justify-between px-4">
-      <Button @toggle-sidebar="$emit('toggle-sidebar')" :is-open="isOpen" />
-    </Container>
+    <div class="mx-auto flex h-full items-center justify-between px-4">
+      <HeaderButton
+        @toggle-sidebar="$emit('toggle-sidebar')"
+        :is-open="isOpen" />
+    </div>
   </header>
 </template>
