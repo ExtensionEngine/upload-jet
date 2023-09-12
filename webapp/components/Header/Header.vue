@@ -12,7 +12,6 @@ defineEmits(['toggle-sidebar']);
   <header class="fixed z-50 w-full bg-white shadow-md lg:hidden lg:h-16">
     <Container class="flex h-full items-center justify-between px-4">
       <Button @toggle-sidebar="$emit('toggle-sidebar')" :is-open="isOpen" />
-      <Avatar />
     </Container>
   </header>
 </template>
