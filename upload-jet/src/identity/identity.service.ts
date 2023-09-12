@@ -35,6 +35,10 @@ export class IdentityService {
     return accessToken;
   }
 
+  get(id: number): Promise<Identity> {
+    return this.identityRepository.findOne(id);
+  }
+
   private async upsertIdentity(user: GetUserResult): Promise<Identity> {
     // TODO: Rename githubId to ssoId and make it string instead of number
     const existingIdentity = await this.identityRepository.findOne({

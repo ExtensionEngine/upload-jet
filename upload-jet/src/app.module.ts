@@ -1,16 +1,16 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UploadPolicyModule } from './upload-policy/upload-policy.module';
 import { IdentityModule } from './identity/identity.module';
 import awsConfig from './config/aws.config';
 import appConfig from './config/app.config';
 import { LoggerModule } from 'nestjs-pino';
-import { AuthModule } from './auth/auth.module';
 import { LoadStrategy } from '@mikro-orm/core';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import databaseConfig from 'config/database.config';
 import oauthConfig from 'config/oauth.config';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthenticationMiddleware } from 'shared/auth/authentication.middleware';
 
 @Module({
   imports: [
@@ -45,10 +45,16 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService]
     }),
     UploadPolicyModule,
-    AuthModule,
     IdentityModule
   ],
   controllers: [],
   providers: []
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthenticationMiddleware)
+      .exclude('identity/callback')
+      .forRoutes('*');
+  }
+}

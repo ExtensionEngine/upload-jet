@@ -1,8 +1,18 @@
-import { Controller, Get, Inject, Query, Redirect, Res } from '@nestjs/common';
+import {
+  Controller,
+  ForbiddenException,
+  Get,
+  Inject,
+  Query,
+  Redirect,
+  Req,
+  Res
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import appConfig from 'config/app.config';
 import { ConfigType } from '@nestjs/config';
 import { IdentityService } from './identity.service';
+import { checkPermission, hasPermission } from 'shared/auth/authorization';
 
 @Controller('identity')
 export class IdentityController {
@@ -27,8 +37,17 @@ export class IdentityController {
   }
 
   @Get('me')
-  me(req: Request) {
-    console.log('userId: ', req.userId);
-    return 'me';
+  async me(@Req() req: Request) {
+    const identity = await this.identityService.get(req.userId);
+    if (!hasPermission(req.permissions, 'read', identity)) {
+      throw new ForbiddenException();
+    }
+    return identity;
+  }
+
+  @Get('simple')
+  @checkPermission({ action: 'read', resource: 'Identity' })
+  async simple() {
+    return 'ok';
   }
 }
