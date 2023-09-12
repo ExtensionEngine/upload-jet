@@ -9,7 +9,7 @@ defineEmits(['close']);
   <Backdrop @close="$emit('close')" :is-open="isOpen" class="lg:hidden" />
   <aside
     :class="{ '-translate-x-full': !isOpen }"
-    class="fixed left-0 top-0 z-40 h-screen w-64 border-r border-gray-200 bg-white pt-16 transition-transform duration-300 lg:block lg:translate-x-0 lg:pt-2"
+    class="absolute left-0 z-40 h-screen w-64 overflow-hidden border-r border-gray-200 bg-white pt-12 transition-all duration-300 lg:relative lg:translate-x-0 lg:overflow-visible lg:pt-0"
     aria-label="Sidebar">
     <div class="flex h-full flex-col justify-start overflow-y-auto bg-white">
       <Avatar />
