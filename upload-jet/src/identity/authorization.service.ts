@@ -1,38 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import Identity, { Role } from './identity.entity';
-import {
-  AbilityBuilder,
-  PureAbility,
-  Subject,
-  createMongoAbility
-} from '@casl/ability';
+import { AbilityBuilder, createMongoAbility } from '@casl/ability';
 import { packRules } from '@casl/ability/extra';
-
-type Action = 'manage' | 'read' | 'create' | 'update' | 'delete';
-type Resource = Subject;
-type AppAbility = PureAbility<[Action, Resource]>;
+import { AppAbility } from 'shared/auth/authorization';
 
 @Injectable()
 export class AuthorizationService {
   async getPermissions(identity: Identity) {
-    const builder = new AbilityBuilder<AppAbility>(createMongoAbility);
-    const rules =
-      identity.role === Role.ADMIN
-        ? this.getAdminPermissions(builder)
-        : this.getUserPermissions(builder);
+    if (identity.role === Role.ADMIN) {
+      const rules = this.getAdminPermissions();
+      return packRules(rules);
+    }
+    if (identity.role === Role.USER) {
+      const rules = this.getUserPermissions(identity);
+      return packRules(rules);
+    }
+    const { rules } = new AbilityBuilder(createMongoAbility);
     return packRules(rules);
   }
 
-  private getAdminPermissions({ can, build }: AbilityBuilder<AppAbility>) {
+  private getAdminPermissions() {
+    const { can, build } = new AbilityBuilder<AppAbility>(createMongoAbility);
+
     can('manage', 'all');
+
     const ability = build();
     return ability.rules;
   }
 
-  private getUserPermissions({ can, build }: AbilityBuilder<AppAbility>) {
-    can('read', 'Application');
+  private getUserPermissions(identity: Identity) {
+    const { can, build } = new AbilityBuilder<AppAbility>(createMongoAbility);
+
+    can('read', 'Identity', { id: identity.id });
+    can('update', 'Identity', { id: identity.id });
     can('create', 'Application');
-    can('read', 'User', { id: 3 });
+    can('read', 'Application', { userId: identity.id });
+    can('update', 'Application', { userId: identity.id });
+    can('delete', 'Application', { userId: identity.id });
+
     const ability = build();
     return ability.rules;
   }

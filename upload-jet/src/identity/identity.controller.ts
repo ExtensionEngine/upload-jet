@@ -1,5 +1,5 @@
 import { Controller, Get, Inject, Query, Redirect, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import appConfig from 'config/app.config';
 import { ConfigType } from '@nestjs/config';
 import { IdentityService } from './identity.service';
@@ -24,5 +24,11 @@ export class IdentityController {
     const { targetUrl = '/' } = JSON.parse(state);
     const redirectUrl = new URL(targetUrl, this.config.appUrl).href;
     return { url: redirectUrl };
+  }
+
+  @Get('me')
+  me(req: Request) {
+    console.log('userId: ', req.userId);
+    return 'me';
   }
 }

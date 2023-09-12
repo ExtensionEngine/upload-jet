@@ -1,5 +1,4 @@
 import { InferSubjects } from '@casl/ability';
-import { Application, User } from './auth.entities';
 
 const Actions = {
   Manage: 'manage',
@@ -15,8 +14,6 @@ export type ApplicationData = {
   userId: number;
   name: string;
 };
-
-export type Subject = InferSubjects<typeof User | typeof Application> | 'all';
 
 export const Roles = {
   Admin: 'Admin',
