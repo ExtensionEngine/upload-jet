@@ -29,14 +29,14 @@
   <Teleport to="body">
     <CreateApplicationModal
       :show="showCreateApplicationModal"
-      @close="showCreateApplicationModal = false"
+      @closeModal="showCreateApplicationModal = false"
       @createApplication="createApplication"
       v-model:input-value="inputValue" />
     <DeleteApplicationModal
       :show="showDeleteApplicationModal"
       :id="applicationId"
       :application-name="applicationName"
-      @close="showDeleteApplicationModal = false"
+      @closeModal="showDeleteApplicationModal = false"
       @deleteApplication="deleteApplication(applicationId)" />
   </Teleport>
 </template>
@@ -46,9 +46,6 @@ definePageMeta({
   layout: 'dashboard-layout',
   alias: '/dashboard/applications'
 });
-
-import CreateApplicationModal from './createApplicationModal/CreateApplicationModal.vue';
-import DeleteApplicationModal from './deleteApplicationModal/DeleteApplicationModal.vue';
 
 const showCreateApplicationModal = ref(false);
 const showDeleteApplicationModal = ref(false);

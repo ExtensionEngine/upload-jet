@@ -8,38 +8,39 @@
         :name="'mdi:close'"
         size="24"
         class="absolute right-2 top-2 ease-out hover:cursor-pointer"
-        @click="emit('close')" />
+        @click="emit('closeModal')" />
 
-      <Title title="Create Application" />
+      <h2 class="text-center text-xl uppercase">Create Application</h2>
 
       <form @submit.prevent>
         <label for="applicationName" />
-        <InputField
-          v-model:model-value="inputValue"
+        <input
           placeholder="Enter your Application name"
-          name="applicationName" />
+          type="text"
+          v-model="inputValue"
+          class="h-10 w-full border-2 p-2" />
       </form>
 
-      <Button
-        :input-value="inputValue"
-        title="Create"
+      <button
         :disabled="!inputValue"
         @click="createApplication"
-        :class="inputValue ? 'text-green-600' : 'text-red-500'" />
+        :class="inputValue ? 'text-green-600' : 'text-red-500'">
+        Create
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import Button from './Button.vue';
-import Title from './Title.vue';
-import InputField from './InputField.vue';
-
 const props = defineProps({
   show: { type: Boolean },
   inputValue: { type: String }
 });
-const emit = defineEmits(['close', 'update:inputValue', 'createApplication']);
+const emit = defineEmits([
+  'closeModal',
+  'update:inputValue',
+  'createApplication'
+]);
 
 const inputValue = computed({
   get() {
@@ -52,7 +53,7 @@ const inputValue = computed({
 
 const createApplication = () => {
   emit('createApplication', inputValue.value);
-  emit('close');
+  emit('closeModal');
   inputValue.value = '';
 };
 </script>
