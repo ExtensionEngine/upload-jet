@@ -1,6 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { z } from 'zod';
+import { join } from 'node:path';
 
 const databaseSchema = z.object({
   port: z.coerce.number().default(5432),
@@ -12,7 +13,7 @@ const databaseSchema = z.object({
 
 export default registerAs('database', () => {
   const config = databaseSchema.parse({
-    port: parseInt(process.env.DATABASE_PORT, 10),
+    port: process.env.DATABASE_PORT,
     host: process.env.DATABASE_HOST,
     dbName: process.env.DATABASE_NAME,
     user: process.env.DATABASE_USER,
@@ -23,8 +24,7 @@ export default registerAs('database', () => {
     ...config,
     driver: PostgreSqlDriver,
     migrations: {
-      path: `${process.cwd()}/src/database/migrations`,
-      disableForeignKeys: false,
+      path: join(process.cwd(), 'src/shared/database/migrations'),
       pattern: /^\d+[\w-]+\.ts$/,
       fileName: (timestamp: string) => `${timestamp}-new-migration`
     }
