@@ -3,6 +3,7 @@ defineProps({
   isOpen: { type: Boolean, default: false }
 });
 defineEmits(['close']);
+const { isMobile } = useBreakpoint();
 </script>
 
 <template>
@@ -18,10 +19,10 @@ defineEmits(['close']);
       <Avatar class="hidden md:inline-flex" />
       <SidebarItemList @close="$emit('close')" />
       <NuxtLink :to="`/`" class="mt-auto p-4 text-right">
-        <p
+        <button
           class="hidden text-sm text-gray-400 hover:cursor-pointer hover:underline md:inline-flex">
           Signout
-        </p>
+        </button>
         <button
           class="w-full rounded-sm bg-gray-400 px-4 py-2 font-bold text-white md:hidden">
           Signout
