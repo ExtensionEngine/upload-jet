@@ -10,7 +10,7 @@ export class Migration20230913064321 extends Migration {
       TABLE_NAME,
       table => {
         table.increments('id').primary();
-        table.string('key', 32).notNullable().unique();
+        table.string('key').notNullable().unique();
         table.integer('application_id').notNullable();
         table
           .foreign('application_id')
@@ -24,7 +24,10 @@ export class Migration20230913064321 extends Migration {
           .timestamp('updated_at', { useTz: true })
           .notNullable()
           .defaultTo(knex.fn.now());
-        table.timestamp('deleted_at', { useTz: true });
+        table
+          .timestamp('deleted_at', { useTz: true })
+          .nullable()
+          .defaultTo(null);
       }
     );
 
