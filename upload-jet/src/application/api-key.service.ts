@@ -1,9 +1,9 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
-import { genSalt, hash } from 'bcrypt';
 import ApiKey from './api-key.entity';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import Application from './application.entity';
+import { randomUUID, createHash } from 'crypto';
 
 @Injectable()
 export class ApiKeyService {
@@ -14,25 +14,13 @@ export class ApiKeyService {
   ) {}
 
   private async hashApiKey(apiKey: string): Promise<string> {
-    const salt = await genSalt();
-    const hashedApiKey = await hash(apiKey, salt);
-    return hashedApiKey;
+    const hash = createHash('sha512');
+    hash.update(apiKey);
+    return hash.digest('hex');
   }
 
-  private generateRandomKey = (length: number): string => {
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const characterArray = new Uint8Array(length);
-    crypto.getRandomValues(characterArray);
-    let apiKey = '';
-    characterArray.forEach(index => {
-      apiKey += characters[index % characters.length];
-    });
-    return apiKey;
-  };
-
   async generateApiKey(application: Application): Promise<string> {
-    const apiKey = this.generateRandomKey(32);
+    const apiKey = randomUUID();
     const hashedKey = await this.hashApiKey(apiKey);
 
     this.apiKeyRepository.nativeUpdate(
