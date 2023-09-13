@@ -1,9 +1,5 @@
 import { z } from 'zod';
 
-export const fetchApplicationSchema = z
-  .object({
-    id: z.coerce.number().positive()
-  })
-  .strict();
+export const applicationIdSchema = z.coerce.number().positive();
 
-export type FetchApplication = z.infer<typeof fetchApplicationSchema>;
+export type ApplicationId = z.infer<typeof applicationIdSchema>;

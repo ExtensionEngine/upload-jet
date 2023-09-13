@@ -2,19 +2,23 @@ import {
   BadRequestException,
   Controller,
   Get,
+  Post,
   NotFoundException,
-  Param
+  Param,
+  Body
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
-import { fetchApplicationSchema } from './application.schema';
+import { applicationIdSchema } from './application.schema';
 import { ValidationService } from 'shared/validation.service';
 import { logger } from '@mikro-orm/nestjs';
+import { ApiKeyService } from './api-key.service';
 
 @Controller('application')
 export class ApplicationController {
   constructor(
     private readonly applicationService: ApplicationService,
-    private readonly validationService: ValidationService
+    private readonly validationService: ValidationService,
+    private readonly apiKeyService: ApiKeyService
   ) {}
 
   @Get('list')
@@ -24,13 +28,11 @@ export class ApplicationController {
 
   @Get(':id')
   async getById(@Param('id') id: string) {
-    const validationResult = await fetchApplicationSchema.safeParseAsync({
-      id
-    });
+    const validationResult = await applicationIdSchema.safeParseAsync(id);
 
     if (validationResult.success === true) {
       const application = await this.applicationService.getById(
-        validationResult.data.id
+        validationResult.data
       );
 
       if (application) return application;
@@ -42,6 +44,29 @@ export class ApplicationController {
     logger.error(error);
     throw new BadRequestException({
       message: 'Error fetching application',
+      error
+    });
+  }
+
+  @Post('generate-api-key')
+  async generateApiKey(@Body('applicationId') id: number) {
+    const validationResult = await applicationIdSchema.safeParseAsync(id);
+
+    if (validationResult.success === true) {
+      const application = await this.applicationService.getById(
+        validationResult.data
+      );
+
+      if (!application)
+        throw new NotFoundException(`Application with id ${id} not found`);
+
+      return this.apiKeyService.generateApiKey(application);
+    }
+
+    const error = this.validationService.mapZodError(validationResult.error);
+    logger.error(error);
+    throw new BadRequestException({
+      message: 'Error generating api key',
       error
     });
   }
