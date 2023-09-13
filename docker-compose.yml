@@ -8,5 +8,20 @@ services:
       - '3000:3000'
     environment:
       - PORT=3000
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=upload_jet
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
     env_file:
       - ./upload-jet/.env
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=upload_jet
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

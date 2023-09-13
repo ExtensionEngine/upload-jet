@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from 'nestjs-pino';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
@@ -9,6 +10,7 @@ async function bootstrap() {
   const logger = app.get(Logger);
   const config = app.get(ConfigService);
   const port = config.get<number>('app.port');
+  app.use(cookieParser());
 
   app.useLogger(logger);
 
