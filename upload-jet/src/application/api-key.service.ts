@@ -28,11 +28,18 @@ export class ApiKeyService {
       { deletedAt: new Date() }
     );
 
-    const apiKeyEntity = new ApiKey(hashedKey, application);
-    this.em.persist(apiKeyEntity);
-
+    this.em.persist(new ApiKey(hashedKey, application));
     this.em.flush();
 
     return apiKey;
+  }
+
+  async deleteApiKey(applicationId: number): Promise<void> {
+    this.apiKeyRepository.nativeUpdate(
+      { application: applicationId },
+      { deletedAt: new Date() }
+    );
+
+    this.em.flush();
   }
 }

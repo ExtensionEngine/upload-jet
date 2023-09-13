@@ -5,7 +5,8 @@ import {
   Post,
   NotFoundException,
   Param,
-  Body
+  Body,
+  Delete
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { applicationIdSchema } from './application.schema';
@@ -67,6 +68,22 @@ export class ApplicationController {
     logger.error(error);
     throw new BadRequestException({
       message: 'Error generating api key',
+      error
+    });
+  }
+
+  @Delete('delete-api-key')
+  async deleteApiKey(@Body('applicationId') id: number) {
+    const validationResult = await applicationIdSchema.safeParseAsync(id);
+
+    if (validationResult.success === true) {
+      return this.apiKeyService.deleteApiKey(validationResult.data);
+    }
+
+    const error = this.validationService.mapZodError(validationResult.error);
+    logger.error(error);
+    throw new BadRequestException({
+      message: 'Error deleting api key',
       error
     });
   }
