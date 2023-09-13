@@ -1,16 +1,15 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
-import User from './user.entity';
+import Identity, { Role } from './identity.entity';
 import {
   GetUserResult,
   GithubProviderService
 } from 'identity/github-provider.service';
-import { JwtService, JwtSignOptions } from '@nestjs/jwt';
-import { JWTPayload, UserProfile } from './identity.types';
-import { Roles } from 'auth/auth.types';
+import { JwtService } from '@nestjs/jwt';
+import { AuthorizationService } from './authorization.service';
 
-const JWT_OPTIONS: JwtSignOptions = { expiresIn: '3600s' };
+type AccessToken = string;
 
 @Injectable()
 export class IdentityService {
@@ -18,42 +17,46 @@ export class IdentityService {
     private readonly githubProvider: GithubProviderService,
     private readonly jwtService: JwtService,
     private readonly em: EntityManager,
-    @InjectRepository(User)
-    private readonly identityRepository: EntityRepository<User>
+    private readonly authorizationService: AuthorizationService,
+    @InjectRepository(Identity)
+    private readonly identityRepository: EntityRepository<Identity>
   ) {}
 
-  async getUserProfile(code: string) {
-    return this.githubProvider.getUser(code);
+  async authorize(code: string): Promise<AccessToken> {
+    const user = await this.githubProvider.getUser(code);
+    const identity = await this.upsertIdentity(user);
+    const permissions = await this.authorizationService.getPermissions(
+      identity
+    );
+    const accessToken = await this.jwtService.signAsync(
+      { permissions },
+      { subject: String(identity.id) }
+    );
+    return accessToken;
   }
 
-  async hydrateUser(user: UserProfile): Promise<User> {
-    const identity = this.mapUser(user);
-    return this.upsert(identity);
+  get(id: number): Promise<Identity> {
+    return this.identityRepository.findOne(id);
   }
 
-  private mapUser(user: GetUserResult): User {
-    const newUser = new User(user.id, user.email, user.avatarUrl);
-    newUser.role = Roles.USER;
-    return newUser;
-  }
-
-  async upsert(user: User): Promise<User> {
-    const existingUser = await this.identityRepository.findOne({
-      githubId: user.githubId
+  private async upsertIdentity(user: GetUserResult): Promise<Identity> {
+    // TODO: Rename githubId to ssoId and make it string instead of number
+    const existingIdentity = await this.identityRepository.findOne({
+      githubId: user.id
     });
-
-    if (existingUser) {
-      existingUser.email = user.email;
-      existingUser.avatarUrl = user.avatarUrl;
-    } else {
-      this.em.persist(user);
+    if (existingIdentity) {
+      existingIdentity.email = user.email;
+      existingIdentity.avatarUrl = user.avatarUrl;
+      await this.em.flush();
+      return existingIdentity;
     }
-
-    await this.em.flush();
-    return existingUser ? existingUser : user;
-  }
-
-  async generateAccessToken(payload: JWTPayload): Promise<string> {
-    return this.jwtService.signAsync(payload, JWT_OPTIONS);
+    const identity = new Identity(
+      user.id,
+      user.email,
+      user.avatarUrl,
+      Role.USER
+    );
+    await this.em.persistAndFlush(identity);
+    return identity;
   }
 }
