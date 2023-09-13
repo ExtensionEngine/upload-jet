@@ -11,6 +11,7 @@ import databaseConfig from 'config/database.config';
 import oauthConfig from 'config/oauth.config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthenticationMiddleware } from 'shared/auth/authentication.middleware';
+import { ApplicationModule } from 'application/application.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { AuthenticationMiddleware } from 'shared/auth/authentication.middleware'
       inject: [ConfigService]
     }),
     UploadPolicyModule,
+    ApplicationModule,
     IdentityModule
   ],
   controllers: [],
