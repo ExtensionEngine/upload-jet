@@ -19,14 +19,17 @@ export class ApiKeyService {
     return hash.digest('hex');
   }
 
+  async apiKeyExists(applicationId: number): Promise<boolean> {
+    const apiKey = await this.apiKeyRepository.findOne({
+      application: applicationId,
+      deletedAt: null
+    });
+    return !!apiKey;
+  }
+
   async generateApiKey(application: Application): Promise<string> {
     const apiKey = randomUUID();
     const hashedKey = await this.hashApiKey(apiKey);
-
-    this.apiKeyRepository.nativeUpdate(
-      { application: application.id },
-      { deletedAt: new Date() }
-    );
 
     this.em.persist(new ApiKey(hashedKey, application));
     this.em.flush();

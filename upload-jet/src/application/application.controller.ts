@@ -40,18 +40,19 @@ export class ApplicationController {
       });
     }
 
-    const application = await this.applicationService.getById(
-      validationResult.data
-    );
+    const applicationId = validationResult.data;
+    const application = await this.applicationService.getById(applicationId);
 
     if (!application)
-      throw new NotFoundException(`Application with id ${id} not found`);
+      throw new NotFoundException(
+        `Application with id ${applicationId} not found`
+      );
 
     return application;
   }
 
   @Post('generate-api-key')
-  async generateApiKey(@Body('applicationId') id: number) {
+  async generateApiKey(@Body('applicationId') id: string) {
     const validationResult = await applicationIdSchema.safeParseAsync(id);
 
     if (validationResult.success === false) {
@@ -63,12 +64,19 @@ export class ApplicationController {
       });
     }
 
-    const application = await this.applicationService.getById(
-      validationResult.data
-    );
+    const applicationId = validationResult.data;
+    const application = await this.applicationService.getById(applicationId);
 
     if (!application)
-      throw new NotFoundException(`Application with id ${id} not found`);
+      throw new NotFoundException(
+        `Application with id ${applicationId} not found`
+      );
+
+    const apiKeyExists = await this.apiKeyService.apiKeyExists(applicationId);
+    if (apiKeyExists)
+      throw new BadRequestException({
+        message: 'Api key already exists for this application'
+      });
 
     return this.apiKeyService.generateApiKey(application);
   }
@@ -85,6 +93,14 @@ export class ApplicationController {
         error
       });
     }
+
+    const applicationId = validationResult.data;
+    const application = await this.applicationService.getById(applicationId);
+
+    if (!application)
+      throw new NotFoundException(
+        `Application with id ${applicationId} not found`
+      );
 
     await this.apiKeyService.deleteApiKey(validationResult.data);
   }
