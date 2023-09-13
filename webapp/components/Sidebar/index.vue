@@ -17,14 +17,10 @@ const { isMobile } = useBreakpoint();
     aria-label="Sidebar">
     <div class="flex h-full flex-col justify-start bg-white">
       <Avatar class="hidden md:inline-flex" />
-      <SidebarItemList @close="$emit('close')" />
+      <SidebarLinkList close="$emit('close')" />
       <NuxtLink :to="`/`" class="mt-auto p-4 text-right">
         <button
-          class="hidden text-sm text-gray-400 hover:cursor-pointer hover:underline md:inline-flex">
-          Signout
-        </button>
-        <button
-          class="w-full rounded-sm bg-gray-400 px-4 py-2 font-bold text-white md:hidden">
+          class="w-full rounded-sm bg-gray-400 px-4 py-2 font-bold text-white md:inline-flex md:w-auto md:bg-transparent md:text-sm md:font-light md:text-gray-400 md:hover:cursor-pointer md:hover:underline">
           Signout
         </button>
       </NuxtLink>
