@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, Property, Unique } from '@mikro-orm/core';
 import BaseEntity from '../shared/database/base.entity';
-import User from '../identity/user.entity';
+import User from '../identity/identity.entity';
 
 @Entity({ tableName: 'application' })
 export default class Application extends BaseEntity {
