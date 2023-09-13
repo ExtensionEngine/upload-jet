@@ -41,16 +41,21 @@
   </Teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
+definePageMeta({
+  layout: 'dashboard-layout',
+  alias: '/dashboard/applications'
+});
+
 import CreateApplicationModal from './createApplicationModal/CreateApplicationModal.vue';
 import DeleteApplicationModal from './deleteApplicationModal/DeleteApplicationModal.vue';
 
 const showCreateApplicationModal = ref(false);
 const showDeleteApplicationModal = ref(false);
-const applicationId = ref(null);
+const applicationId = ref<number>();
 const inputValue = ref('');
 
-function openDeleteApplicationModal(id) {
+function openDeleteApplicationModal(id: number) {
   showDeleteApplicationModal.value = true;
   applicationId.value = id;
 }
@@ -74,13 +79,14 @@ const mockedApplications = ref([
   { id: 3, name: 'Mocked App 3' }
 ]);
 
-const createApplication = inputValue => {
+const createApplication = (inputValue: string) => {
   const randomId = Math.floor(Math.random() * 1000);
   const newApplication = { id: randomId, name: inputValue };
   mockedApplications.value.push(newApplication);
 };
 
-const deleteApplication = id => {
+const deleteApplication = (id: number | undefined) => {
+  if (id === undefined) return;
   mockedApplications.value = mockedApplications.value.filter(
     app => app.id !== id
   );
