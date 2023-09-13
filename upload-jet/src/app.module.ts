@@ -11,7 +11,10 @@ import databaseConfig from 'config/database.config';
 import oauthConfig from 'config/oauth.config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthenticationMiddleware } from 'shared/auth/authentication.middleware';
+<<<<<<< HEAD
 import { ApplicationModule } from 'application/application.module';
+=======
+>>>>>>> 8b0bad2a71c6f5356181b79f05585fbd287027ff
 
 @Module({
   imports: [
