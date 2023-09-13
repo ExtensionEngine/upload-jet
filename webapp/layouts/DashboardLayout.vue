@@ -6,10 +6,10 @@ const { isOpen, close, toggle } = useSidebarMenu();
   <Header
     @toggle-sidebar="toggle"
     :is-open="isOpen"
-    class="absolute lg:hidden lg:h-16" />
+    class="absolute md:hidden md:h-16" />
   <div class="flex">
     <Sidebar @close="close" :is-open="isOpen" />
-    <main class="h-screen w-screen pt-12 lg:flex-1 lg:pt-0">
+    <main class="h-screen w-screen pt-12 md:flex-1 md:pt-0">
       <slot></slot>
     </main>
   </div>

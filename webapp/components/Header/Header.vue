@@ -11,7 +11,7 @@ defineEmits(['toggle-sidebar']);
       <button
         @click="$emit('toggle-sidebar')"
         aria-label="toggle menu"
-        class="p-2 lg:hidden">
+        class="p-2 md:hidden">
         <Icon v-if="!isOpen" size="30" name="heroicons:bars-3-20-solid" />
         <Icon v-else size="30" name="heroicons:x-mark-20-solid" />
       </button>
