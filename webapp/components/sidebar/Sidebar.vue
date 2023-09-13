@@ -16,7 +16,7 @@ defineEmits(['close']);
     aria-label="Sidebar">
     <div class="flex h-full flex-col justify-start bg-white">
       <Avatar class="hidden md:inline-flex" />
-      <SidebarApplicationList @close="$emit('close')" />
+      <SidebarItemList @close="$emit('close')" />
       <NuxtLink :to="`/`" class="mt-auto p-4 text-right">
         <p
           class="hidden text-sm text-gray-400 hover:cursor-pointer hover:underline md:inline-flex">

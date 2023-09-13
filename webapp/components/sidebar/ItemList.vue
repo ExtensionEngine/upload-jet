@@ -18,7 +18,7 @@ defineEmits(['close']);
 </script>
 
 <style scoped>
-.router-link-active {
+.nav-link.router-link-active {
   @apply border-r-4 border-gray-800 bg-gray-300;
 }
 </style>
