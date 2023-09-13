@@ -31,60 +31,61 @@ export class ApplicationController {
   async getById(@Param('id') id: string) {
     const validationResult = await applicationIdSchema.safeParseAsync(id);
 
-    if (validationResult.success === true) {
-      const application = await this.applicationService.getById(
-        validationResult.data
-      );
-
-      if (application) return application;
-
-      throw new NotFoundException(`Application with id ${id} not found`);
+    if (validationResult.success === false) {
+      const error = this.validationService.mapZodError(validationResult.error);
+      logger.error(error);
+      throw new BadRequestException({
+        message: 'Error fetching application',
+        error
+      });
     }
 
-    const error = this.validationService.mapZodError(validationResult.error);
-    logger.error(error);
-    throw new BadRequestException({
-      message: 'Error fetching application',
-      error
-    });
+    const application = await this.applicationService.getById(
+      validationResult.data
+    );
+
+    if (!application)
+      throw new NotFoundException(`Application with id ${id} not found`);
+
+    return application;
   }
 
   @Post('generate-api-key')
   async generateApiKey(@Body('applicationId') id: number) {
     const validationResult = await applicationIdSchema.safeParseAsync(id);
 
-    if (validationResult.success === true) {
-      const application = await this.applicationService.getById(
-        validationResult.data
-      );
-
-      if (!application)
-        throw new NotFoundException(`Application with id ${id} not found`);
-
-      return this.apiKeyService.generateApiKey(application);
+    if (validationResult.success === false) {
+      const error = this.validationService.mapZodError(validationResult.error);
+      logger.error(error);
+      throw new BadRequestException({
+        message: 'Error generating api key',
+        error
+      });
     }
 
-    const error = this.validationService.mapZodError(validationResult.error);
-    logger.error(error);
-    throw new BadRequestException({
-      message: 'Error generating api key',
-      error
-    });
+    const application = await this.applicationService.getById(
+      validationResult.data
+    );
+
+    if (!application)
+      throw new NotFoundException(`Application with id ${id} not found`);
+
+    return this.apiKeyService.generateApiKey(application);
   }
 
   @Delete('delete-api-key')
   async deleteApiKey(@Body('applicationId') id: number) {
     const validationResult = await applicationIdSchema.safeParseAsync(id);
 
-    if (validationResult.success === true) {
-      return this.apiKeyService.deleteApiKey(validationResult.data);
+    if (validationResult.success === false) {
+      const error = this.validationService.mapZodError(validationResult.error);
+      logger.error(error);
+      throw new BadRequestException({
+        message: 'Error deleting api key',
+        error
+      });
     }
 
-    const error = this.validationService.mapZodError(validationResult.error);
-    logger.error(error);
-    throw new BadRequestException({
-      message: 'Error deleting api key',
-      error
-    });
+    await this.apiKeyService.deleteApiKey(validationResult.data);
   }
 }
