@@ -1,6 +1,5 @@
 import { Entity, Enum, Property, Unique } from '@mikro-orm/core';
 import BaseEntity from '../shared/database/base.entity';
-import { Role, Roles } from '../auth/auth.types';
 
 export const Role = {
   ADMIN: 'admin',
@@ -21,7 +20,7 @@ export default class Identity extends BaseEntity {
   @Property()
   avatarUrl: string;
 
-  @Enum({ items: Object.values(Roles) })
+  @Enum({ items: Object.values(Role) })
   role: Role;
 
   constructor(
