@@ -4,7 +4,7 @@
     <div class="flex items-center md:space-x-8">
       <div
         class="h-10 w-10 overflow-hidden rounded-full border-2 border-gray-300 object-cover md:h-20 md:w-20" />
-      <p class="ml-2">Username</p>
+      <div class="ml-2">Username</div>
     </div>
   </div>
 </template>

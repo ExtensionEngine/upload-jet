@@ -15,9 +15,7 @@ defineEmits(['toggle-sidebar']);
         <Icon v-if="!isOpen" size="30" name="heroicons:bars-3-20-solid" />
         <Icon v-else size="30" name="heroicons:x-mark-20-solid" />
       </button>
-      <div class="flex items-center">
-        <Avatar />
-      </div>
+      <Avatar class="flex items-center" />
     </div>
   </header>
 </template>
