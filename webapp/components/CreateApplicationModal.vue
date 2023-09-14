@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="show"
     class="fixed left-0 top-0 z-50 flex h-screen w-screen bg-gray-700 bg-opacity-50 transition-opacity duration-100 ease-in-out">
     <div
       class="relative m-auto flex w-96 flex-col gap-7 rounded-xl bg-white p-5 pl-7 shadow-md">
@@ -33,7 +32,6 @@
 
 <script setup>
 const props = defineProps({
-  show: { type: Boolean },
   inputValue: { type: String }
 });
 const emit = defineEmits([

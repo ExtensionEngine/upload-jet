@@ -11,29 +11,29 @@
     <div class="max-h-[90vh] overflow-y-auto p-4 pb-8 pt-10">
       <NuxtLink
         :to="`/dashboard/applications/${application.id}`"
-        class="mb-6 flex h-14 list-none items-center justify-between rounded-lg border-2 bg-slate-50 pl-4 pr-2 duration-200 ease-out hover:translate-x-1 hover:cursor-pointer hover:border-cyan-500"
+        class="mb-6 flex h-14 list-none items-center justify-between rounded-lg border-2 bg-slate-50 pl-4 pr-2 duration-200 ease-out hover:cursor-pointer hover:border-slate-400"
         v-for="application in mockedApplications"
         :key="application.id">
         <div class="font-semibold">
           {{ application.name }}
         </div>
-        <p
+        <button
           class="hover:text-red-600"
           @click.prevent="openDeleteApplicationModal(application.id)">
           Delete
-        </p>
+        </button>
       </NuxtLink>
     </div>
   </div>
 
   <Teleport to="body">
     <CreateApplicationModal
-      :show="showCreateApplicationModal"
+      v-if="showCreateApplicationModal"
       @closeModal="showCreateApplicationModal = false"
       @createApplication="createApplication"
       v-model:input-value="inputValue" />
     <DeleteApplicationModal
-      :show="showDeleteApplicationModal"
+      v-if="showDeleteApplicationModal"
       :id="applicationId"
       :application-name="applicationName"
       @closeModal="showDeleteApplicationModal = false"
@@ -83,7 +83,6 @@ const createApplication = (inputValue: string) => {
 };
 
 const deleteApplication = (id: number | undefined) => {
-  if (id === undefined) return;
   mockedApplications.value = mockedApplications.value.filter(
     app => app.id !== id
   );
