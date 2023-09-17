@@ -1,3 +1,5 @@
+import userService from '@/services/userService';
+
 type UserData = {
   id: number;
   createdAt: Date;
@@ -11,21 +13,8 @@ type UserData = {
 export default function useUserStore() {
   const user: Ref<UserData | null> = useState('user', () => null);
 
-  async function fetchUser() {
-    const headers = useRequestHeaders();
-    const { data } = await useFetch<UserData>(
-      'http://localhost:3000/identity/me',
-      {
-        method: 'GET',
-        credentials: 'include',
-        headers
-      }
-    );
-    return data;
-  }
-
   async function setUser() {
-    const userData = await fetchUser();
+    const userData = await userService.fetchUser();
     user.value = userData?.value;
   }
 
@@ -33,22 +22,11 @@ export default function useUserStore() {
     return !!user.value?.id;
   });
 
-  async function deleteCookie() {
-    const headers = useRequestHeaders();
-
-    const response = await fetch('http://localhost:3000/identity/signout', {
-      method: 'GET',
-      credentials: 'include',
-      headers
-    });
-    return response.ok;
-  }
-
   async function signOut() {
     user.value = null;
-    const success = await deleteCookie();
-    if (success) return navigateTo('/');
+    const success = await userService.deleteCookie();
+    if (success.value === 'success') return navigateTo('/');
   }
 
-  return { user, isLoggedIn, fetchUser, signOut, deleteCookie, setUser };
+  return { user, isLoggedIn, signOut, setUser };
 }
