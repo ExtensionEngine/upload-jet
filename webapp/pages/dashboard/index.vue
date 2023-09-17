@@ -34,10 +34,11 @@
       v-model:input-value="inputValue" />
     <DeleteApplicationModal
       v-if="showDeleteApplicationModal"
+      @closeModal="showDeleteApplicationModal = false"
+      @deleteApplication="deleteApplication(applicationId)"
       :id="applicationId"
       :application-name="applicationName"
-      @closeModal="showDeleteApplicationModal = false"
-      @deleteApplication="deleteApplication(applicationId)" />
+       />
   </Teleport>
 </template>
 

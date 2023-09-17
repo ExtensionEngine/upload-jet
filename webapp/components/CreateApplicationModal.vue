@@ -4,10 +4,10 @@
     <div
       class="relative m-auto flex w-96 flex-col gap-7 rounded-xl bg-white p-5 pl-7 shadow-md">
       <Icon
+        @click="emit('closeModal')"
         :name="'mdi:close'"
         size="24"
-        class="absolute right-2 top-2 ease-out hover:cursor-pointer"
-        @click="emit('closeModal')" />
+        class="absolute right-2 top-2 ease-out hover:cursor-pointer" />
 
       <h2 class="text-center text-xl uppercase">Create Application</h2>
 
@@ -21,8 +21,8 @@
       </form>
 
       <button
-        :disabled="!inputValue"
         @click="createApplication"
+        :disabled="!inputValue"
         :class="inputValue ? 'text-green-600' : 'text-red-500'">
         Create
       </button>

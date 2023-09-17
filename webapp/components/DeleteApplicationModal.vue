@@ -11,13 +11,13 @@
 
       <div class="flex justify-end gap-3">
         <button
-          class="rounded-sm border-2 bg-gray-300 p-2 text-black hover:bg-gray-400"
-          @click="emit('closeModal')">
+          @click="emit('closeModal')"
+          class="rounded-sm border-2 bg-gray-300 p-2 text-black hover:bg-gray-400">
           Cancel
         </button>
         <button
-          class="rounded-sm border-2 bg-red-400 p-2 text-white hover:bg-red-500"
-          @click="deleteApplication">
+          @click="deleteApplication"
+          class="rounded-sm border-2 bg-red-400 p-2 text-white hover:bg-red-500">
           Delete
         </button>
       </div>
