@@ -35,17 +35,19 @@ export default function useUserStore() {
   }
 
   async function deleteCookie() {
-    await useFetch('http://localhost:3000/identity/signout', {
+    const response = await fetch('http://localhost:3000/identity/signout', {
       method: 'GET',
       credentials: 'include',
       headers
     });
+    return response.ok;
   }
 
   async function signOut() {
     user.value = null;
-    await deleteCookie();
+    const success = await deleteCookie();
+    if (success) return navigateTo('/');
   }
 
-  return { user, isLoggedIn, getUser, signOut, logIn };
+  return { user, isLoggedIn, getUser, signOut, deleteCookie, logIn };
 }
