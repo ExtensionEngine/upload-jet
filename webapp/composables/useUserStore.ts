@@ -1,4 +1,4 @@
-import userService from '@/services/userService';
+import { fetchUser, deleteCookie } from '@/services/userService';
 
 type UserData = {
   id: number;
@@ -14,7 +14,7 @@ export default function useUserStore() {
   const user: Ref<UserData | null> = useState('user', () => null);
 
   async function setUser() {
-    const userData = await userService.fetchUser();
+    const userData = await fetchUser();
     user.value = userData?.value;
   }
 
@@ -24,7 +24,7 @@ export default function useUserStore() {
 
   async function signOut() {
     user.value = null;
-    const success = await userService.deleteCookie();
+    const success = await deleteCookie();
     if (success.value === 'success') return navigateTo('/');
   }
 

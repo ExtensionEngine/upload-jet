@@ -10,7 +10,7 @@ type UserData = {
 
 const API_BASE_URL = 'http://localhost:3000';
 
-async function fetchUser() {
+export async function fetchUser() {
   const headers = useRequestHeaders();
   const { data } = await useFetch<UserData>(`${API_BASE_URL}/identity/me`, {
     method: 'GET',
@@ -20,9 +20,8 @@ async function fetchUser() {
   return data;
 }
 
-async function deleteCookie() {
+export async function deleteCookie() {
   const headers = useRequestHeaders();
-
   const { status } = await useFetch(`${API_BASE_URL}/identity/signout`, {
     method: 'GET',
     credentials: 'include',
@@ -30,5 +29,3 @@ async function deleteCookie() {
   });
   return status;
 }
-
-export default { fetchUser, deleteCookie };
