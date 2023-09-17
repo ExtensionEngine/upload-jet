@@ -1,14 +1,5 @@
 import { fetchUser, deleteCookie } from '@/services/userService';
-
-type UserData = {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  githubId: number;
-  email: string;
-  avatarUrl: string;
-  role: string;
-};
+import { UserData } from 'types';
 
 export default function useUserStore() {
   const user: Ref<UserData | null> = useState('user', () => null);
@@ -28,5 +19,5 @@ export default function useUserStore() {
     if (success.value === 'success') return navigateTo('/');
   }
 
-  return { user, isLoggedIn, signOut, setUser };
+  return { isLoggedIn, signOut, setUser };
 }

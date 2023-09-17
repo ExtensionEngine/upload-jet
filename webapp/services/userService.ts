@@ -1,12 +1,4 @@
-type UserData = {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  githubId: number;
-  email: string;
-  avatarUrl: string;
-  role: string;
-};
+import { UserData } from 'types';
 
 const API_BASE_URL = 'http://localhost:3000';
 
