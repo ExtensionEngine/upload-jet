@@ -11,9 +11,8 @@ type UserData = {
 export default function useUserStore() {
   const user: Ref<UserData | null> = useState('user', () => null);
 
-  const headers = useRequestHeaders();
-
-  async function getUser() {
+  async function fetchUser() {
+    const headers = useRequestHeaders();
     const { data } = await useFetch<UserData>(
       'http://localhost:3000/identity/me',
       {
@@ -29,12 +28,14 @@ export default function useUserStore() {
     return !!user.value?.id;
   });
 
-  async function logIn() {
-    const userData = await getUser();
+  async function setUser() {
+    const userData = await fetchUser();
     user.value = userData?.value;
   }
 
   async function deleteCookie() {
+    const headers = useRequestHeaders();
+
     const response = await fetch('http://localhost:3000/identity/signout', {
       method: 'GET',
       credentials: 'include',
@@ -49,5 +50,5 @@ export default function useUserStore() {
     if (success) return navigateTo('/');
   }
 
-  return { user, isLoggedIn, getUser, signOut, deleteCookie, logIn };
+  return { user, isLoggedIn, fetchUser, signOut, deleteCookie, setUser };
 }

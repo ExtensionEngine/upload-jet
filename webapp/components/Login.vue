@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const config = useRuntimeConfig();
 const route = useRoute();
-const { logIn, isLoggedIn } = useUserStore();
+const { setUser, isLoggedIn } = useUserStore();
 
-logIn();
+setUser();
 
 const authConfig = {
   scope: 'user:email',
