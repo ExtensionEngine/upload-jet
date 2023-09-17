@@ -12,7 +12,6 @@
       <h2 class="text-center text-xl uppercase">Create Application</h2>
 
       <form @submit.prevent>
-        <label for="applicationName" />
         <input
           placeholder="Enter your Application name"
           type="text"
