@@ -37,8 +37,7 @@
       @closeModal="showDeleteApplicationModal = false"
       @deleteApplication="deleteApplication(applicationId)"
       :id="applicationId"
-      :application-name="applicationName"
-       />
+      :application-name="applicationName" />
   </Teleport>
 </template>
 
@@ -77,15 +76,18 @@ const mockedApplications = ref([
   { id: 3, name: 'Mocked App 3' }
 ]);
 
-const createApplication = (inputValue: string) => {
+const createApplication = (input: string) => {
   const randomId = Math.floor(Math.random() * 1000);
-  const newApplication = { id: randomId, name: inputValue };
+  const newApplication = { id: randomId, name: input };
   mockedApplications.value.push(newApplication);
+  showCreateApplicationModal.value = false;
+  inputValue.value = '';
 };
 
 const deleteApplication = (id: number | undefined) => {
   mockedApplications.value = mockedApplications.value.filter(
     app => app.id !== id
   );
+  showDeleteApplicationModal.value = false;
 };
 </script>

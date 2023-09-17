@@ -50,7 +50,5 @@ const inputValue = computed({
 
 const createApplication = () => {
   emit('createApplication', inputValue.value);
-  emit('closeModal');
-  inputValue.value = '';
 };
 </script>

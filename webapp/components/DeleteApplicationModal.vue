@@ -33,6 +33,5 @@ const props = defineProps({
 const emit = defineEmits(['closeModal', 'deleteApplication']);
 const deleteApplication = () => {
   emit('deleteApplication', props.id);
-  emit('closeModal');
 };
 </script>
