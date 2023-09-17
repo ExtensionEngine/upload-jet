@@ -10,11 +10,12 @@ async function bootstrap() {
   const logger = app.get(Logger);
   const config = app.get(ConfigService);
   const port = config.get<number>('app.port');
+  const appUrl = config.get<string>('app.appUrl');
+  console.log(appUrl);
   app.use(cookieParser());
 
-  // TODO: extract config
   app.enableCors({
-    origin: 'http://localhost:8080',
+    origin: appUrl,
     credentials: true
   });
 
