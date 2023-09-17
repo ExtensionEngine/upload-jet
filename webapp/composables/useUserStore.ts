@@ -24,14 +24,14 @@ export default function useUserStore() {
     return data;
   }
 
-  const isLoggedIn = computed(() => {
-    return !!user.value?.id;
-  });
-
   async function setUser() {
     const userData = await fetchUser();
     user.value = userData?.value;
   }
+
+  const isLoggedIn = computed(() => {
+    return !!user.value?.id;
+  });
 
   async function deleteCookie() {
     const headers = useRequestHeaders();

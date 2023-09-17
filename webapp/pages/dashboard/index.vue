@@ -1,7 +1,8 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'dashboard-layout',
-  alias: '/dashboard/applications'
+  alias: '/dashboard/applications',
+  middleware: ['auth']
 });
 </script>
 
