@@ -12,6 +12,12 @@ async function bootstrap() {
   const port = config.get<number>('app.port');
   app.use(cookieParser());
 
+  // TODO: extract config
+  app.enableCors({
+    origin: 'http://localhost:8080',
+    credentials: true
+  });
+
   app.useLogger(logger);
 
   process.on('uncaughtException', err => logUncaughtException(err, logger));

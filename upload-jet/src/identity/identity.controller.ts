@@ -53,4 +53,10 @@ export class IdentityController {
   async simple() {
     return 'ok';
   }
+
+  @Get('signout')
+  async signout(@Res() res: Response) {
+    res.clearCookie('access_token');
+    return res.sendStatus(200);
+  }
 }

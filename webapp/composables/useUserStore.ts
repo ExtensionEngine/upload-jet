@@ -26,7 +26,7 @@ export default function useUserStore() {
   }
 
   const isLoggedIn = computed(() => {
-    return user.value?.id;
+    return !!user.value?.id;
   });
 
   async function logIn() {
@@ -35,17 +35,17 @@ export default function useUserStore() {
   }
 
   async function deleteCookie() {
-    await useFetch('http://localhost:3000/identity/logout', {
+    await useFetch('http://localhost:3000/identity/signout', {
       method: 'GET',
       credentials: 'include',
       headers
     });
   }
 
-  async function logOut() {
+  async function signOut() {
     user.value = null;
     await deleteCookie();
   }
 
-  return { user, isLoggedIn, getUser, logOut, logIn };
+  return { user, isLoggedIn, getUser, signOut, logIn };
 }
