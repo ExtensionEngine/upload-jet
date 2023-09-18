@@ -26,19 +26,21 @@
     </div>
   </div>
 
-  <Teleport to="body">
-    <CreateApplicationModal
-      v-if="showCreateApplicationModal"
-      @closeModal="showCreateApplicationModal = false"
-      @createApplication="createApplication"
-      v-model:application-name="inputValue" />
-    <DeleteApplicationModal
-      v-if="showDeleteApplicationModal"
-      @closeModal="showDeleteApplicationModal = false"
-      @deleteApplication="deleteApplication(applicationId)"
-      :id="applicationId"
-      :application-name="applicationName" />
-  </Teleport>
+  <ClientOnly>
+    <Teleport to="#teleported">
+      <CreateApplicationModal
+        v-if="showCreateApplicationModal"
+        @closeModal="showCreateApplicationModal = false"
+        @createApplication="createApplication"
+        v-model:application-name="inputValue" />
+      <DeleteApplicationModal
+        v-if="showDeleteApplicationModal"
+        @closeModal="showDeleteApplicationModal = false"
+        @deleteApplication="deleteApplication(applicationId)"
+        :id="applicationId"
+        :application-name="applicationName" />
+    </Teleport>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
