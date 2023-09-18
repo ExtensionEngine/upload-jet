@@ -21,10 +21,10 @@ githubLoginUrl.search = searchParams;
     Login with GitHub
   </NuxtLink>
 
-  <NuxtLink v-else :to="{ name: 'Applications' }">
-    <button
-      class="cursor-pointer rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
-      Go to dashboard
-    </button>
+  <NuxtLink
+    v-else
+    :to="{ name: 'Applications' }"
+    class="cursor-pointer rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
+    Go to dashboard>
   </NuxtLink>
 </template>

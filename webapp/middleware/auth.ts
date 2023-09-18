@@ -4,4 +4,5 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (to.path.includes('dashboard') && !isLoggedIn.value) {
     return navigateTo({ name: 'Login' });
   }
+  return true;
 });
