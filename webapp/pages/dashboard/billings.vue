@@ -1,5 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
+  name: 'Billings',
   layout: 'dashboard-layout',
   middleware: ['auth']
 });
