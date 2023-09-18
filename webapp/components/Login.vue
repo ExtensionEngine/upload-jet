@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const config = useRuntimeConfig();
 const route = useRoute();
-const { setUser, isLoggedIn } = useUserStore();
+const { setUser, isLoggedIn } = useAuth();
 
 setUser();
 

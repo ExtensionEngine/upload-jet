@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const { isLoggedIn, setUser } = useUserStore();
+  const { isLoggedIn, setUser } = useAuth();
 
   if (!isLoggedIn.value) {
     await useAsyncData(() => setUser());

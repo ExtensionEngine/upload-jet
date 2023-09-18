@@ -1,7 +1,7 @@
 import { fetchUser, deleteCookie } from '@/services/userService';
 import { UserData } from 'types';
 
-export default function useUserStore() {
+export default function useAuth() {
   const user: Ref<UserData | null> = useState('user', () => null);
 
   async function setUser() {
