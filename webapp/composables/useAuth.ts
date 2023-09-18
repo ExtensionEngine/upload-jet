@@ -2,7 +2,7 @@
 import { UserData } from 'types';
 
 export default async function useAuth() {
-  const { apiFetch } = useApiFetch();
+  const { API_BASE_URL, apiFetch } = useApiFetch();
 
   const user: Ref<UserData | null> = useState('user', () => null);
 
@@ -19,8 +19,7 @@ export default async function useAuth() {
 
   async function signOut() {
     user.value = null;
-    const response = await apiFetch('identity/signout');
-    if (response.ok) return navigateTo('/');
+    navigateTo(`${API_BASE_URL}/identity/signout`, { external: true });
   }
 
   return { isLoggedIn, signOut, setUser, user };

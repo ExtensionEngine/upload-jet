@@ -25,6 +25,6 @@ githubLoginUrl.search = searchParams;
     v-else
     :to="{ name: 'Applications' }"
     class="cursor-pointer rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
-    Go to dashboard>
+    Go to dashboard
   </NuxtLink>
 </template>

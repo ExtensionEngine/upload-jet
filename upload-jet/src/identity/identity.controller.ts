@@ -55,8 +55,10 @@ export class IdentityController {
   }
 
   @Get('signout')
-  async signout(@Res() res: Response) {
+  @Redirect()
+  async signout(@Res({ passthrough: true }) res: Response) {
+    const redirectUrl = this.config.appUrl;
     res.clearCookie('access_token');
-    return res.sendStatus(200);
+    return { url: redirectUrl };
   }
 }

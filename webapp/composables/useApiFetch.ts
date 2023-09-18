@@ -17,5 +17,5 @@ export function useApiFetch() {
     const response = await fetch(`${API_BASE_URL}/${path}`, requestOptions);
     return response;
   }
-  return { apiFetch };
+  return { API_BASE_URL, apiFetch };
 }
