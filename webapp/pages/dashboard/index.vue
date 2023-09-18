@@ -31,7 +31,7 @@
       v-if="showCreateApplicationModal"
       @closeModal="showCreateApplicationModal = false"
       @createApplication="createApplication"
-      v-model:input-value="inputValue" />
+      v-model:application-name="inputValue" />
     <DeleteApplicationModal
       v-if="showDeleteApplicationModal"
       @closeModal="showDeleteApplicationModal = false"

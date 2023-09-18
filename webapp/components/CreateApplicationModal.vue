@@ -15,14 +15,14 @@
         <input
           placeholder="Enter your Application name"
           type="text"
-          v-model="inputValue"
+          v-model="applicationName"
           class="h-10 w-full border-2 p-2" />
       </form>
 
       <button
         @click="createApplication"
-        :disabled="!inputValue"
-        :class="inputValue ? 'text-green-600' : 'text-red-500'">
+        :disabled="!applicationName"
+        :class="applicationName ? 'text-green-600' : 'text-red-500'">
         Create
       </button>
     </div>
@@ -31,24 +31,24 @@
 
 <script setup>
 const props = defineProps({
-  inputValue: { type: String }
+  applicationName: { type: String }
 });
 const emit = defineEmits([
   'closeModal',
-  'update:inputValue',
+  'update:applicationName',
   'createApplication'
 ]);
 
-const inputValue = computed({
+const applicationName = computed({
   get() {
-    return props.inputValue;
+    return props.applicationName;
   },
   set(newValue) {
-    emit('update:inputValue', newValue);
+    emit('update:applicationName', newValue);
   }
 });
 
 const createApplication = () => {
-  emit('createApplication', inputValue.value);
+  emit('createApplication', applicationName.value);
 };
 </script>
