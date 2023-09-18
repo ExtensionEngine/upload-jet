@@ -28,7 +28,7 @@
 <script setup>
 const props = defineProps({
   id: { type: Number },
-  applicationName: { type: String }
+  applicationName: { type: [String, null] }
 });
 const emit = defineEmits(['closeModal', 'deleteApplication']);
 const deleteApplication = () => {

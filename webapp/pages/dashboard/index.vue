@@ -60,10 +60,10 @@ function openDeleteApplicationModal(id: number) {
 }
 
 const applicationName = computed(() => {
-  const filteredApplication = mockedApplications.value.filter(
+  const filteredApplication = mockedApplications.value.find(
     app => app.id === applicationId.value
   );
-  return filteredApplication[0]?.name;
+  return filteredApplication?.name || null;
 });
 
 // Below is a test code just for the client side to showcase the render functionality, will be deleted before merging
