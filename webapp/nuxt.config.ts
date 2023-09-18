@@ -7,7 +7,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      githubClientId: process.env.GITHUB_CLIENT_ID
+      githubClientId: process.env.GITHUB_CLIENT_ID,
+      apiBaseUrl: process.env.API_BASE_URL
     }
   }
 });

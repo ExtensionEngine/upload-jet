@@ -1,9 +1,7 @@
 <script setup lang="ts">
 const config = useRuntimeConfig();
 const route = useRoute();
-const { setUser, isLoggedIn } = useAuth();
-
-setUser();
+const { isLoggedIn } = await useAuth();
 
 const authConfig = {
   scope: 'user:email',

@@ -3,7 +3,7 @@ defineProps({
   isOpen: { type: Boolean, default: false }
 });
 defineEmits(['close']);
-const { signOut } = useAuth();
+const { signOut } = await useAuth();
 </script>
 
 <template>
