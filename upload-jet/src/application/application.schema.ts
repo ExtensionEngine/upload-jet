@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
-export const fetchApplicationSchema = z
+export const readApplicationSchema = z
   .object({
     id: z.coerce.number().positive()
   })
   .strict();
 
-export type FetchApplication = z.infer<typeof fetchApplicationSchema>;
+export type ReadApplicationSchema = z.infer<typeof readApplicationSchema>;

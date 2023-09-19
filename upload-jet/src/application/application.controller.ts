@@ -6,7 +6,7 @@ import {
   Param
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
-import { fetchApplicationSchema } from './application.schema';
+import { readApplicationSchema } from './application.schema';
 import { ValidationService } from 'shared/validation.service';
 import { logger } from '@mikro-orm/nestjs';
 
@@ -24,7 +24,7 @@ export class ApplicationController {
 
   @Get(':id')
   async getById(@Param('id') id: string) {
-    const validationResult = await fetchApplicationSchema.safeParseAsync({
+    const validationResult = await readApplicationSchema.safeParseAsync({
       id
     });
 
