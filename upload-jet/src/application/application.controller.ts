@@ -45,9 +45,6 @@ export class ApplicationController {
         validationResult.data.id
       );
 
-      if (!application)
-        throw new NotFoundException(`Application with id ${id} not found`);
-
       if (!hasPermission(req.permissions, 'read', application)) {
         throw new ForbiddenException();
       }

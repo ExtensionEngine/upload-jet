@@ -22,7 +22,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     const responseObj: any = {
       statusCode: status,
-      message: exception.name
+      message: exception.name,
+      error: exception.message
     };
 
     if (exceptionResponse instanceof ZodError) {
