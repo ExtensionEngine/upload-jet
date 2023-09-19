@@ -1,17 +1,24 @@
 import {
   BadRequestException,
   Controller,
+  ForbiddenException,
   Get,
   NotFoundException,
   Param,
-  ParseIntPipe
+  ParseIntPipe,
+  Req,
+  UseGuards
 } from '@nestjs/common';
+import { Request } from 'express';
 import { ApplicationService } from './application.service';
 import { readApplicationSchema } from './validation';
 import { ValidationService } from 'shared/validation.service';
 import { logger } from '@mikro-orm/nestjs';
+import { PermissionGuard } from 'shared/auth/permission.guard';
+import { hasPermission } from 'shared/auth/authorization';
 
 @Controller('application')
+@UseGuards(PermissionGuard)
 export class ApplicationController {
   constructor(
     private readonly applicationService: ApplicationService,
@@ -24,7 +31,7 @@ export class ApplicationController {
   }
 
   @Get(':id')
-  async getById(@Param('id', ParseIntPipe) id: number) {
+  async getById(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
     const validationResult = await readApplicationSchema.safeParseAsync({
       id
     });
@@ -34,9 +41,14 @@ export class ApplicationController {
         validationResult.data.id
       );
 
-      if (application) return application;
+      if (!application)
+        throw new NotFoundException(`Application with id ${id} not found`);
 
-      throw new NotFoundException(`Application with id ${id} not found`);
+      if (!hasPermission(req.permissions, 'read', application)) {
+        throw new ForbiddenException();
+      }
+
+      return application;
     }
 
     const error = this.validationService.mapZodError(validationResult.error);
