@@ -10,6 +10,7 @@ import { AuthorizationService } from './authorization.service';
 @Module({
   controllers: [IdentityController],
   imports: [HttpModule, MikroOrmModule.forFeature([Identity])],
-  providers: [IdentityService, AuthorizationService, GithubProviderService]
+  providers: [IdentityService, AuthorizationService, GithubProviderService],
+  exports: [IdentityService]
 })
 export class IdentityModule {}

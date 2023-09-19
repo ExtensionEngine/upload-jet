@@ -16,18 +16,25 @@ import { ValidationService } from 'shared/validation.service';
 import { logger } from '@mikro-orm/nestjs';
 import { PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
+import { IdentityService } from 'identity/identity.service';
 
 @Controller('application')
 @UseGuards(PermissionGuard)
 export class ApplicationController {
   constructor(
     private readonly applicationService: ApplicationService,
-    private readonly validationService: ValidationService
+    private readonly validationService: ValidationService,
+    private readonly identityService: IdentityService
   ) {}
 
   @Get('list')
-  async getAll() {
-    return this.applicationService.getAll();
+  async getAll(@Req() req: Request) {
+    if (!hasPermission(req.permissions, 'read', 'Application')) {
+      throw new ForbiddenException();
+    }
+
+    const identity = await this.identityService.get(req.userId);
+    return this.applicationService.getUserApplications(identity.id);
   }
 
   @Get(':id')

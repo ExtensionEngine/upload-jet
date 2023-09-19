@@ -10,8 +10,8 @@ export class ApplicationService {
     private readonly applicationRepository: EntityRepository<Application>
   ) {}
 
-  async getAll() {
-    return this.applicationRepository.findAll();
+  getUserApplications(userId?: number) {
+    return this.applicationRepository.find({ userId });
   }
 
   getById(id: number) {
