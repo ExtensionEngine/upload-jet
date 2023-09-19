@@ -3,7 +3,8 @@ import {
   Controller,
   Get,
   NotFoundException,
-  Param
+  Param,
+  ParseIntPipe
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { readApplicationSchema } from './validation';
@@ -23,7 +24,7 @@ export class ApplicationController {
   }
 
   @Get(':id')
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id', ParseIntPipe) id: number) {
     const validationResult = await readApplicationSchema.safeParseAsync({
       id
     });
