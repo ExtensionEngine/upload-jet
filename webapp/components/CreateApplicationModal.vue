@@ -1,13 +1,13 @@
 <template>
-  <Modal
-    :action-button-text="buttonText"
+  <BaseModal
+    action-button-text="Create"
     :disable-action-button="!applicationName"
     :action-button-class="
       applicationName
         ? 'bg-green-600 hover:bg-green-500'
         : 'text-red-500 hover:bg-red-500'
     "
-    :perform-action="createApplication"
+    @performAction="createApplication"
     @closeModal="emit('closeModal')">
     <h2 class="text-center text-xl uppercase">Create Application</h2>
     <form @submit.prevent>
@@ -17,7 +17,7 @@
         v-model="applicationName"
         class="h-10 w-full border-2 p-2" />
     </form>
-  </Modal>
+  </BaseModal>
 </template>
 
 <script setup>
@@ -25,12 +25,10 @@ const props = defineProps({
   applicationName: { type: String }
 });
 
-const buttonText = 'Create';
-
 const emit = defineEmits([
   'closeModal',
   'update:applicationName',
-  'createApplication'
+  'create:application'
 ]);
 
 const applicationName = computed({
@@ -43,6 +41,6 @@ const applicationName = computed({
 });
 
 const createApplication = () => {
-  emit('createApplication', applicationName.value);
+  emit('create:application', applicationName.value);
 };
 </script>

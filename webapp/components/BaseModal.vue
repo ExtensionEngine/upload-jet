@@ -37,5 +37,9 @@ const props = defineProps({
   performAction: { type: Function }
 });
 
-const emit = defineEmits(['closeModal']);
+const performAction = () => {
+  emit('performAction');
+};
+
+const emit = defineEmits(['closeModal', 'performAction']);
 </script>

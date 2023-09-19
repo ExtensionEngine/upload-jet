@@ -31,12 +31,12 @@
       <CreateApplicationModal
         v-if="isCreateApplicationModalOpen"
         @closeModal="isCreateApplicationModalOpen = false"
-        @createApplication="createApplication"
+        @create:application="createApplication"
         v-model:application-name="inputValue" />
       <DeleteApplicationModal
         v-if="isDeleteApplicationModalOpen"
         @closeModal="isDeleteApplicationModalOpen = false"
-        @deleteApplication="deleteApplication(applicationId)"
+        @delete:application="deleteApplication(applicationId)"
         :id="applicationId"
         :application-name="applicationName" />
     </Teleport>
