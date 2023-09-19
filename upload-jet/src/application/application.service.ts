@@ -14,7 +14,7 @@ export class ApplicationService {
     return this.applicationRepository.findAll();
   }
 
-  async getById(id: number) {
+  getById(id: number) {
     return this.applicationRepository.findOne({ id });
   }
 }
