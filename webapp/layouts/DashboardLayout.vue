@@ -3,7 +3,6 @@ const { isOpen, close, toggle } = useSidebarMenu();
 </script>
 
 <template>
-  <div id="teleported" />
   <Header
     @toggle-sidebar="toggle"
     :is-open="isOpen"
