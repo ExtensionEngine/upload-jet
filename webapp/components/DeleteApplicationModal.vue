@@ -10,7 +10,7 @@
     </template>
     <template v-slot:footer>
       <button
-        @click="emit('closeModal')"
+        @click="emit('close:modal')"
         class="rounded-sm border-2 bg-gray-300 p-2 text-black hover:bg-gray-400">
         Cancel
       </button>
