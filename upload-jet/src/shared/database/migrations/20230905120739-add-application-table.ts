@@ -12,7 +12,7 @@ export class AddApplication extends Migration {
         table.increments('id').primary();
         table.string('name').notNullable();
         table.integer('user_id').notNullable();
-        table.foreign('user_id').references('user.id').onDelete('SET NULL');
+        table.foreign('user_id').references('user.id').onDelete('CASCADE');
         table
           .timestamp('created_at', { useTz: true })
           .notNullable()
