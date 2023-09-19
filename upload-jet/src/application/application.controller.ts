@@ -12,8 +12,6 @@ import {
 import { Request } from 'express';
 import { ApplicationService } from './application.service';
 import { readApplicationSchema } from './validation';
-import { ValidationService } from 'shared/validation.service';
-import { logger } from '@mikro-orm/nestjs';
 import { PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
 import { IdentityService } from 'identity/identity.service';
@@ -23,7 +21,6 @@ import { IdentityService } from 'identity/identity.service';
 export class ApplicationController {
   constructor(
     private readonly applicationService: ApplicationService,
-    private readonly validationService: ValidationService,
     private readonly identityService: IdentityService
   ) {}
 
@@ -58,11 +55,6 @@ export class ApplicationController {
       return application;
     }
 
-    const error = this.validationService.mapZodError(validationResult.error);
-    logger.error(error);
-    throw new BadRequestException({
-      message: 'Error fetching application',
-      error
-    });
+    throw new BadRequestException(validationResult.error);
   }
 }
