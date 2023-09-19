@@ -40,23 +40,21 @@ export class ApplicationController {
 
   @Get(':id')
   async getById(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-    const validationResult = await readApplicationSchema.safeParseAsync({
-      id
-    });
+    const validationResult = await readApplicationSchema.safeParseAsync({ id });
 
-    if (validationResult.success === true) {
-      const application = await this.applicationService.getById(
-        validationResult.data.id
-      );
-
-      if (!hasPermission(req.permissions, 'read', application)) {
-        throw new ForbiddenException();
-      }
-
-      return application;
+    if (validationResult.success === false) {
+      throw new BadRequestException(validationResult.error);
     }
 
-    throw new BadRequestException(validationResult.error);
+    const application = await this.applicationService.getById(
+      validationResult.data.id
+    );
+
+    if (!hasPermission(req.permissions, 'read', application)) {
+      throw new ForbiddenException();
+    }
+
+    return application;
   }
 
   @Post('generate-api-key')
@@ -92,6 +90,6 @@ export class ApplicationController {
       throw new ForbiddenException();
     }
 
-    await this.apiKeyService.deleteApiKey(validationResult.data.id);
+    await this.apiKeyService.deleteApiKey(applicationId);
   }
 }
