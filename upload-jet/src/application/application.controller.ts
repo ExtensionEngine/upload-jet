@@ -6,7 +6,7 @@ import {
   Param
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
-import { readApplicationSchema } from './application.schema';
+import { readApplicationSchema } from './validation';
 import { ValidationService } from 'shared/validation.service';
 import { logger } from '@mikro-orm/nestjs';
 
