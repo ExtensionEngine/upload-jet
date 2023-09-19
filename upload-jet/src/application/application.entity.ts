@@ -1,19 +1,18 @@
 import { Entity, ManyToOne, Property, Unique } from '@mikro-orm/core';
 import BaseEntity from '../shared/database/base.entity';
-import User from '../identity/identity.entity';
+import Identity from '../identity/identity.entity';
 
-@Entity({ tableName: 'application' })
+@Entity()
+@Unique({ properties: ['name', 'user'] })
 export default class Application extends BaseEntity {
-  @Unique()
   @Property({ nullable: false })
   name: string;
 
-  @ManyToOne({
-    entity: () => User,
-    fieldName: 'user_id',
-    serializedName: 'userId'
-  })
-  user!: User;
+  @ManyToOne(() => Identity, { fieldName: 'user_id', serializedName: 'userId' })
+  user!: Identity;
+
+  @Property({ persist: false })
+  userId!: number;
 
   constructor(name: string) {
     super();

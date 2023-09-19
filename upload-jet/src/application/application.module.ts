@@ -1,16 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ApplicationController } from './application.controller';
 import { ApplicationService } from './application.service';
-import { HttpModule } from '@nestjs/axios';
 import Application from './application.entity';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { ValidationService } from 'shared/validation.service';
-import { ApiKeyService } from './api-key.service';
+import { IdentityModule } from 'identity/identity.module';
 import ApiKey from './api-key.entity';
-
+import { ApiKeyService } from './api-key.service';
 @Module({
   controllers: [ApplicationController],
-  imports: [HttpModule, MikroOrmModule.forFeature([Application, ApiKey])],
-  providers: [ApplicationService, ValidationService, ApiKeyService]
+  imports: [MikroOrmModule.forFeature([Application, ApiKey]), IdentityModule],
+  providers: [ApplicationService, ApiKeyService]
 })
 export class ApplicationModule {}

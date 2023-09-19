@@ -1,59 +1,71 @@
 import {
   BadRequestException,
   Controller,
+  ForbiddenException,
   Get,
   Post,
   NotFoundException,
   Param,
   Body,
-  Delete
+  Delete,
+  ParseIntPipe,
+  Req,
+  UseGuards
 } from '@nestjs/common';
+import { Request } from 'express';
 import { ApplicationService } from './application.service';
-import { applicationIdSchema } from './application.schema';
 import { ValidationService } from 'shared/validation.service';
 import { logger } from '@mikro-orm/nestjs';
 import { ApiKeyService } from './api-key.service';
+import { readApplicationSchema } from './validation';
+import { PermissionGuard } from 'shared/auth/permission.guard';
+import { hasPermission } from 'shared/auth/authorization';
+import { IdentityService } from 'identity/identity.service';
 
 @Controller('application')
+@UseGuards(PermissionGuard)
 export class ApplicationController {
   constructor(
     private readonly applicationService: ApplicationService,
     private readonly validationService: ValidationService,
-    private readonly apiKeyService: ApiKeyService
+    private readonly apiKeyService: ApiKeyService,
+    private readonly identityService: IdentityService
   ) {}
 
   @Get('list')
-  async getAll() {
-    return this.applicationService.getAll();
+  async getAll(@Req() req: Request) {
+    if (!hasPermission(req.permissions, 'read', 'Application')) {
+      throw new ForbiddenException();
+    }
+
+    const identity = await this.identityService.get(req.userId);
+    return this.applicationService.getUserApplications(identity.id);
   }
 
   @Get(':id')
-  async getById(@Param('id') id: string) {
-    const validationResult = await applicationIdSchema.safeParseAsync(id);
+  async getById(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    const validationResult = await readApplicationSchema.safeParseAsync({
+      id
+    });
 
-    if (validationResult.success === false) {
-      const error = this.validationService.mapZodError(validationResult.error);
-      logger.error(error);
-      throw new BadRequestException({
-        message: 'Error fetching application',
-        error
-      });
-    }
-
-    const applicationId = validationResult.data;
-    const application = await this.applicationService.getById(applicationId);
-
-    if (!application)
-      throw new NotFoundException(
-        `Application with id ${applicationId} not found`
+    if (validationResult.success === true) {
+      const application = await this.applicationService.getById(
+        validationResult.data.id
       );
 
-    return application;
+      if (!hasPermission(req.permissions, 'read', application)) {
+        throw new ForbiddenException();
+      }
+
+      return application;
+    }
+
+    throw new BadRequestException(validationResult.error);
   }
 
   @Post('generate-api-key')
   async generateApiKey(@Body('applicationId') id: string) {
-    const validationResult = await applicationIdSchema.safeParseAsync(id);
+    const validationResult = await readApplicationSchema.safeParseAsync({ id });
 
     if (validationResult.success === false) {
       const error = this.validationService.mapZodError(validationResult.error);
@@ -64,7 +76,7 @@ export class ApplicationController {
       });
     }
 
-    const applicationId = validationResult.data;
+    const applicationId = validationResult.data.id;
     const application = await this.applicationService.getById(applicationId);
 
     if (!application)
@@ -83,7 +95,7 @@ export class ApplicationController {
 
   @Delete('delete-api-key')
   async deleteApiKey(@Body('applicationId') id: number) {
-    const validationResult = await applicationIdSchema.safeParseAsync(id);
+    const validationResult = await readApplicationSchema.safeParseAsync(id);
 
     if (validationResult.success === false) {
       const error = this.validationService.mapZodError(validationResult.error);
@@ -94,7 +106,7 @@ export class ApplicationController {
       });
     }
 
-    const applicationId = validationResult.data;
+    const applicationId = validationResult.data.id;
     const application = await this.applicationService.getById(applicationId);
 
     if (!application)
@@ -102,6 +114,6 @@ export class ApplicationController {
         `Application with id ${applicationId} not found`
       );
 
-    await this.apiKeyService.deleteApiKey(validationResult.data);
+    await this.apiKeyService.deleteApiKey(validationResult.data.id);
   }
 }

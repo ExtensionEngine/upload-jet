@@ -20,7 +20,7 @@ export default class Identity extends BaseEntity {
   @Property()
   avatarUrl: string;
 
-  @Enum({ items: Object.values(Role) })
+  @Enum(() => Role)
   role: Role;
 
   constructor(
