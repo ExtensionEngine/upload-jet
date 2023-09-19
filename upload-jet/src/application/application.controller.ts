@@ -14,8 +14,6 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ApplicationService } from './application.service';
-import { ValidationService } from 'shared/validation.service';
-import { logger } from '@mikro-orm/nestjs';
 import { ApiKeyService } from './api-key.service';
 import { readApplicationSchema } from './validation';
 import { PermissionGuard } from 'shared/auth/permission.guard';
@@ -27,7 +25,6 @@ import { IdentityService } from 'identity/identity.service';
 export class ApplicationController {
   constructor(
     private readonly applicationService: ApplicationService,
-    private readonly validationService: ValidationService,
     private readonly apiKeyService: ApiKeyService,
     private readonly identityService: IdentityService
   ) {}
@@ -68,12 +65,7 @@ export class ApplicationController {
     const validationResult = await readApplicationSchema.safeParseAsync({ id });
 
     if (validationResult.success === false) {
-      const error = this.validationService.mapZodError(validationResult.error);
-      logger.error(error);
-      throw new BadRequestException({
-        message: 'Error generating api key',
-        error
-      });
+      throw new BadRequestException(validationResult.error);
     }
 
     const applicationId = validationResult.data.id;
@@ -98,12 +90,7 @@ export class ApplicationController {
     const validationResult = await readApplicationSchema.safeParseAsync(id);
 
     if (validationResult.success === false) {
-      const error = this.validationService.mapZodError(validationResult.error);
-      logger.error(error);
-      throw new BadRequestException({
-        message: 'Error deleting api key',
-        error
-      });
+      throw new BadRequestException(validationResult.error);
     }
 
     const applicationId = validationResult.data.id;
