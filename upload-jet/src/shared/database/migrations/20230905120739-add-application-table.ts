@@ -10,7 +10,7 @@ export class AddApplication extends Migration {
       TABLE_NAME,
       table => {
         table.increments('id').primary();
-        table.string('name').notNullable().unique();
+        table.string('name').notNullable();
         table.integer('user_id').notNullable();
         table.foreign('user_id').references('user.id').onDelete('SET NULL');
         table
@@ -21,6 +21,7 @@ export class AddApplication extends Migration {
           .timestamp('updated_at', { useTz: true })
           .notNullable()
           .defaultTo(knex.fn.now());
+        table.unique(['name', 'user_id']);
       }
     );
 
