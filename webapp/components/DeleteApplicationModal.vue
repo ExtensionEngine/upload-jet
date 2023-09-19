@@ -2,8 +2,8 @@
   <BaseModal
     action-button-text="Delete"
     :disable-action-button="false"
-    action-button-class=""
-    @performAction="deleteApplication"
+    action-button-class="hover:bg-red-500"
+    @confirm:action="deleteApplication"
     @closeModal="emit('closeModal')">
     <template v-slot:header>
       <h2 class="text-center text-xl uppercase">Delete Application</h2>

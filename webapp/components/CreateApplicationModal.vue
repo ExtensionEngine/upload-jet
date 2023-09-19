@@ -3,11 +3,9 @@
     action-button-text="Create"
     :disable-action-button="!applicationName"
     :action-button-class="
-      applicationName
-        ? 'bg-green-600 hover:bg-green-500'
-        : 'text-red-500 hover:bg-red-500'
+      applicationName ? 'hover:bg-green-500' : 'text-red-500 hover:bg-red-500'
     "
-    @performAction="createApplication"
+    @confirm:action="createApplication"
     @closeModal="emit('closeModal')">
     <template v-slot:header>
       <h2 class="text-center text-xl uppercase">Create Application</h2>

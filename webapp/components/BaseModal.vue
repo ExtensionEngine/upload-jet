@@ -20,9 +20,9 @@
           Cancel
         </button>
         <button
-          @click="performAction"
+          @click="$emit('confirm:action')"
           :disabled="disableActionButton"
-          class="rounded-sm border-2 bg-red-400 p-2 text-white hover:bg-red-500"
+          class="rounded-sm border-2 bg-gray-500 p-2 text-white"
           :class="actionButtonClass">
           {{ actionButtonText }}
         </button>
@@ -35,13 +35,8 @@
 const props = defineProps({
   actionButtonText: { type: String },
   disableActionButton: { type: Boolean },
-  actionButtonClass: { type: String },
-  performAction: { type: Function }
+  actionButtonClass: { type: String }
 });
 
-const performAction = () => {
-  emit('performAction');
-};
-
-const emit = defineEmits(['closeModal', 'performAction']);
+const emit = defineEmits(['closeModal', 'confirm:action']);
 </script>
