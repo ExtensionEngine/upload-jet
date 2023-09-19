@@ -74,12 +74,6 @@ export class ApplicationController {
       throw new ForbiddenException();
     }
 
-    const apiKeyExists = await this.apiKeyService.apiKeyExists(applicationId);
-    if (apiKeyExists)
-      throw new BadRequestException({
-        message: 'Api key already exists for this application'
-      });
-
     return this.apiKeyService.generateApiKey(application);
   }
 

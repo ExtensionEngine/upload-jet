@@ -1,5 +1,5 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import ApiKey from './api-key.entity';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import Application from './application.entity';
@@ -28,6 +28,12 @@ export class ApiKeyService {
   }
 
   async generateApiKey(application: Application): Promise<string> {
+    const apiKeyExists = await this.apiKeyExists(application.id);
+    if (apiKeyExists)
+      throw new BadRequestException({
+        message: 'Api key already exists for this application'
+      });
+
     const apiKey = randomUUID();
     const hashedKey = await this.hashApiKey(apiKey);
 
