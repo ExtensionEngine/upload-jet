@@ -4,39 +4,21 @@
     <div
       class="relative m-auto flex w-96 flex-col gap-7 rounded-xl bg-white p-5 pl-7 shadow-md">
       <Icon
-        @click="emit('closeModal')"
+        @click="emit('close:modal')"
         :name="'mdi:close'"
         size="24"
         class="absolute right-2 top-2 ease-out hover:cursor-pointer" />
 
       <slot name="header"></slot>
       <slot name="content"></slot>
-      <slot></slot>
 
       <div class="flex justify-end gap-3">
-        <button
-          @click="emit('closeModal')"
-          class="rounded-sm border-2 bg-gray-300 p-2 text-black hover:bg-gray-400">
-          Cancel
-        </button>
-        <button
-          @click="$emit('confirm:action')"
-          :disabled="disableActionButton"
-          class="rounded-sm border-2 bg-gray-500 p-2 text-white"
-          :class="actionButtonClass">
-          {{ actionButtonText }}
-        </button>
+        <slot name="footer"></slot>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-const props = defineProps({
-  actionButtonText: { type: String },
-  disableActionButton: { type: Boolean },
-  actionButtonClass: { type: String }
-});
-
-const emit = defineEmits(['closeModal', 'confirm:action']);
+const emit = defineEmits(['close:modal']);
 </script>

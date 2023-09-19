@@ -1,12 +1,5 @@
 <template>
-  <BaseModal
-    action-button-text="Create"
-    :disable-action-button="!applicationName"
-    :action-button-class="
-      applicationName ? 'hover:bg-green-500' : 'text-red-500 hover:bg-red-500'
-    "
-    @confirm:action="createApplication"
-    @closeModal="emit('closeModal')">
+  <BaseModal @close:modal="emit('close:modal')">
     <template v-slot:header>
       <h2 class="text-center text-xl uppercase">Create Application</h2>
     </template>
@@ -19,6 +12,20 @@
           class="h-10 w-full border-2 p-2" />
       </form>
     </template>
+    <template v-slot:footer>
+      <button
+        @click="emit('close:modal')"
+        class="rounded-sm border-2 bg-gray-300 p-2 text-black hover:bg-gray-400">
+        Cancel
+      </button>
+      <button
+        @click="emit('create:application', applicationName)"
+        :disabled="!applicationName"
+        class="text-whit rounded-sm border-2 bg-gray-500 p-2"
+        :class="{ 'bg-green-500 hover:bg-green-400': applicationName }">
+        Create
+      </button>
+    </template>
   </BaseModal>
 </template>
 
@@ -28,7 +35,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits([
-  'closeModal',
+  'close:modal',
   'update:applicationName',
   'create:application'
 ]);
@@ -41,8 +48,4 @@ const applicationName = computed({
     emit('update:applicationName', newValue);
   }
 });
-
-const createApplication = () => {
-  emit('create:application', applicationName.value);
-};
 </script>
