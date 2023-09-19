@@ -61,7 +61,7 @@ export class ApplicationController {
   }
 
   @Post('generate-api-key')
-  async generateApiKey(@Body('applicationId') id: string) {
+  async generateApiKey(@Req() req: Request, @Body('applicationId') id: string) {
     const validationResult = await readApplicationSchema.safeParseAsync({ id });
 
     if (validationResult.success === false) {
@@ -71,10 +71,9 @@ export class ApplicationController {
     const applicationId = validationResult.data.id;
     const application = await this.applicationService.getById(applicationId);
 
-    if (!application)
-      throw new NotFoundException(
-        `Application with id ${applicationId} not found`
-      );
+    if (!hasPermission(req.permissions, 'update', application)) {
+      throw new ForbiddenException();
+    }
 
     const apiKeyExists = await this.apiKeyService.apiKeyExists(applicationId);
     if (apiKeyExists)
@@ -86,7 +85,7 @@ export class ApplicationController {
   }
 
   @Delete('delete-api-key')
-  async deleteApiKey(@Body('applicationId') id: number) {
+  async deleteApiKey(@Req() req: Request, @Body('applicationId') id: number) {
     const validationResult = await readApplicationSchema.safeParseAsync(id);
 
     if (validationResult.success === false) {
@@ -96,10 +95,9 @@ export class ApplicationController {
     const applicationId = validationResult.data.id;
     const application = await this.applicationService.getById(applicationId);
 
-    if (!application)
-      throw new NotFoundException(
-        `Application with id ${applicationId} not found`
-      );
+    if (!hasPermission(req.permissions, 'update', application)) {
+      throw new ForbiddenException();
+    }
 
     await this.apiKeyService.deleteApiKey(validationResult.data.id);
   }
