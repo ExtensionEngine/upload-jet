@@ -9,6 +9,8 @@
         size="24"
         class="absolute right-2 top-2 ease-out hover:cursor-pointer" />
 
+      <slot name="header"></slot>
+      <slot name="content"></slot>
       <slot></slot>
 
       <div class="flex justify-end gap-3">

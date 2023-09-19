@@ -5,8 +5,14 @@
     action-button-class=""
     @performAction="deleteApplication"
     @closeModal="emit('closeModal')">
-    <h2 class="text-center text-xl uppercase">Delete Application</h2>
-    <h1>Are you sure you want to permanently delete {{ applicationName }}?</h1>
+    <template v-slot:header>
+      <h2 class="text-center text-xl uppercase">Delete Application</h2>
+    </template>
+    <template v-slot:content>
+      <h1>
+        Are you sure you want to permanently delete {{ applicationName }}?
+      </h1>
+    </template>
   </BaseModal>
 </template>
 

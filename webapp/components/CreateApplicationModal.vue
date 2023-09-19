@@ -9,14 +9,18 @@
     "
     @performAction="createApplication"
     @closeModal="emit('closeModal')">
-    <h2 class="text-center text-xl uppercase">Create Application</h2>
-    <form @submit.prevent>
-      <input
-        placeholder="Enter your Application name"
-        type="text"
-        v-model="applicationName"
-        class="h-10 w-full border-2 p-2" />
-    </form>
+    <template v-slot:header>
+      <h2 class="text-center text-xl uppercase">Create Application</h2>
+    </template>
+    <template v-slot:content>
+      <form @submit.prevent>
+        <input
+          placeholder="Enter your Application name"
+          type="text"
+          v-model="applicationName"
+          class="h-10 w-full border-2 p-2" />
+      </form>
+    </template>
   </BaseModal>
 </template>
 
