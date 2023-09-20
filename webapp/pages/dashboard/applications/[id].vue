@@ -22,10 +22,6 @@
 
 <script setup lang="ts">
 import { Application } from '@/types/application.dto';
-const route = useRoute();
-const config = useRuntimeConfig();
-const headers = useRequestHeaders();
-const applicationUrl = new URL(`/applications/${route.params.id}`, config.public.apiUrl);
 
 const application = ref<Application | null>(null);
 
@@ -33,7 +29,7 @@ const formatDate = (dateString: string) => {
   return new Date(dateString).toUTCString()
 }
 
-const { data, error } = await useFetch(applicationUrl.href, { headers, credentials: 'include' });
+const { data, error } = await useFetchData(`/applications/${useRoute().params.id}`);
 const app = data.value as Application;
 
 if (error.value) {
