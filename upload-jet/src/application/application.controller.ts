@@ -1,31 +1,33 @@
 import {
   BadRequestException,
+  Body,
   Controller,
+  Delete,
   ForbiddenException,
   Get,
-  Post,
+  NotFoundException,
   Param,
-  Body,
-  Delete,
   ParseIntPipe,
+  Post,
   Req,
   UseGuards
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApplicationService } from './application.service';
-import { ApiKeyService } from './api-key.service';
+import {
+  ApplicationNotFoundError,
+  ApplicationService
+} from './application.service';
 import { readApplicationSchema } from './validation';
 import { PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
-import { IdentityService } from 'identity/identity.service';
+import { ApiKeyService } from './api-key.service';
 
 @Controller('application')
 @UseGuards(PermissionGuard)
 export class ApplicationController {
   constructor(
     private readonly applicationService: ApplicationService,
-    private readonly apiKeyService: ApiKeyService,
-    private readonly identityService: IdentityService
+    private readonly apiKeyService: ApiKeyService
   ) {}
 
   @Get('list')
@@ -34,27 +36,30 @@ export class ApplicationController {
       throw new ForbiddenException();
     }
 
-    const identity = await this.identityService.get(req.userId);
-    return this.applicationService.getUserApplications(identity.id);
+    return this.applicationService.getUserApplications(req.userId);
   }
 
   @Get(':id')
   async getById(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-    const validationResult = await readApplicationSchema.safeParseAsync({ id });
+    const validationResult = await readApplicationSchema.parseAsync({
+      id
+    });
 
-    if (validationResult.success === false) {
-      throw new BadRequestException(validationResult.error);
-    }
+    return this.applicationService
+      .getById(validationResult.id)
+      .then(application => {
+        if (!hasPermission(req.permissions, 'read', application)) {
+          throw new ForbiddenException();
+        }
 
-    const application = await this.applicationService.getById(
-      validationResult.data.id
-    );
+        return application;
+      })
+      .catch(err => {
+        if (err instanceof ApplicationNotFoundError)
+          throw new NotFoundException(err.message);
 
-    if (!hasPermission(req.permissions, 'read', application)) {
-      throw new ForbiddenException();
-    }
-
-    return application;
+        throw err;
+      });
   }
 
   @Post('generate-api-key')

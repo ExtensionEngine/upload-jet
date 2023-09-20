@@ -12,7 +12,7 @@ import oauthConfig from 'config/oauth.config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthenticationMiddleware } from 'shared/auth/authentication.middleware';
 import { ApplicationModule } from 'application/application.module';
-import { HttpExceptionFilter } from 'shared/http-exception.filter';
+import { ZodExceptionFilter } from 'shared/zod-exception.filter';
 import { APP_FILTER } from '@nestjs/core';
 import { ValidationService } from 'shared/validation.service';
 
@@ -56,7 +56,7 @@ import { ValidationService } from 'shared/validation.service';
   providers: [
     {
       provide: APP_FILTER,
-      useClass: HttpExceptionFilter
+      useClass: ZodExceptionFilter
     },
     ValidationService
   ]
