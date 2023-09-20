@@ -1,48 +1,56 @@
 import {
-  BadRequestException,
   Controller,
+  ForbiddenException,
   Get,
   NotFoundException,
-  Param
+  Param,
+  ParseIntPipe,
+  Req,
+  UseGuards
 } from '@nestjs/common';
-import { ApplicationService } from './application.service';
-import { fetchApplicationSchema } from './application.schema';
-import { ValidationService } from 'shared/validation.service';
-import { logger } from '@mikro-orm/nestjs';
+import { Request } from 'express';
+import {
+  ApplicationNotFoundError,
+  ApplicationService
+} from './application.service';
+import { readApplicationSchema } from './validation';
+import { PermissionGuard } from 'shared/auth/permission.guard';
+import { hasPermission } from 'shared/auth/authorization';
 
 @Controller('application')
+@UseGuards(PermissionGuard)
 export class ApplicationController {
-  constructor(
-    private readonly applicationService: ApplicationService,
-    private readonly validationService: ValidationService
-  ) {}
+  constructor(private readonly applicationService: ApplicationService) {}
 
   @Get('list')
-  async getAll() {
-    return this.applicationService.getAll();
+  async getAll(@Req() req: Request) {
+    if (!hasPermission(req.permissions, 'read', 'Application')) {
+      throw new ForbiddenException();
+    }
+
+    return this.applicationService.getUserApplications(req.userId);
   }
 
   @Get(':id')
-  async getById(@Param('id') id: string) {
-    const validationResult = await fetchApplicationSchema.safeParseAsync({
+  async getById(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    const validationResult = await readApplicationSchema.parseAsync({
       id
     });
 
-    if (validationResult.success === true) {
-      const application = await this.applicationService.getById(
-        validationResult.data.id
-      );
+    return this.applicationService
+      .getById(validationResult.id)
+      .then(application => {
+        if (!hasPermission(req.permissions, 'read', application)) {
+          throw new ForbiddenException();
+        }
 
-      if (application) return application;
+        return application;
+      })
+      .catch(err => {
+        if (err instanceof ApplicationNotFoundError)
+          throw new NotFoundException(err.message);
 
-      throw new NotFoundException(`Application with id ${id} not found`);
-    }
-
-    const error = this.validationService.mapZodError(validationResult.error);
-    logger.error(error);
-    throw new BadRequestException({
-      message: 'Error fetching application',
-      error
-    });
+        throw err;
+      });
   }
 }
