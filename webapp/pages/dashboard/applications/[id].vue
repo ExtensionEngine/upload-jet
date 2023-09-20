@@ -22,8 +22,12 @@
 
 <script setup lang="ts">
 const route = useRoute();
+const config = useRuntimeConfig();
+const headers = useRequestHeaders();
+const applicationUrl = new URL(`/applications/${route.params.id}`, config.public.apiUrl);
+console.log('url: ', applicationUrl.href);
 
-interface Application {
+type Application = {
   id: number;
   name: string;
   createdAt: string;
@@ -31,28 +35,18 @@ interface Application {
 
 const application = ref<Application | null>(null);
 
-const fetchApplication = async (id: number) => {
-  const config = useRuntimeConfig();
-
-  const route = `/application/${id}`;
-  const applicationUrl = new URL(route, config.public.apiUrl);
-
-  $fetch(applicationUrl.href, { credentials: 'include' }).then(data => {
-    const app = data as Application;
-    app.createdAt = formatDate(app.createdAt);
-
-    application.value = app;
-  })
-};
-
 const formatDate = (dateString: string) => {
   return new Date(dateString).toUTCString()
 }
 
-const id = useRoute().params.id.toString();
-const applicationId = parseInt(id);
+const { data, error } = await useFetch(applicationUrl.href, { headers, credentials: 'include' });
+const app = data.value as Application;
 
-if (!isNaN(applicationId)) {
-  fetchApplication(applicationId);
+if (error.value) {
+  throw createError({ ...error.value, fatal: true });
 }
+
+app.createdAt = formatDate(app.createdAt);
+application.value = app;
+
 </script>

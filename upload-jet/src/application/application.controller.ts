@@ -17,7 +17,7 @@ import { readApplicationSchema } from './validation';
 import { PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
 
-@Controller('application')
+@Controller('applications')
 @UseGuards(PermissionGuard)
 export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}
