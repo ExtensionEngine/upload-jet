@@ -3,7 +3,6 @@ import {
   Controller,
   ForbiddenException,
   Get,
-  NotFoundException,
   Param,
   ParseIntPipe,
   Req,
@@ -14,15 +13,11 @@ import { ApplicationService } from './application.service';
 import { readApplicationSchema } from './validation';
 import { PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
-import { IdentityService } from 'identity/identity.service';
 
 @Controller('application')
 @UseGuards(PermissionGuard)
 export class ApplicationController {
-  constructor(
-    private readonly applicationService: ApplicationService,
-    private readonly identityService: IdentityService
-  ) {}
+  constructor(private readonly applicationService: ApplicationService) {}
 
   @Get('list')
   async getAll(@Req() req: Request) {
@@ -30,8 +25,7 @@ export class ApplicationController {
       throw new ForbiddenException();
     }
 
-    const identity = await this.identityService.get(req.userId);
-    return this.applicationService.getUserApplications(identity.id);
+    return this.applicationService.getUserApplications(req.userId);
   }
 
   @Get(':id')
