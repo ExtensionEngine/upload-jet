@@ -41,7 +41,7 @@ const fetchApplication = async (id: number) => {
     const app = data as Application;
     app.createdAt = formatDate(app.createdAt);
 
-    application.value = app
+    application.value = app;
   })
 };
 
@@ -49,7 +49,9 @@ const formatDate = (dateString: string) => {
   return new Date(dateString).toUTCString()
 }
 
-const applicationId = parseInt(route.params.id.toString());
+const id = useRoute().params.id.toString();
+const applicationId = parseInt(id);
+
 if (!isNaN(applicationId)) {
   fetchApplication(applicationId);
 }
