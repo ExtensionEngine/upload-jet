@@ -10,6 +10,13 @@ export class ApplicationNotFoundError extends Error {
   }
 }
 
+export class ApiKeyExistsError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = this.constructor.name;
+  }
+}
+
 @Injectable()
 export class ApplicationService {
   constructor(
@@ -36,7 +43,6 @@ export class ApplicationService {
   async generateApiKey(application: Application) {
     const apiKey = await application.generateApiKey();
     await this.em.persistAndFlush(application);
-
     return apiKey;
   }
 
