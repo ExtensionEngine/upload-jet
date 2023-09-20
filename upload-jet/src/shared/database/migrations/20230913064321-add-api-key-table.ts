@@ -10,7 +10,7 @@ export class Migration20230913064321 extends Migration {
       TABLE_NAME,
       table => {
         table.increments('id').primary();
-        table.string('key').notNullable().unique();
+        table.string('key_hash').notNullable().unique();
         table.integer('application_id').notNullable();
         table
           .foreign('application_id')

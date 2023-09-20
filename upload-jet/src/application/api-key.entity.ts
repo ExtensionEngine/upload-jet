@@ -5,8 +5,12 @@ import Application from './application.entity';
 @Entity({ tableName: 'api_key' })
 export default class ApiKey extends BaseDeleteableEntity {
   @Unique()
-  @Property({ nullable: false })
-  key: string;
+  @Property({
+    nullable: false,
+    serializedName: 'keyHash',
+    fieldName: 'key_hash'
+  })
+  keyHash: string;
 
   @ManyToOne({
     entity: () => Application,
@@ -15,8 +19,8 @@ export default class ApiKey extends BaseDeleteableEntity {
   })
   application!: Application;
 
-  constructor(key: string) {
+  constructor(keyHash: string) {
     super();
-    this.key = key;
+    this.keyHash = keyHash;
   }
 }
