@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Controller,
   ForbiddenException,
   Get,
@@ -30,22 +29,18 @@ export class ApplicationController {
 
   @Get(':id')
   async getById(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-    const validationResult = await readApplicationSchema.safeParseAsync({
+    const validationResult = await readApplicationSchema.parseAsync({
       id
     });
 
-    if (validationResult.success === true) {
-      const application = await this.applicationService.getById(
-        validationResult.data.id
-      );
+    const application = await this.applicationService.getById(
+      validationResult.id
+    );
 
-      if (!hasPermission(req.permissions, 'read', application)) {
-        throw new ForbiddenException();
-      }
-
-      return application;
+    if (!hasPermission(req.permissions, 'read', application)) {
+      throw new ForbiddenException();
     }
 
-    throw new BadRequestException(validationResult.error);
+    return application;
   }
 }
