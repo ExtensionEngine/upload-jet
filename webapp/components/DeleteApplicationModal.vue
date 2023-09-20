@@ -4,9 +4,7 @@
       <h2 class="text-center text-xl uppercase">Delete Application</h2>
     </template>
     <template v-slot:content>
-      <h1>
-        Are you sure you want to permanently delete {{ applicationName }}?
-      </h1>
+      <p>Are you sure you want to permanently delete {{ applicationName }}?</p>
     </template>
     <template v-slot:footer>
       <button
@@ -23,10 +21,10 @@
   </BaseModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
-  id: { type: Number },
-  applicationName: { type: [String, null] }
+  id: { type: Number, default: null },
+  applicationName: { type: String, default: null }
 });
 
 const baseModalRef = ref();

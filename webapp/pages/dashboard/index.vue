@@ -32,9 +32,9 @@
     v-model:application-name="inputValue" />
   <DeleteApplicationModal
     ref="deleteApplicationModal"
-    @delete:application="deleteApplication(applicationId)"
     :id="applicationId"
-    :application-name="applicationName" />
+    :application-name="applicationName"
+    @delete:application="deleteApplication(applicationId)" />
 </template>
 
 <script setup lang="ts">
@@ -65,7 +65,7 @@ const applicationName = computed(() => {
   const filteredApplication = mockedApplications.value.find(
     app => app.id === applicationId.value
   );
-  return filteredApplication?.name || null;
+  return filteredApplication?.name;
 });
 
 // Below is a test code just for the client side to showcase the render functionality, will be deleted before merging
