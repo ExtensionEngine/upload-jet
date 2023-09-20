@@ -1,11 +1,9 @@
 <template>
-  <dialog
-    ref="baseModal"
-    class="fixed left-0 top-0 z-50 flex h-screen w-screen bg-gray-700 bg-opacity-50 transition-opacity duration-100 ease-in-out">
+  <dialog ref="baseModalRef">
     <div
       class="relative m-auto flex w-96 flex-col gap-7 rounded-xl bg-white p-5 pl-7 shadow-md">
       <Icon
-        @click="emit('close:modal')"
+        @click="closeModal"
         :name="'mdi:close'"
         size="24"
         class="absolute right-2 top-2 ease-out hover:cursor-pointer" />
@@ -18,14 +16,22 @@
       </div>
     </div>
   </dialog>
+  <slot name="trigger" v-bind="{ showModal }"></slot>
 </template>
 
-<script setup>
-const baseModal = ref(null);
+<script setup lang="ts">
+const baseModalRef = ref<HTMLDialogElement>();
 
-onMounted(() => {
-  baseModal.value.show();
+const showModal = () => {
+  baseModalRef.value?.showModal();
+};
+
+const closeModal = () => {
+  baseModalRef.value?.close();
+};
+
+defineExpose({
+  showModal,
+  closeModal
 });
-
-const emit = defineEmits(['close:modal']);
 </script>

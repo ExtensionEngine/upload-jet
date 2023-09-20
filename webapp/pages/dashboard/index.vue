@@ -2,7 +2,7 @@
   <div class="flex flex-col pb-2">
     <div class="mb-4 flex w-full flex-row justify-end p-4 pb-0">
       <button
-        @click="isCreateApplicationModalOpen = true"
+        @click="showModal"
         class="w-32 rounded-lg bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600">
         Create App
       </button>
@@ -27,13 +27,12 @@
   </div>
 
   <CreateApplicationModal
-    v-if="isCreateApplicationModalOpen"
-    @close:modal="isCreateApplicationModalOpen = false"
+    ref="createApplicationModal"
+    @close:modal="closeModal"
     @create:application="createApplication"
     v-model:application-name="inputValue" />
   <DeleteApplicationModal
-    v-if="isDeleteApplicationModalOpen"
-    @close:modal="isDeleteApplicationModalOpen = false"
+    @close:modal="closeDeleteModal"
     @delete:application="deleteApplication(applicationId)"
     :id="applicationId"
     :application-name="applicationName" />
@@ -45,14 +44,20 @@ definePageMeta({
   alias: '/dashboard/applications'
 });
 
-const isCreateApplicationModalOpen = ref(false);
-const isDeleteApplicationModalOpen = ref(false);
+const createApplicationModal = ref();
+const deleteApplicationModal = ref();
+
+const { showModal, closeModal } = useModal(createApplicationModal);
+const { showModal: showDeleteModal, closeModal: closeDeleteModal } = useModal(
+  deleteApplicationModal
+);
+
 const applicationId = ref<number>();
 const inputValue = ref('');
 
 function openDeleteApplicationModal(id: number) {
-  isDeleteApplicationModalOpen.value = true;
   applicationId.value = id;
+  showDeleteModal();
 }
 
 const applicationName = computed(() => {
@@ -78,7 +83,6 @@ const createApplication = (input: string) => {
   const randomId = Math.floor(Math.random() * 1000);
   const newApplication = { id: randomId, name: input };
   mockedApplications.value.push(newApplication);
-  isCreateApplicationModalOpen.value = false;
   inputValue.value = '';
 };
 
@@ -86,6 +90,5 @@ const deleteApplication = (id: number | undefined) => {
   mockedApplications.value = mockedApplications.value.filter(
     app => app.id !== id
   );
-  isDeleteApplicationModalOpen.value = false;
 };
 </script>

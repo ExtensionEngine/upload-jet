@@ -1,9 +1,9 @@
 <template>
-  <BaseModal @close:modal="emit('close:modal')">
-    <template v-slot:header>
+  <BaseModal ref="baseModalRef">
+    <template #header>
       <h2 class="text-center text-xl uppercase">Create Application</h2>
     </template>
-    <template v-slot:content>
+    <template #content>
       <form @submit.prevent>
         <input
           placeholder="Enter your Application name"
@@ -12,9 +12,9 @@
           class="h-10 w-full border-2 p-2" />
       </form>
     </template>
-    <template v-slot:footer>
+    <template #footer>
       <button
-        @click="emit('close:modal')"
+        @click="closeModal"
         class="rounded-sm border-2 bg-gray-300 p-2 text-black hover:bg-gray-400">
         Cancel
       </button>
@@ -29,9 +29,17 @@
   </BaseModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
   applicationName: { type: String }
+});
+
+const baseModalRef = ref();
+const { showModal, closeModal } = useModal(baseModalRef);
+
+defineExpose({
+  showModal,
+  closeModal
 });
 
 const emit = defineEmits([
