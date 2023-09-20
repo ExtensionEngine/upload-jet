@@ -22,5 +22,5 @@ export default async function useAuth() {
     navigateTo(`${API_BASE_URL}/identity/signout`, { external: true });
   }
 
-  return { isLoggedIn, signOut, setUser, user };
+  return { isLoggedIn, signOut, user };
 }
