@@ -2,13 +2,17 @@ import {
   Controller,
   ForbiddenException,
   Get,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Req,
   UseGuards
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApplicationService } from './application.service';
+import {
+  ApplicationNotFoundError,
+  ApplicationService
+} from './application.service';
 import { readApplicationSchema } from './validation';
 import { PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
@@ -33,14 +37,20 @@ export class ApplicationController {
       id
     });
 
-    const application = await this.applicationService.getById(
-      validationResult.id
-    );
+    return this.applicationService
+      .getById(validationResult.id)
+      .then(application => {
+        if (!hasPermission(req.permissions, 'read', application)) {
+          throw new ForbiddenException();
+        }
 
-    if (!hasPermission(req.permissions, 'read', application)) {
-      throw new ForbiddenException();
-    }
+        return application;
+      })
+      .catch(err => {
+        if (err instanceof ApplicationNotFoundError)
+          throw new NotFoundException(err.message);
 
-    return application;
+        throw err;
+      });
   }
 }

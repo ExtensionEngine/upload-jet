@@ -1,7 +1,14 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import Application from './application.entity';
+
+export class ApplicationNotFoundError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = this.constructor.name;
+  }
+}
 
 @Injectable()
 export class ApplicationService {
@@ -17,7 +24,9 @@ export class ApplicationService {
   async getById(id: number) {
     return this.applicationRepository.findOne({ id }).then(result => {
       if (!result)
-        throw new NotFoundException(`Application with id ${id} not found`);
+        throw new ApplicationNotFoundError(
+          `Application with id ${id} not found`
+        );
 
       return result;
     });
