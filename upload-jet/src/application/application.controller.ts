@@ -1,6 +1,6 @@
 import {
-  BadRequestException,
   Body,
+  ConflictException,
   Controller,
   Delete,
   ForbiddenException,
@@ -14,14 +14,13 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import {
-  ApiKeyExistsError,
   ApplicationNotFoundError,
   ApplicationService
 } from './application.service';
 import { readApplicationSchema } from './validation';
 import { PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
-import Application from './application.entity';
+import Application, { ApiKeyExistsError } from './application.entity';
 
 function applicationErrorCatch(err: unknown) {
   if (err instanceof ApplicationNotFoundError)
@@ -75,7 +74,7 @@ export class ApplicationController {
           .generateApiKey(application)
           .catch(err => {
             if (err instanceof ApiKeyExistsError)
-              throw new BadRequestException(err.message);
+              throw new ConflictException(err.message);
           });
       })
       .catch(applicationErrorCatch);

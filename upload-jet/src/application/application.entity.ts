@@ -1,7 +1,6 @@
 import {
   Collection,
   Entity,
-  EntityManager,
   OneToMany,
   Property,
   Unique
@@ -9,7 +8,13 @@ import {
 import BaseEntity from '../shared/database/base.entity';
 import ApiKey from './api-key.entity';
 import { createHash, randomUUID } from 'crypto';
-import { ApiKeyExistsError } from './application.service';
+
+export class ApiKeyExistsError extends Error {
+  constructor() {
+    super('Api key already exists for this application');
+    this.name = this.constructor.name;
+  }
+}
 
 @Entity()
 @Unique({ properties: ['name', 'userId'] })
@@ -20,7 +25,7 @@ export default class Application extends BaseEntity {
   @Property({ fieldName: 'user_id', serializedName: 'userId' })
   userId!: number;
 
-  @OneToMany(() => ApiKey, apiKey => apiKey.application)
+  @OneToMany(() => ApiKey, apiKey => apiKey.application, { eager: true })
   apiKeys = new Collection<ApiKey>(this);
 
   constructor(name: string, userId: number) {
@@ -41,24 +46,14 @@ export default class Application extends BaseEntity {
   }
 
   async generateApiKey(): Promise<string> {
-    await this.apiKeys.init();
-
-    if (this.apiKeyExists())
-      throw new ApiKeyExistsError(
-        'Api key already exists for this application'
-      );
-
+    if (this.apiKeyExists()) throw new ApiKeyExistsError();
     const apiKey = randomUUID();
     const hashedKey = await this.hashApiKey(apiKey);
-
     this.apiKeys.add(new ApiKey(hashedKey));
-
     return apiKey;
   }
 
   async deleteApiKey(): Promise<void> {
-    await this.apiKeys.init();
-
     const apiKeys = await this.apiKeys.loadItems();
     apiKeys.forEach(apiKey => (apiKey.deletedAt = new Date()));
   }
