@@ -15,9 +15,8 @@ export default class ApiKey extends BaseDeleteableEntity {
   })
   application!: Application;
 
-  constructor(key: string, application: Application) {
+  constructor(key: string) {
     super();
     this.key = key;
-    this.application = application;
   }
 }

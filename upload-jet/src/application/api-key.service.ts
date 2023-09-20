@@ -1,17 +1,12 @@
-import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import ApiKey from './api-key.entity';
-import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { EntityManager } from '@mikro-orm/core';
 import Application from './application.entity';
 import { randomUUID, createHash } from 'crypto';
 
 @Injectable()
 export class ApiKeyService {
-  constructor(
-    private readonly em: EntityManager,
-    @InjectRepository(ApiKey)
-    private readonly apiKeyRepository: EntityRepository<ApiKey>
-  ) {}
+  constructor(private readonly em: EntityManager) {}
 
   private async hashApiKey(apiKey: string): Promise<string> {
     const hash = createHash('sha512');
@@ -19,16 +14,15 @@ export class ApiKeyService {
     return hash.digest('hex');
   }
 
-  async apiKeyExists(applicationId: number): Promise<boolean> {
-    const apiKey = await this.apiKeyRepository.findOne({
-      application: applicationId,
-      deletedAt: null
-    });
-    return !!apiKey;
+  apiKeyExists(application: Application): boolean {
+    const apiKeys = application.apiKeys.getItems();
+    return !!apiKeys.find(apiKey => !apiKey.deletedAt);
   }
 
   async generateApiKey(application: Application): Promise<string> {
-    const apiKeyExists = await this.apiKeyExists(application.id);
+    await application.apiKeys.init();
+
+    const apiKeyExists = this.apiKeyExists(application);
     if (apiKeyExists)
       throw new BadRequestException({
         message: 'Api key already exists for this application'
@@ -37,18 +31,19 @@ export class ApiKeyService {
     const apiKey = randomUUID();
     const hashedKey = await this.hashApiKey(apiKey);
 
-    this.em.persist(new ApiKey(hashedKey, application));
-    this.em.flush();
+    application.apiKeys.add(new ApiKey(hashedKey));
+
+    this.em.persistAndFlush(application);
 
     return apiKey;
   }
 
-  async deleteApiKey(applicationId: number): Promise<void> {
-    this.apiKeyRepository.nativeUpdate(
-      { application: applicationId },
-      { deletedAt: new Date() }
-    );
+  async deleteApiKey(application: Application): Promise<void> {
+    await application.apiKeys.init();
 
-    this.em.flush();
+    const apiKeys = await application.apiKeys.loadItems();
+    apiKeys.forEach(apiKey => (apiKey.deletedAt = new Date()));
+
+    this.em.persistAndFlush(application);
   }
 }

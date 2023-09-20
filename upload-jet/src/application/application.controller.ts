@@ -77,7 +77,7 @@ export class ApplicationController {
 
   @Delete('delete-api-key')
   async deleteApiKey(@Req() req: Request, @Body('applicationId') id: number) {
-    const validationResult = await readApplicationSchema.safeParseAsync(id);
+    const validationResult = await readApplicationSchema.safeParseAsync({ id });
 
     if (validationResult.success === false) {
       throw new BadRequestException(validationResult.error);
@@ -90,6 +90,6 @@ export class ApplicationController {
       throw new ForbiddenException();
     }
 
-    await this.apiKeyService.deleteApiKey(applicationId);
+    await this.apiKeyService.deleteApiKey(application);
   }
 }
