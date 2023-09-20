@@ -10,8 +10,9 @@ export default class Application extends BaseEntity {
   @Property({ fieldName: 'user_id', serializedName: 'userId' })
   userId!: number;
 
-  constructor(name: string) {
+  constructor(name: string, userId: number) {
     super();
     this.name = name;
+    this.userId = userId;
   }
 }
