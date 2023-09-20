@@ -32,6 +32,7 @@
     @create:application="createApplication"
     v-model:application-name="inputValue" />
   <DeleteApplicationModal
+    ref="deleteApplicationModal"
     @close:modal="closeDeleteModal"
     @delete:application="deleteApplication(applicationId)"
     :id="applicationId"
@@ -84,11 +85,13 @@ const createApplication = (input: string) => {
   const newApplication = { id: randomId, name: input };
   mockedApplications.value.push(newApplication);
   inputValue.value = '';
+  closeModal();
 };
 
 const deleteApplication = (id: number | undefined) => {
   mockedApplications.value = mockedApplications.value.filter(
     app => app.id !== id
   );
+  closeDeleteModal();
 };
 </script>
