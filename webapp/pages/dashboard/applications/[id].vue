@@ -24,8 +24,7 @@
 const route = useRoute();
 const config = useRuntimeConfig();
 const headers = useRequestHeaders();
-const applicationUrl = new URL(`/applications/${route.params.id}`, config.public.apiUrl);
-console.log('url: ', applicationUrl.href);
+const applicationUrl = new URL(`/applications/${route.params.id}`, config.public.apiUrl);„
 
 type Application = {
   id: number;
