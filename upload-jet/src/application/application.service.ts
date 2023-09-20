@@ -1,4 +1,4 @@
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 import Application from './application.entity';
@@ -10,9 +10,17 @@ export class ApplicationNotFoundError extends Error {
   }
 }
 
+export class ApiKeyExistsError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = this.constructor.name;
+  }
+}
+
 @Injectable()
 export class ApplicationService {
   constructor(
+    private readonly em: EntityManager,
     @InjectRepository(Application)
     private readonly applicationRepository: EntityRepository<Application>
   ) {}
@@ -30,5 +38,17 @@ export class ApplicationService {
 
       return result;
     });
+  }
+
+  async generateApiKey(application: Application) {
+    const apiKey = await application.generateApiKey();
+    this.em.persistAndFlush(application);
+
+    return apiKey;
+  }
+
+  async deleteApiKey(application: Application) {
+    await application.deleteApiKey();
+    this.em.persistAndFlush(application);
   }
 }
