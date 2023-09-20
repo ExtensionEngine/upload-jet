@@ -22,6 +22,13 @@ import { PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
 import { ApiKeyService } from './api-key.service';
 
+function applicationErrorCatch(err: unknown) {
+  if (err instanceof ApplicationNotFoundError)
+    throw new NotFoundException(err.message);
+
+  throw err;
+}
+
 @Controller('application')
 @UseGuards(PermissionGuard)
 export class ApplicationController {
@@ -48,47 +55,35 @@ export class ApplicationController {
     return this.applicationService
       .getById(validationResult.id)
       .then(application => {
-        if (!hasPermission(req.permissions, 'read', application)) {
+        if (!hasPermission(req.permissions, 'read', application))
           throw new ForbiddenException();
-        }
 
         return application;
       })
-      .catch(err => {
-        if (err instanceof ApplicationNotFoundError)
-          throw new NotFoundException(err.message);
-
-        throw err;
-      });
+      .catch(applicationErrorCatch);
   }
 
   @Post('generate-api-key')
   async generateApiKey(@Req() req: Request, @Body('applicationId') id: string) {
-    const validationResult = await readApplicationSchema.safeParseAsync({ id });
+    const validationResult = await readApplicationSchema.parseAsync({ id });
 
-    if (validationResult.success === false) {
-      throw new BadRequestException(validationResult.error);
-    }
+    const applicationId = validationResult.id;
+    return this.applicationService
+      .getById(applicationId)
+      .then(application => {
+        if (!hasPermission(req.permissions, 'update', application))
+          throw new ForbiddenException();
 
-    const applicationId = validationResult.data.id;
-    const application = await this.applicationService.getById(applicationId);
-
-    if (!hasPermission(req.permissions, 'update', application)) {
-      throw new ForbiddenException();
-    }
-
-    return this.apiKeyService.generateApiKey(application);
+        return this.apiKeyService.generateApiKey(application);
+      })
+      .catch(applicationErrorCatch);
   }
 
   @Delete('delete-api-key')
   async deleteApiKey(@Req() req: Request, @Body('applicationId') id: number) {
-    const validationResult = await readApplicationSchema.safeParseAsync({ id });
+    const validationResult = await readApplicationSchema.parseAsync({ id });
 
-    if (validationResult.success === false) {
-      throw new BadRequestException(validationResult.error);
-    }
-
-    const applicationId = validationResult.data.id;
+    const applicationId = validationResult.id;
     const application = await this.applicationService.getById(applicationId);
 
     if (!hasPermission(req.permissions, 'update', application)) {
