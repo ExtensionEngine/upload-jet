@@ -14,17 +14,20 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import {
+  ApiKeyExistsError,
   ApplicationNotFoundError,
   ApplicationService
 } from './application.service';
 import { readApplicationSchema } from './validation';
 import { PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
-import { ApiKeyService } from './api-key.service';
+import Application from './application.entity';
 
 function applicationErrorCatch(err: unknown) {
   if (err instanceof ApplicationNotFoundError)
     throw new NotFoundException(err.message);
+  else if (err instanceof ApiKeyExistsError)
+    throw new BadRequestException(err.message);
 
   throw err;
 }
@@ -32,10 +35,7 @@ function applicationErrorCatch(err: unknown) {
 @Controller('application')
 @UseGuards(PermissionGuard)
 export class ApplicationController {
-  constructor(
-    private readonly applicationService: ApplicationService,
-    private readonly apiKeyService: ApiKeyService
-  ) {}
+  constructor(private readonly applicationService: ApplicationService) {}
 
   @Get('list')
   async getAll(@Req() req: Request) {
@@ -67,14 +67,18 @@ export class ApplicationController {
   async generateApiKey(@Req() req: Request, @Body('applicationId') id: string) {
     const validationResult = await readApplicationSchema.parseAsync({ id });
 
-    const applicationId = validationResult.id;
     return this.applicationService
-      .getById(applicationId)
-      .then(application => {
+      .getById(validationResult.id)
+      .then(async (application: Application) => {
         if (!hasPermission(req.permissions, 'update', application))
           throw new ForbiddenException();
 
-        return this.apiKeyService.generateApiKey(application);
+        return await this.applicationService
+          .generateApiKey(application)
+          .catch(err => {
+            if (err instanceof ApiKeyExistsError)
+              throw new BadRequestException(err.message);
+          });
       })
       .catch(applicationErrorCatch);
   }
@@ -83,13 +87,14 @@ export class ApplicationController {
   async deleteApiKey(@Req() req: Request, @Body('applicationId') id: number) {
     const validationResult = await readApplicationSchema.parseAsync({ id });
 
-    const applicationId = validationResult.id;
-    const application = await this.applicationService.getById(applicationId);
+    const application = await this.applicationService.getById(
+      validationResult.id
+    );
 
     if (!hasPermission(req.permissions, 'update', application)) {
       throw new ForbiddenException();
     }
 
-    await this.apiKeyService.deleteApiKey(application);
+    return this.applicationService.deleteApiKey(application);
   }
 }

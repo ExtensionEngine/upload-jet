@@ -7,6 +7,9 @@ import {
 } from '@mikro-orm/core';
 import BaseEntity from '../shared/database/base.entity';
 import ApiKey from './api-key.entity';
+import { createHash, randomUUID } from 'crypto';
+import { ApiKeyExistsError } from './application.service';
+
 @Entity()
 @Unique({ properties: ['name', 'userId'] })
 export default class Application extends BaseEntity {
@@ -23,5 +26,39 @@ export default class Application extends BaseEntity {
     super();
     this.name = name;
     this.userId = userId;
+  }
+
+  private apiKeyExists(): boolean {
+    const apiKeys = this.apiKeys.getItems();
+    return !!apiKeys.find(apiKey => !apiKey.deletedAt);
+  }
+
+  private async hashApiKey(apiKey: string): Promise<string> {
+    const hash = createHash('sha512');
+    hash.update(apiKey);
+    return hash.digest('hex');
+  }
+
+  async generateApiKey(): Promise<string> {
+    await this.apiKeys.init();
+
+    if (this.apiKeyExists())
+      throw new ApiKeyExistsError(
+        'Api key already exists for this application'
+      );
+
+    const apiKey = randomUUID();
+    const hashedKey = await this.hashApiKey(apiKey);
+
+    this.apiKeys.add(new ApiKey(hashedKey));
+
+    return apiKey;
+  }
+
+  async deleteApiKey(): Promise<void> {
+    await this.apiKeys.init();
+
+    const apiKeys = await this.apiKeys.loadItems();
+    apiKeys.forEach(apiKey => (apiKey.deletedAt = new Date()));
   }
 }
