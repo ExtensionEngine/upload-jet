@@ -7,3 +7,16 @@ export type UserData = {
   avatarUrl: string;
   role: string;
 };
+
+export type RequestOptions = RequestInit & {
+  method:
+    | 'GET'
+    | 'POST'
+    | 'PUT'
+    | 'DELETE'
+    | 'PATCH'
+    | 'HEAD'
+    | 'OPTIONS'
+    | 'CONNECT'
+    | 'TRACE';
+};

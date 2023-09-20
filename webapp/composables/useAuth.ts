@@ -1,14 +1,14 @@
-// import { fetchUser, deleteCookie } from '@/services/userService';
 import { UserData } from 'types';
 
 export default async function useAuth() {
-  const { API_BASE_URL, apiFetch } = useApiFetch();
+  const config = useRuntimeConfig();
+  const { apiBaseUrl: baseURL } = config.public;
 
   const user: Ref<UserData | null> = useState('user', () => null);
 
   async function setUser() {
-    const response = await apiFetch('identity/me');
-    user.value = await response.json();
+    const { data } = await useApiFetch('identity/me', { method: 'GET' });
+    user.value = data.value as UserData;
   }
 
   await setUser();
@@ -19,7 +19,7 @@ export default async function useAuth() {
 
   async function signOut() {
     user.value = null;
-    navigateTo(`${API_BASE_URL}/identity/signout`, { external: true });
+    navigateTo(`${baseURL}/identity/signout`, { external: true });
   }
 
   return { isLoggedIn, signOut, user };

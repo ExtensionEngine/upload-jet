@@ -1,21 +1,15 @@
-export function useApiFetch() {
-  const config = useRuntimeConfig();
-  const API_BASE_URL = config.public.apiBaseUrl;
-  const defaultHeaders = useRequestHeaders();
+import { RequestOptions } from 'types';
 
-  async function apiFetch(
-    path: string,
-    method = 'GET',
-    credentials: RequestCredentials = 'include',
-    headers = defaultHeaders
-  ) {
-    const requestOptions = {
-      method,
-      credentials,
-      headers
-    };
-    const response = await fetch(`${API_BASE_URL}/${path}`, requestOptions);
-    return response;
-  }
-  return { API_BASE_URL, apiFetch };
+export function useApiFetch(path: string, options: RequestOptions) {
+  const config = useRuntimeConfig();
+  const { apiBaseUrl: baseURL } = config.public;
+  const defaultHeaders = useRequestHeaders();
+  const headers = { ...defaultHeaders, ...options.headers };
+
+  return useFetch(path, {
+    baseURL,
+    credentials: 'include',
+    headers,
+    ...options
+  });
 }
