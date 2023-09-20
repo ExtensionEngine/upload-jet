@@ -36,5 +36,6 @@ defineExpose({
   showModal,
   closeModal
 });
-const emit = defineEmits(['close:modal', 'delete:application']);
+
+const emit = defineEmits(['delete:application']);
 </script>

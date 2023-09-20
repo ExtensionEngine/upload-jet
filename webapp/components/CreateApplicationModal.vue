@@ -42,11 +42,7 @@ defineExpose({
   closeModal
 });
 
-const emit = defineEmits([
-  'close:modal',
-  'update:applicationName',
-  'create:application'
-]);
+const emit = defineEmits(['update:applicationName', 'create:application']);
 
 const applicationName = computed({
   get() {

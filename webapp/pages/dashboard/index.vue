@@ -2,7 +2,7 @@
   <div class="flex flex-col pb-2">
     <div class="mb-4 flex w-full flex-row justify-end p-4 pb-0">
       <button
-        @click="showModal"
+        @click="showCreateModal"
         class="w-32 rounded-lg bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600">
         Create App
       </button>
@@ -28,12 +28,10 @@
 
   <CreateApplicationModal
     ref="createApplicationModal"
-    @close:modal="closeModal"
     @create:application="createApplication"
     v-model:application-name="inputValue" />
   <DeleteApplicationModal
     ref="deleteApplicationModal"
-    @close:modal="closeDeleteModal"
     @delete:application="deleteApplication(applicationId)"
     :id="applicationId"
     :application-name="applicationName" />
@@ -48,7 +46,9 @@ definePageMeta({
 const createApplicationModal = ref();
 const deleteApplicationModal = ref();
 
-const { showModal, closeModal } = useModal(createApplicationModal);
+const { showModal: showCreateModal, closeModal: closeCreateModal } = useModal(
+  createApplicationModal
+);
 const { showModal: showDeleteModal, closeModal: closeDeleteModal } = useModal(
   deleteApplicationModal
 );
@@ -85,7 +85,7 @@ const createApplication = (input: string) => {
   const newApplication = { id: randomId, name: input };
   mockedApplications.value.push(newApplication);
   inputValue.value = '';
-  closeModal();
+  closeCreateModal();
 };
 
 const deleteApplication = (id: number | undefined) => {
