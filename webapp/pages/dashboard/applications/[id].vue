@@ -14,14 +14,13 @@
       </div>
       <div class="flex text-xl">
         <label class="mr-2">Created:</label>
-        <div>{{ formatDate(application.createdAt) }}</div>
+        <div>{{ application.createdAt }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 const route = useRoute();
 
 interface Application {
@@ -39,7 +38,10 @@ const fetchApplication = async (id: number) => {
   const applicationUrl = new URL(route, config.public.apiUrl);
 
   $fetch(applicationUrl.href, { credentials: 'include' }).then(data => {
-    application.value = data as Application;
+    const app = data as Application;
+    app.createdAt = formatDate(app.createdAt);
+
+    application.value = app
   })
 };
 
