@@ -28,7 +28,7 @@ export class ApplicationController {
       throw new ForbiddenException();
     }
 
-    return this.applicationService.getUserApplications(req.userId);
+    return this.applicationService.getAllByUserId(req.userId);
   }
 
   @Get(':id')

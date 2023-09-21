@@ -17,7 +17,7 @@ export class ApplicationService {
     private readonly applicationRepository: EntityRepository<Application>
   ) {}
 
-  getUserApplications(userId: number) {
+  getAllByUserId(userId: number) {
     return this.applicationRepository.find({ userId });
   }
 
