@@ -28,15 +28,16 @@ export default class Application extends BaseEntity {
   @OneToMany(() => ApiKey, apiKey => apiKey.application, { eager: true })
   apiKeys = new Collection<ApiKey>(this);
 
+  @Property({ persist: false })
+  get hasApiKey() {
+    const apiKeys = this.apiKeys.getItems();
+    return !!apiKeys.find(apiKey => !apiKey.deletedAt);
+  }
+
   constructor(name: string, userId: number) {
     super();
     this.name = name;
     this.userId = userId;
-  }
-
-  private apiKeyExists(): boolean {
-    const apiKeys = this.apiKeys.getItems();
-    return !!apiKeys.find(apiKey => !apiKey.deletedAt);
   }
 
   private async hashApiKey(apiKey: string): Promise<string> {
@@ -46,7 +47,7 @@ export default class Application extends BaseEntity {
   }
 
   async generateApiKey(): Promise<string> {
-    if (this.apiKeyExists()) throw new ApiKeyExistsError();
+    if (this.hasApiKey) throw new ApiKeyExistsError();
     const apiKey = randomUUID();
     const hashedKey = await this.hashApiKey(apiKey);
     this.apiKeys.add(new ApiKey(hashedKey));

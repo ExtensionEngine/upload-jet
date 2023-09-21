@@ -26,17 +26,11 @@ export class ApplicationService {
   ) {}
 
   getAllByUserId(userId: number) {
-    return this.applicationRepository.find(
-      { userId },
-      { fields: ['*', { apiKeys: ['id'] }] }
-    );
+    return this.applicationRepository.find({ userId });
   }
 
   async getById(id: number) {
-    const result = await this.applicationRepository.findOne(
-      { id },
-      { fields: ['*', { apiKeys: ['id'] }] }
-    );
+    const result = await this.applicationRepository.findOne({ id });
     if (!result) throw new ApplicationNotFoundError();
     return result;
   }
