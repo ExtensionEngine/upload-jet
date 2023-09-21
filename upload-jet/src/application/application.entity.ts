@@ -22,7 +22,7 @@ export default class Application extends BaseEntity {
   @Property({ nullable: false })
   name: string;
 
-  @Property({ fieldName: 'user_id', serializedName: 'userId' })
+  @Property()
   userId!: number;
 
   @OneToMany(() => ApiKey, apiKey => apiKey.application, { eager: true })

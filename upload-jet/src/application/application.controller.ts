@@ -18,7 +18,7 @@ import {
   ApplicationService
 } from './application.service';
 import { readApplicationSchema } from './validation';
-import { PermissionGuard } from 'shared/auth/permission.guard';
+import { Permission, PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
 import Application, { ApiKeyExistsError } from './application.entity';
 
@@ -29,35 +29,36 @@ function applicationErrorCatch(err: unknown) {
   throw err;
 }
 
-@Controller('application')
+@Controller('applications')
 @UseGuards(PermissionGuard)
 export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}
 
   @Get('list')
+  @Permission('read', 'Application')
   async getAll(@Req() req: Request) {
-    if (!hasPermission(req.permissions, 'read', 'Application')) {
-      throw new ForbiddenException();
-    }
-
-    return this.applicationService.getUserApplications(req.userId);
+    return this.applicationService.getAllByUserId(req.userId);
   }
 
   @Get(':id')
   async getById(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-    const validationResult = await readApplicationSchema.parseAsync({
+    const { id: applicationId } = await readApplicationSchema.parseAsync({
       id
     });
 
-    return this.applicationService
-      .getById(validationResult.id)
-      .then(application => {
-        if (!hasPermission(req.permissions, 'read', application))
-          throw new ForbiddenException();
+    try {
+      const application = await this.applicationService.getById(applicationId);
 
-        return application;
-      })
-      .catch(applicationErrorCatch);
+      if (!hasPermission(req.permissions, 'read', application))
+        throw new ForbiddenException();
+
+      return application;
+    } catch (error) {
+      if (error instanceof ApplicationNotFoundError)
+        throw new NotFoundException(error.message);
+
+      throw error;
+    }
   }
 
   @Post('generate-api-key')

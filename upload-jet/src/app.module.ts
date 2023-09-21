@@ -14,7 +14,6 @@ import { AuthenticationMiddleware } from 'shared/auth/authentication.middleware'
 import { ApplicationModule } from 'application/application.module';
 import { ZodExceptionFilter } from 'shared/zod-exception.filter';
 import { APP_FILTER } from '@nestjs/core';
-import { ValidationService } from 'shared/validation.service';
 
 @Module({
   imports: [
@@ -57,8 +56,7 @@ import { ValidationService } from 'shared/validation.service';
     {
       provide: APP_FILTER,
       useClass: ZodExceptionFilter
-    },
-    ValidationService
+    }
   ]
 })
 export class AppModule implements NestModule {
