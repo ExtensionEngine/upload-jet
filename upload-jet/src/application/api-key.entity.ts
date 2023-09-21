@@ -5,11 +5,7 @@ import Application from './application.entity';
 @Entity({ tableName: 'api_key' })
 export default class ApiKey extends BaseDeleteableEntity {
   @Unique()
-  @Property({
-    nullable: false,
-    serializedName: 'keyHash',
-    fieldName: 'key_hash'
-  })
+  @Property({ nullable: false })
   keyHash: string;
 
   @ManyToOne({
