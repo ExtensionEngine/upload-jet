@@ -7,8 +7,6 @@ const BAD_REQUEST_CODE = 400;
 
 @Catch(ZodError)
 export class ZodExceptionFilter implements ExceptionFilter {
-  constructor() {}
-
   mapZodError(error: ZodError) {
     return error.issues.map(({ path, message, code }) => ({
       path,

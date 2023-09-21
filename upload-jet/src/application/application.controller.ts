@@ -17,7 +17,7 @@ import { readApplicationSchema } from './validation';
 import { PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
 
-@Controller('application')
+@Controller('applications')
 @UseGuards(PermissionGuard)
 export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}
@@ -33,12 +33,12 @@ export class ApplicationController {
 
   @Get(':id')
   async getById(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-    const validationResult = await readApplicationSchema.parseAsync({
+    const { id: applicationId } = await readApplicationSchema.parseAsync({
       id
     });
 
     return this.applicationService
-      .getById(validationResult.id)
+      .getById(applicationId)
       .then(application => {
         if (!hasPermission(req.permissions, 'read', application)) {
           throw new ForbiddenException();
