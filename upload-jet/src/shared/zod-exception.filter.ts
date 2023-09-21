@@ -1,12 +1,14 @@
 import { ExceptionFilter, Catch, ArgumentsHost } from '@nestjs/common';
 import { Response } from 'express';
+import { PinoLogger } from 'nestjs-pino';
 import { ZodError } from 'zod';
-import { logger } from '@mikro-orm/nestjs';
 
 const BAD_REQUEST_CODE = 400;
 
 @Catch(ZodError)
 export class ZodExceptionFilter implements ExceptionFilter {
+  constructor(private readonly logger: PinoLogger) {}
+
   mapZodError(error: ZodError) {
     return error.issues.map(({ path, message, code }) => ({
       path,
@@ -20,7 +22,7 @@ export class ZodExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
 
     const error = this.mapZodError(exception);
-    logger.error(error);
+    this.logger.error(error);
 
     response.status(BAD_REQUEST_CODE).json({
       statusCode: BAD_REQUEST_CODE,
