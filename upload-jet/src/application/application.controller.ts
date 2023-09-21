@@ -34,20 +34,18 @@ export class ApplicationController {
       id
     });
 
-    return this.applicationService
-      .getById(applicationId)
-      .then(application => {
-        if (!hasPermission(req.permissions, 'read', application)) {
-          throw new ForbiddenException();
-        }
+    try {
+      const application = await this.applicationService.getById(applicationId);
 
-        return application;
-      })
-      .catch(err => {
-        if (err instanceof ApplicationNotFoundError)
-          throw new NotFoundException(err.message);
+      if (!hasPermission(req.permissions, 'read', application))
+        throw new ForbiddenException();
 
-        throw err;
-      });
+      return application;
+    } catch (error) {
+      if (error instanceof ApplicationNotFoundError)
+        throw new NotFoundException(error.message);
+
+      throw error;
+    }
   }
 }
