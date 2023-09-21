@@ -7,7 +7,6 @@ import {
 } from '@mikro-orm/core';
 import BaseEntity from '../shared/database/base.entity';
 import ApiKey from './api-key.entity';
-import { createHash, randomUUID } from 'crypto';
 
 export class ApiKeyExistsError extends Error {
   constructor() {
@@ -40,18 +39,9 @@ export default class Application extends BaseEntity {
     this.userId = userId;
   }
 
-  private async hashApiKey(apiKey: string): Promise<string> {
-    const hash = createHash('sha512');
-    hash.update(apiKey);
-    return hash.digest('hex');
-  }
-
-  async generateApiKey(): Promise<string> {
+  async generateApiKey(hashedKey: string) {
     if (this.hasApiKey) throw new ApiKeyExistsError();
-    const apiKey = randomUUID();
-    const hashedKey = await this.hashApiKey(apiKey);
     this.apiKeys.add(new ApiKey(hashedKey));
-    return apiKey;
   }
 
   async deleteApiKey(): Promise<void> {

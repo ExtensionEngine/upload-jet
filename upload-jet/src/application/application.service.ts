@@ -2,6 +2,7 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 import Application from './application.entity';
+import { createHash, randomUUID } from 'crypto';
 
 export class ApplicationNotFoundError extends Error {
   constructor() {
@@ -36,13 +37,23 @@ export class ApplicationService {
   }
 
   async generateApiKey(application: Application) {
-    const apiKey = await application.generateApiKey();
+    const apiKey = randomUUID();
+    const hashedKey = await this.hashApiKey(apiKey);
+
+    await application.generateApiKey(hashedKey);
     await this.em.persistAndFlush(application);
+
     return apiKey;
   }
 
   async deleteApiKey(application: Application) {
     await application.deleteApiKey();
     this.em.persistAndFlush(application);
+  }
+
+  private async hashApiKey(apiKey: string): Promise<string> {
+    const hash = createHash('sha512');
+    hash.update(apiKey);
+    return hash.digest('hex');
   }
 }
