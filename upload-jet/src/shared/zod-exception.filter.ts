@@ -18,11 +18,14 @@ export class ZodExceptionFilter implements ExceptionFilter {
   }
 
   catch(exception: ZodError, host: ArgumentsHost) {
-    const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-
     const error = this.mapZodError(exception);
     this.logger.error(error);
+
+    const contextType = host.getType();
+    if (contextType !== 'http') return;
+
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
 
     response.status(BAD_REQUEST_CODE).json({
       statusCode: BAD_REQUEST_CODE,
