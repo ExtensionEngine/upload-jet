@@ -37,8 +37,9 @@ export class ApplicationController {
     try {
       const application = await this.applicationService.getById(applicationId);
 
-      if (!hasPermission(req.permissions, 'read', application))
+      if (!hasPermission(req.permissions, 'read', application)) {
         throw new ForbiddenException();
+      }
 
       return application;
     } catch (error) {
