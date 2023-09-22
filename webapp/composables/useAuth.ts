@@ -6,8 +6,8 @@ export default async function useAuth() {
 
   const user: Ref<UserData | null> = useState('user', () => null);
 
-  const { data } = await useApiFetch('identity/me', { method: 'GET' });
-  user.value = data.value as UserData;
+  const { data } = await useApiFetch<UserData>('identity/me', {});
+  user.value = data.value;
 
   const isLoggedIn = computed(() => {
     return !!user.value;

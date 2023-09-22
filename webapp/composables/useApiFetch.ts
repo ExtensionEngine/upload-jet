@@ -1,15 +1,20 @@
-import { RequestOptions } from 'types';
+import { UseFetchOptions } from 'nuxt/app';
+import { UserData } from 'types';
 
-export function useApiFetch(path: string, options: RequestOptions) {
+export function useApiFetch<T extends UserData>(
+  path: string,
+  options: UseFetchOptions<UserData>
+) {
   const config = useRuntimeConfig();
   const { apiBaseUrl: baseURL } = config.public;
   const defaultHeaders = useRequestHeaders();
-  const headers = { ...defaultHeaders, ...options.headers };
+  const { headers: overrideHeaders, ...rest } = options;
+  const headers = { ...defaultHeaders, ...overrideHeaders };
 
-  return useFetch(path, {
+  return useFetch<UserData>(path, {
     baseURL,
     credentials: 'include',
     headers,
-    ...options
+    ...rest
   });
 }
