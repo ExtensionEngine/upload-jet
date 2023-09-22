@@ -7,7 +7,6 @@ import {
 } from '@mikro-orm/core';
 import BaseEntity from '../shared/database/base.entity';
 import ApiKey from './api-key.entity';
-import { Exclude, Expose } from 'class-transformer';
 
 export class ApiKeyExistsError extends Error {
   constructor() {
@@ -25,13 +24,11 @@ export default class Application extends BaseEntity {
   @Property()
   userId!: number;
 
-  @Exclude()
   @OneToMany(() => ApiKey, apiKey => apiKey.application, { eager: true })
   apiKeys = new Collection<ApiKey>(this);
 
   @Property({ persist: false })
-  @Expose()
-  get hasApiKey(): boolean {
+  get hasApiKey() {
     const apiKeys = this.apiKeys.getItems();
     return !!apiKeys.find(apiKey => !apiKey.deletedAt);
   }

@@ -1,5 +1,4 @@
 import {
-  ClassSerializerInterceptor,
   ConflictException,
   Controller,
   Delete,
@@ -10,8 +9,7 @@ import {
   ParseIntPipe,
   Post,
   Req,
-  UseGuards,
-  UseInterceptors
+  UseGuards
 } from '@nestjs/common';
 import { Request } from 'express';
 import {
@@ -22,6 +20,7 @@ import { readApplicationSchema } from './validation';
 import { Permission, PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
 import { ApiKeyExistsError } from './application.entity';
+import { ApplicationDto } from './application.dto';
 
 @Controller('applications')
 @UseGuards(PermissionGuard)
@@ -29,14 +28,15 @@ export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}
 
   @Get('list')
-  @UseInterceptors(ClassSerializerInterceptor)
   @Permission('read', 'Application')
   async getAll(@Req() req: Request) {
-    return this.applicationService.getAllByUserId(req.userId);
+    const applications = await this.applicationService.getAllByUserId(
+      req.userId
+    );
+    return applications.map(application => new ApplicationDto(application));
   }
 
   @Get(':id')
-  @UseInterceptors(ClassSerializerInterceptor)
   async getById(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
     const { id: applicationId } = await readApplicationSchema.parseAsync({
       id
@@ -49,7 +49,7 @@ export class ApplicationController {
         throw new ForbiddenException();
       }
 
-      return application;
+      return new ApplicationDto(application);
     } catch (error) {
       if (error instanceof ApplicationNotFoundError) {
         throw new NotFoundException(error.message);
