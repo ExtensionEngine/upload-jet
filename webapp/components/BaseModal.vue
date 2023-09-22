@@ -16,7 +16,6 @@
       </div>
     </div>
   </dialog>
-  <slot name="trigger" v-bind="{ showModal }"></slot>
 </template>
 
 <script setup lang="ts">

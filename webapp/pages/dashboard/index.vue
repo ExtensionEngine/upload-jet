@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col pb-2">
+  <div class="flex h-screen flex-col pb-2">
     <div class="mb-4 flex w-full flex-row justify-end p-4 pb-0">
       <button
         @click="showCreateModal"
@@ -8,7 +8,7 @@
       </button>
     </div>
 
-    <div class="max-h-[90vh] overflow-y-auto p-4 pb-8 pt-10">
+    <div class="overflow-y-scroll p-4 pb-8 pt-10">
       <NuxtLink
         :to="`/dashboard/applications/${application.id}`"
         class="mb-6 flex h-14 list-none items-center justify-between rounded-lg border-2 bg-slate-50 pl-4 pr-2 duration-200 ease-out hover:cursor-pointer hover:border-slate-400"
@@ -18,8 +18,8 @@
           {{ application.name }}
         </div>
         <button
-          class="hover:text-red-600"
-          @click.prevent="openDeleteApplicationModal(application.id)">
+          @click.prevent="openDeleteApplicationModal(application.id)"
+          class="hover:text-red-600">
           Delete
         </button>
       </NuxtLink>
@@ -32,9 +32,9 @@
     v-model:application-name="inputValue" />
   <DeleteApplicationModal
     ref="deleteApplicationModal"
+    @delete:application="deleteApplication(applicationId)"
     :id="applicationId"
-    :application-name="applicationName"
-    @delete:application="deleteApplication(applicationId)" />
+    :application-name="applicationName" />
 </template>
 
 <script setup lang="ts">
@@ -75,6 +75,15 @@ const applicationName = computed(() => {
 // 3. When user deletes an app it should send a post request to authorized route and delete it from the dabatabase and retrieve a new list of apps to render
 
 const mockedApplications = ref([
+  { id: 1, name: 'Mocked App 1' },
+  { id: 2, name: 'Mocked App 2' },
+  { id: 3, name: 'Mocked App 3' },
+  { id: 1, name: 'Mocked App 1' },
+  { id: 2, name: 'Mocked App 2' },
+  { id: 3, name: 'Mocked App 3' },
+  { id: 1, name: 'Mocked App 1' },
+  { id: 2, name: 'Mocked App 2' },
+  { id: 3, name: 'Mocked App 3' },
   { id: 1, name: 'Mocked App 1' },
   { id: 2, name: 'Mocked App 2' },
   { id: 3, name: 'Mocked App 3' }
