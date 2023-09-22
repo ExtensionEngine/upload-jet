@@ -43,8 +43,9 @@ export class ApplicationController {
 
       return application;
     } catch (error) {
-      if (error instanceof ApplicationNotFoundError)
+      if (error instanceof ApplicationNotFoundError) {
         throw new NotFoundException(error.message);
+      }
 
       throw error;
     }
