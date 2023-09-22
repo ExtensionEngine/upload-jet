@@ -6,20 +6,17 @@ export default async function useAuth() {
 
   const user: Ref<UserData | null> = useState('user', () => null);
 
-  async function setUser() {
-    const { data } = await useApiFetch('identity/me', { method: 'GET' });
-    user.value = data.value as UserData;
-  }
-
-  await setUser();
+  const { data } = await useApiFetch('identity/me', { method: 'GET' });
+  user.value = data.value as UserData;
 
   const isLoggedIn = computed(() => {
-    return !!user.value?.id;
+    return !!user.value;
   });
 
   async function signOut() {
     user.value = null;
-    navigateTo(`${baseURL}/identity/signout`, { external: true });
+    const signoutUrl = new URL('identity/signout', baseURL);
+    navigateTo(signoutUrl.href, { external: true });
   }
 
   return { isLoggedIn, signOut, user };
