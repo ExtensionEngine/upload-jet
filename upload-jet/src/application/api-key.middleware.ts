@@ -33,7 +33,7 @@ export class GetApplicationMiddleware implements NestMiddleware {
           throw new ForbiddenException();
         }
 
-        req.application = application;
+        req.applicationId = applicationId;
       } catch (error) {
         if (error instanceof ApplicationNotFoundError) {
           throw new NotFoundException(error.message);

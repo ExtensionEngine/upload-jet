@@ -62,7 +62,7 @@ export class ApplicationController {
   @Post('create-api-key')
   async createApiKey(@Req() req: Request) {
     return this.applicationService
-      .createApiKey(req.application)
+      .createApiKey(req.applicationId)
       .catch(error => {
         if (error instanceof ApiKeyExistsError) {
           throw new ConflictException(error.message);
@@ -73,6 +73,6 @@ export class ApplicationController {
 
   @Delete('delete-api-key')
   async deleteApiKey(@Req() req: Request) {
-    return this.applicationService.deleteApiKey(req.application);
+    return this.applicationService.deleteApiKey(req.applicationId);
   }
 }

@@ -29,17 +29,19 @@ export class ApplicationService {
     return result;
   }
 
-  async createApiKey(application: Application) {
+  async createApiKey(applicationId: number) {
     const apiKey = randomUUID();
     const hashedKey = await this.hashApiKey(apiKey);
 
+    const application = await this.getById(applicationId);
     await application.createApiKey(hashedKey);
     await this.em.persistAndFlush(application);
 
     return apiKey;
   }
 
-  async deleteApiKey(application: Application) {
+  async deleteApiKey(applicationId: number) {
+    const application = await this.getById(applicationId);
     await application.deleteApiKey();
     this.em.persistAndFlush(application);
   }
