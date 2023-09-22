@@ -30,9 +30,9 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  applicationName: { type: String }
-});
+const props = defineProps<{
+  applicationName: string;
+}>();
 
 const baseModalRef = ref();
 const { showModal, closeModal } = useModal(baseModalRef);
@@ -42,7 +42,10 @@ defineExpose({
   closeModal
 });
 
-const emit = defineEmits(['update:applicationName', 'create:application']);
+const emit = defineEmits<{
+  'create:application': [applicationName: string];
+  'update:applicationName': [newValue: string];
+}>();
 
 const applicationName = computed({
   get() {

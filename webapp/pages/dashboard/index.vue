@@ -77,15 +77,6 @@ const applicationName = computed(() => {
 const mockedApplications = ref([
   { id: 1, name: 'Mocked App 1' },
   { id: 2, name: 'Mocked App 2' },
-  { id: 3, name: 'Mocked App 3' },
-  { id: 1, name: 'Mocked App 1' },
-  { id: 2, name: 'Mocked App 2' },
-  { id: 3, name: 'Mocked App 3' },
-  { id: 1, name: 'Mocked App 1' },
-  { id: 2, name: 'Mocked App 2' },
-  { id: 3, name: 'Mocked App 3' },
-  { id: 1, name: 'Mocked App 1' },
-  { id: 2, name: 'Mocked App 2' },
   { id: 3, name: 'Mocked App 3' }
 ]);
 
