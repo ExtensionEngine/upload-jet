@@ -20,14 +20,7 @@ import {
 import { readApplicationSchema } from './validation';
 import { Permission, PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
-import Application, { ApiKeyExistsError } from './application.entity';
-
-function applicationErrorCatch(err: unknown) {
-  if (err instanceof ApplicationNotFoundError)
-    throw new NotFoundException(err.message);
-
-  throw err;
-}
+import { ApiKeyExistsError } from './application.entity';
 
 @Controller('applications')
 @UseGuards(PermissionGuard)
@@ -55,8 +48,9 @@ export class ApplicationController {
 
       return application;
     } catch (error) {
-      if (error instanceof ApplicationNotFoundError)
+      if (error instanceof ApplicationNotFoundError) {
         throw new NotFoundException(error.message);
+      }
 
       throw error;
     }
@@ -64,22 +58,27 @@ export class ApplicationController {
 
   @Post('generate-api-key')
   async generateApiKey(@Req() req: Request, @Body('applicationId') id: string) {
-    const validationResult = await readApplicationSchema.parseAsync({ id });
+    const { id: applicationId } = await readApplicationSchema.parseAsync({
+      id
+    });
 
-    return this.applicationService
-      .getById(validationResult.id)
-      .then(async (application: Application) => {
-        if (!hasPermission(req.permissions, 'update', application))
-          throw new ForbiddenException();
+    try {
+      const application = await this.applicationService.getById(applicationId);
 
-        return await this.applicationService
-          .generateApiKey(application)
-          .catch(err => {
-            if (err instanceof ApiKeyExistsError)
-              throw new ConflictException(err.message);
-          });
-      })
-      .catch(applicationErrorCatch);
+      if (!hasPermission(req.permissions, 'update', application)) {
+        throw new ForbiddenException();
+      }
+
+      return await this.applicationService.generateApiKey(application);
+    } catch (error) {
+      if (error instanceof ApplicationNotFoundError) {
+        throw new NotFoundException(error.message);
+      } else if (error instanceof ApiKeyExistsError) {
+        throw new ConflictException(error.message);
+      }
+
+      throw error;
+    }
   }
 
   @Delete('delete-api-key')
