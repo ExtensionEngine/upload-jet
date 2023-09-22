@@ -7,7 +7,7 @@ const ROLES = ['admin', 'user'];
 const TEMP_COLUMN = 'temp';
 
 const COPY_COLUMN_SQL = `
-  UPDATE public.${TABLE_NAME}
+  UPDATE "${TABLE_NAME}"
   SET "${TEMP_COLUMN}" = "${COLUMN_NAME}"
 `;
 
