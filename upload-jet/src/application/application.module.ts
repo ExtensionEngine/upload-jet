@@ -3,7 +3,7 @@ import { ApplicationController } from './application.controller';
 import { ApplicationService } from './application.service';
 import Application from './application.entity';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { ApiKeyMiddleware } from './api-key.middleware';
+import { GetApplicationMiddleware } from './api-key.middleware';
 @Module({
   controllers: [ApplicationController],
   imports: [MikroOrmModule.forFeature([Application])],
@@ -12,7 +12,7 @@ import { ApiKeyMiddleware } from './api-key.middleware';
 export class ApplicationModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(ApiKeyMiddleware)
+      .apply(GetApplicationMiddleware)
       .forRoutes(
         'applications/generate-api-key',
         'applications/delete-api-key'

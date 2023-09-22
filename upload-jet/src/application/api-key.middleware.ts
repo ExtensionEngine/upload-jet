@@ -12,7 +12,7 @@ import { MikroORM } from '@mikro-orm/core';
 import Application from './application.entity';
 
 @Injectable()
-export class ApiKeyMiddleware implements NestMiddleware {
+export class GetApplicationMiddleware implements NestMiddleware {
   constructor(private readonly orm: MikroORM) {}
 
   async use(req: Request, _res: Response, next: NextFunction) {
