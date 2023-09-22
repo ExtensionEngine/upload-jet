@@ -1,5 +1,5 @@
 import {
-  Body,
+  ClassSerializerInterceptor,
   ConflictException,
   Controller,
   Delete,
@@ -10,7 +10,8 @@ import {
   ParseIntPipe,
   Post,
   Req,
-  UseGuards
+  UseGuards,
+  UseInterceptors
 } from '@nestjs/common';
 import { Request } from 'express';
 import {
@@ -28,12 +29,14 @@ export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}
 
   @Get('list')
+  @UseInterceptors(ClassSerializerInterceptor)
   @Permission('read', 'Application')
   async getAll(@Req() req: Request) {
     return this.applicationService.getAllByUserId(req.userId);
   }
 
   @Get(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
   async getById(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
     const { id: applicationId } = await readApplicationSchema.parseAsync({
       id
