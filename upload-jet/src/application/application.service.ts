@@ -11,13 +11,6 @@ export class ApplicationNotFoundError extends Error {
   }
 }
 
-export class ApiKeyExistsError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = this.constructor.name;
-  }
-}
-
 @Injectable()
 export class ApplicationService {
   constructor(
