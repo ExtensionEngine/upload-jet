@@ -9,14 +9,6 @@ const BAD_REQUEST_CODE = 400;
 export class ZodExceptionFilter implements ExceptionFilter {
   constructor(private readonly logger: PinoLogger) {}
 
-  mapZodError(error: ZodError) {
-    return error.issues.map(({ path, message, code }) => ({
-      path,
-      message,
-      code
-    }));
-  }
-
   catch(exception: ZodError, host: ArgumentsHost) {
     const error = this.mapZodError(exception);
     this.logger.error(error);
@@ -32,5 +24,13 @@ export class ZodExceptionFilter implements ExceptionFilter {
       message: exception.name,
       error
     });
+  }
+
+  private mapZodError(error: ZodError) {
+    return error.issues.map(({ path, message, code }) => ({
+      path,
+      message,
+      code
+    }));
   }
 }
