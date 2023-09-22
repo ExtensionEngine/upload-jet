@@ -47,6 +47,6 @@ export default class Application extends BaseEntity {
   async deleteApiKey(): Promise<void> {
     const apiKeys = await this.apiKeys.loadItems();
     const apiKey = apiKeys.find(apiKey => !apiKey.deletedAt);
-    apiKey.deletedAt = new Date();
+    if (apiKey) apiKey.deletedAt = new Date();
   }
 }

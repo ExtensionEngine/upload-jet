@@ -1,4 +1,5 @@
 import { Permission } from 'shared/auth/authorization';
+import ApplicationEntity from 'application/application.entity';
 
 export {};
 
@@ -7,6 +8,7 @@ declare global {
     export interface Request {
       userId: number;
       permissions: Permission[];
+      application: ApplicationEntity;
     }
   }
 }
