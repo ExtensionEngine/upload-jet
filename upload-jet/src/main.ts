@@ -13,6 +13,7 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.useLogger(logger);
+  app.enableCors();
 
   process.on('uncaughtException', err => logUncaughtException(err, logger));
 

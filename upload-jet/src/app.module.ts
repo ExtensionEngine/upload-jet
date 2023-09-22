@@ -11,6 +11,9 @@ import databaseConfig from 'config/database.config';
 import oauthConfig from 'config/oauth.config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthenticationMiddleware } from 'shared/auth/authentication.middleware';
+import { ApplicationModule } from 'application/application.module';
+import { ZodExceptionFilter } from 'shared/zod-exception.filter';
+import { APP_FILTER } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -45,10 +48,16 @@ import { AuthenticationMiddleware } from 'shared/auth/authentication.middleware'
       inject: [ConfigService]
     }),
     UploadPolicyModule,
+    ApplicationModule,
     IdentityModule
   ],
   controllers: [],
-  providers: []
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: ZodExceptionFilter
+    }
+  ]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
