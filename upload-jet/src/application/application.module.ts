@@ -13,9 +13,6 @@ export class ApplicationModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(GetApplicationMiddleware)
-      .forRoutes(
-        'applications/generate-api-key',
-        'applications/delete-api-key'
-      );
+      .forRoutes('applications/create-api-key', 'applications/delete-api-key');
   }
 }

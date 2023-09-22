@@ -59,10 +59,10 @@ export class ApplicationController {
     }
   }
 
-  @Post('generate-api-key')
-  async generateApiKey(@Req() req: Request) {
+  @Post('create-api-key')
+  async createApiKey(@Req() req: Request) {
     try {
-      return await this.applicationService.generateApiKey(req.application);
+      return await this.applicationService.createApiKey(req.application);
     } catch (error) {
       if (error instanceof ApiKeyExistsError) {
         throw new ConflictException(error.message);

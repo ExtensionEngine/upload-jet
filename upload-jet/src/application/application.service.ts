@@ -36,11 +36,11 @@ export class ApplicationService {
     return result;
   }
 
-  async generateApiKey(application: Application) {
+  async createApiKey(application: Application) {
     const apiKey = randomUUID();
     const hashedKey = await this.hashApiKey(apiKey);
 
-    await application.generateApiKey(hashedKey);
+    await application.createApiKey(hashedKey);
     await this.em.persistAndFlush(application);
 
     return apiKey;
