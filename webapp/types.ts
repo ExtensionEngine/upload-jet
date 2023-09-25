@@ -1,4 +1,4 @@
-export type UserData = {
+export type Identity = {
   id: number;
   createdAt: Date;
   updatedAt: Date;
