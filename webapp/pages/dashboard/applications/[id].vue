@@ -47,4 +47,3 @@ const createdAt = computed(() => {
 });
 
 </script>
-types/application
