@@ -14,29 +14,33 @@
       </div>
       <div class="flex text-xl">
         <label class="mr-2">Created:</label>
-        <div>{{ application?.createdAt }}</div>
+        <div>{{ createdAt }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Application } from '@/types/application.dto';
+import { Application } from '@/types/application';
 
-const application = ref<Application | null>(null);
-
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toUTCString()
+const formatDate = (dateString: string | undefined): string => {
+  return dateString ? new Date(dateString).toUTCString() : '';
 }
 
-const { data, error } = await useFetchData(`/applications/${useRoute().params.id}`);
-const app = data.value as Application;
+const application: Ref<Application | null> = useState('application', () => null);
 
-if (error.value) {
-  throw createError({ ...error.value, fatal: true });
+if (!application.value) {
+  const { data, error } = await useApiFetch<Application>(`applications/${useRoute().params.id}`);
+  application.value = data.value;
+
+  if (error.value) {
+    throw createError({ ...error.value, fatal: true });
+  }
 }
 
-app.createdAt = formatDate(app.createdAt);
-application.value = app;
+const createdAt = computed(() => {
+  return formatDate(application.value?.createdAt);
+});
 
 </script>
+types/application
