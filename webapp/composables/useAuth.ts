@@ -7,7 +7,7 @@ export default async function useAuth() {
   const user: Ref<Identity | null> = useState('user', () => null);
 
   if (!user.value) {
-    const { data } = await useApiFetch<Identity>('identity/me', {});
+    const { data } = await useApiFetch<Identity>('identity/me');
     user.value = data.value;
   }
 
