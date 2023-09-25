@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const config = useRuntimeConfig();
 const route = useRoute();
+const { isLoggedIn } = await useAuth();
 
 const authConfig = {
   scope: 'user:email',
@@ -8,15 +9,22 @@ const authConfig = {
   client_id: config.public.githubClientId
 };
 const searchParams = new URLSearchParams(authConfig).toString();
-
 const githubLoginUrl = new URL('https://github.com/login/oauth/authorize');
 githubLoginUrl.search = searchParams;
 </script>
 
 <template>
-  <a
+  <NuxtLink
+    v-if="!isLoggedIn"
     :href="githubLoginUrl.href"
     class="cursor-pointer rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
     Login with GitHub
-  </a>
+  </NuxtLink>
+
+  <NuxtLink
+    v-else
+    :to="{ name: 'Applications' }"
+    class="cursor-pointer rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
+    Go to dashboard
+  </NuxtLink>
 </template>

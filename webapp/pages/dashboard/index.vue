@@ -40,7 +40,9 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'dashboard-layout',
-  alias: '/dashboard/applications'
+  name: 'Applications',
+  alias: '/dashboard/applications',
+  middleware: ['auth']
 });
 
 const createApplicationModal = ref();
