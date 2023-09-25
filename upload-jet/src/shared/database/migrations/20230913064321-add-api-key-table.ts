@@ -2,7 +2,7 @@ import { Migration } from '@mikro-orm/migrations';
 
 const TABLE_NAME = 'api_key';
 
-export class Migration20230913064321 extends Migration {
+export class AddApiKeyTable extends Migration {
   async up(): Promise<void> {
     const knex = this.getKnex();
 
