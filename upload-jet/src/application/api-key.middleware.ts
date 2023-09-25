@@ -17,7 +17,7 @@ export class GetApplicationMiddleware implements NestMiddleware {
 
   async use(req: Request, _res: Response, next: NextFunction) {
     const { id: applicationId } = await readApplicationSchema.parseAsync({
-      id: req.body.applicationId
+      id: req.params['applicationId']
     });
 
     if (applicationId) {

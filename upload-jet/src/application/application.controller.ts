@@ -59,20 +59,22 @@ export class ApplicationController {
     }
   }
 
-  @Post('create-api-key')
-  async createApiKey(@Req() req: Request) {
-    return this.applicationService
-      .createApiKey(req.applicationId)
-      .catch(error => {
-        if (error instanceof ApiKeyExistsError) {
-          throw new ConflictException(error.message);
-        }
-        throw error;
-      });
+  @Post('create-api-key/:applicationId')
+  async createApiKey(
+    @Param('applicationId', ParseIntPipe) applicationId: number
+  ) {
+    return this.applicationService.createApiKey(applicationId).catch(error => {
+      if (error instanceof ApiKeyExistsError) {
+        throw new ConflictException(error.message);
+      }
+      throw error;
+    });
   }
 
-  @Delete('delete-api-key')
-  async deleteApiKey(@Req() req: Request) {
-    return this.applicationService.deleteApiKey(req.applicationId);
+  @Delete('delete-api-key/:applicationId')
+  async deleteApiKey(
+    @Param('applicationId', ParseIntPipe) applicationId: number
+  ) {
+    return this.applicationService.deleteApiKey(applicationId);
   }
 }
