@@ -13,6 +13,12 @@ async function bootstrap() {
   const appUrl = config.get<string>('app.appUrl');
 
   app.use(cookieParser());
+
+  app.enableCors({
+    origin: appUrl,
+    credentials: true
+  });
+
   app.useLogger(logger);
   app.enableCors({ credentials: true, origin: appUrl });
 

@@ -1,31 +1,36 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException
-} from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost } from '@nestjs/common';
 import { Response } from 'express';
+import { PinoLogger } from 'nestjs-pino';
 import { ZodError } from 'zod';
-import { ValidationService } from './validation.service';
-import { logger } from '@mikro-orm/nestjs';
 
 const BAD_REQUEST_CODE = 400;
 
 @Catch(ZodError)
 export class ZodExceptionFilter implements ExceptionFilter {
-  constructor(private readonly validationService: ValidationService) {}
+  constructor(private readonly logger: PinoLogger) {}
 
   catch(exception: ZodError, host: ArgumentsHost) {
+    const error = this.mapZodError(exception);
+    this.logger.error(error);
+
+    const contextType = host.getType();
+    if (contextType !== 'http') return;
+
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-
-    const error = this.validationService.mapZodError(exception);
-    logger.error(error);
 
     response.status(BAD_REQUEST_CODE).json({
       statusCode: BAD_REQUEST_CODE,
       message: exception.name,
       error
     });
+  }
+
+  private mapZodError(error: ZodError) {
+    return error.issues.map(({ path, message, code }) => ({
+      path,
+      message,
+      code
+    }));
   }
 }

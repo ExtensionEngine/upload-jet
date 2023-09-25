@@ -4,8 +4,8 @@ import { Injectable } from '@nestjs/common';
 import Application from './application.entity';
 
 export class ApplicationNotFoundError extends Error {
-  constructor(message: string) {
-    super(message);
+  constructor() {
+    super('Application not found');
     this.name = this.constructor.name;
   }
 }
@@ -17,18 +17,13 @@ export class ApplicationService {
     private readonly applicationRepository: EntityRepository<Application>
   ) {}
 
-  getUserApplications(userId: number) {
+  getAllByUserId(userId: number) {
     return this.applicationRepository.find({ userId });
   }
 
   async getById(id: number) {
-    return this.applicationRepository.findOne({ id }).then(result => {
-      if (!result)
-        throw new ApplicationNotFoundError(
-          `Application with id ${id} not found`
-        );
-
-      return result;
-    });
+    const result = await this.applicationRepository.findOne({ id });
+    if (!result) throw new ApplicationNotFoundError();
+    return result;
   }
 }

@@ -7,7 +7,7 @@ export default class Application extends BaseEntity {
   @Property({ nullable: false })
   name: string;
 
-  @Property({ fieldName: 'user_id', serializedName: 'userId' })
+  @Property()
   userId!: number;
 
   constructor(name: string, userId: number) {
