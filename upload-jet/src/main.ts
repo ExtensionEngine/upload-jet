@@ -10,7 +10,13 @@ async function bootstrap() {
   const logger = app.get(Logger);
   const config = app.get(ConfigService);
   const port = config.get<number>('app.port');
+  const appUrl = config.get<string>('app.appUrl');
   app.use(cookieParser());
+
+  app.enableCors({
+    origin: appUrl,
+    credentials: true
+  });
 
   app.useLogger(logger);
   app.enableCors();
