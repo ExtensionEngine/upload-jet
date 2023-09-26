@@ -1,12 +1,11 @@
 <template>
   <div class="p-4" v-if="application">
     <div class="flex justify-between mb-4">
-      <h1 class="text-3xl">{{ application.name }}</h1>
+      <h1 class="text-3xl">{{ createdAt }}</h1>
       <button class="rounded-lg bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600">
         Generate API key
       </button>
     </div>
-
     <div>
       <div class="flex text-xl">
         <label class="mr-2">Name:</label>
@@ -33,15 +32,15 @@ const formatDate = (dateString: string | undefined): string => {
   return dateString ? new Date(dateString).toUTCString() : '';
 }
 
-const { data, error } = await useApiFetch<Application>(`applications/${useRoute().params.id}`);
-const application = data.value;
-
+const { data: application, error } = await useApiFetch<Application>(
+  `applications/${useRoute().params.id}`
+);
 if (error.value) {
   throw createError({ ...error.value, fatal: true });
 }
 
 const createdAt = computed(() => {
-  return formatDate(application?.createdAt);
+  return formatDate(application.value?.createdAt);
 });
 
 </script>
