@@ -1,19 +1,23 @@
 import {
+  BadRequestException,
+  Body,
   Controller,
   ForbiddenException,
   Get,
   NotFoundException,
   Param,
   ParseIntPipe,
+  Post,
   Req,
   UseGuards
 } from '@nestjs/common';
 import { Request } from 'express';
 import {
   ApplicationNotFoundError,
-  ApplicationService
+  ApplicationService,
+  UniqueConstraintError
 } from './application.service';
-import { readApplicationSchema } from './validation';
+import { applicationNameSchema, readApplicationSchema } from './validation';
 import { Permission, PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
 
@@ -47,6 +51,26 @@ export class ApplicationController {
         throw new NotFoundException(error.message);
       }
 
+      throw error;
+    }
+  }
+
+  @Post('create')
+  async createApplication(@Body('name') name: string, @Req() request: Request) {
+    const applicationName = await applicationNameSchema.parseAsync(name);
+
+    try {
+      const { userId } = request;
+      const createdApplication =
+        await this.applicationService.createApplication(
+          applicationName,
+          userId
+        );
+      return createdApplication;
+    } catch (error) {
+      if (error instanceof UniqueConstraintError) {
+        throw new BadRequestException(error.message);
+      }
       throw error;
     }
   }

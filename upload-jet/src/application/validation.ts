@@ -7,3 +7,5 @@ export const readApplicationSchema = z
   .strict();
 
 export type ReadApplicationSchema = z.infer<typeof readApplicationSchema>;
+
+export const applicationNameSchema = z.string().nonempty();
