@@ -63,7 +63,9 @@ import { RequestContextMiddleware } from 'shared/request-context-middleware';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(RequestContextMiddleware, AuthenticationMiddleware)
+      .apply(RequestContextMiddleware)
+      .forRoutes('*')
+      .apply(AuthenticationMiddleware)
       .exclude('identity/callback')
       .forRoutes('*');
   }
