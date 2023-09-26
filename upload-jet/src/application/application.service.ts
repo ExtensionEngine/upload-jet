@@ -34,7 +34,7 @@ export class ApplicationService {
     const hashedKey = await this.hashApiKey(apiKey);
 
     const application = await this.getById(applicationId);
-    await application.createApiKey(hashedKey);
+    application.createApiKey(hashedKey);
     await this.em.persistAndFlush(application);
 
     return apiKey;
@@ -42,7 +42,7 @@ export class ApplicationService {
 
   async deleteApiKey(applicationId: number) {
     const application = await this.getById(applicationId);
-    await application.deleteApiKey();
+    application.deleteApiKey();
     this.em.persistAndFlush(application);
   }
 

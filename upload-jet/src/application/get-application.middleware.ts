@@ -24,8 +24,6 @@ export class GetApplicationMiddleware implements NestMiddleware {
     try {
       const application = await this.applicationService.getById(applicationId);
 
-      if (!application) throw new ApplicationNotFoundError();
-
       if (!hasPermission(req.permissions, 'update', application)) {
         throw new ForbiddenException();
       }
