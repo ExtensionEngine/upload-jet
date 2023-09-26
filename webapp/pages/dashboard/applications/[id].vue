@@ -33,17 +33,15 @@ const formatDate = (dateString: string | undefined): string => {
   return dateString ? new Date(dateString).toUTCString() : '';
 }
 
-const application: Ref<Application | null> = useState('application', () => null);
-
 const { data, error } = await useApiFetch<Application>(`applications/${useRoute().params.id}`);
-application.value = data.value;
+const application = data.value;
 
 if (error.value) {
   throw createError({ ...error.value, fatal: true });
 }
 
 const createdAt = computed(() => {
-  return formatDate(application.value?.createdAt);
+  return formatDate(application?.createdAt);
 });
 
 </script>
