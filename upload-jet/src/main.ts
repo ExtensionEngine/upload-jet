@@ -19,7 +19,6 @@ async function bootstrap() {
   });
 
   app.useLogger(logger);
-  app.enableCors();
 
   process.on('uncaughtException', err => logUncaughtException(err, logger));
 
