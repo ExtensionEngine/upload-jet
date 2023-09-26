@@ -45,7 +45,7 @@ definePageMeta({
   middleware: ['auth']
 });
 
-const { applicationList } = await useApplication();
+const applicationList = await useApplication();
 
 const createApplicationModal = ref();
 const deleteApplicationModal = ref();
