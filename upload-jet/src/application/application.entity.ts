@@ -24,7 +24,10 @@ export default class Application extends BaseEntity {
   @Property()
   userId!: number;
 
-  @OneToMany(() => ApiKey, apiKey => apiKey.application, { eager: true })
+  @OneToMany(() => ApiKey, apiKey => apiKey.application, {
+    eager: true,
+    hidden: true
+  })
   apiKeys = new Collection<ApiKey>(this);
 
   @Property({ persist: false })

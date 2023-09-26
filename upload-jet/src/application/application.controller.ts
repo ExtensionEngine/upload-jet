@@ -20,7 +20,6 @@ import { readApplicationSchema } from './validation';
 import { Permission, PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
 import { ApiKeyExistsError } from './application.entity';
-import { ApplicationDto } from './application.dto';
 
 @Controller('applications')
 @UseGuards(PermissionGuard)
@@ -33,7 +32,7 @@ export class ApplicationController {
     const applications = await this.applicationService.getAllByUserId(
       req.userId
     );
-    return applications.map(application => new ApplicationDto(application));
+    return applications;
   }
 
   @Get(':id')
@@ -49,7 +48,7 @@ export class ApplicationController {
         throw new ForbiddenException();
       }
 
-      return new ApplicationDto(application);
+      return application;
     } catch (error) {
       if (error instanceof ApplicationNotFoundError) {
         throw new NotFoundException(error.message);
