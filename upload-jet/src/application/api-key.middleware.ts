@@ -20,27 +20,25 @@ export class GetApplicationMiddleware implements NestMiddleware {
       id: req.params['applicationId']
     });
 
-    if (applicationId) {
-      try {
-        const em = this.orm.em.fork();
-        const application = await em.findOne(Application, {
-          id: applicationId
-        });
+    try {
+      const em = this.orm.em.fork();
+      const application = await em.findOne(Application, {
+        id: applicationId
+      });
 
-        if (!application) throw new ApplicationNotFoundError();
+      if (!application) throw new ApplicationNotFoundError();
 
-        if (!hasPermission(req.permissions, 'update', application)) {
-          throw new ForbiddenException();
-        }
-
-        req.applicationId = applicationId;
-      } catch (error) {
-        if (error instanceof ApplicationNotFoundError) {
-          throw new NotFoundException(error.message);
-        }
-
-        throw error;
+      if (!hasPermission(req.permissions, 'update', application)) {
+        throw new ForbiddenException();
       }
+
+      req.applicationId = applicationId;
+    } catch (error) {
+      if (error instanceof ApplicationNotFoundError) {
+        throw new NotFoundException(error.message);
+      }
+
+      throw error;
     }
 
     next();
