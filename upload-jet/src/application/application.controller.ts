@@ -56,6 +56,7 @@ export class ApplicationController {
   }
 
   @Post('create')
+  @Permission('create', 'Application')
   async createApplication(@Body('name') name: string, @Req() request: Request) {
     const applicationName = await applicationNameSchema.parseAsync(name);
 
