@@ -59,7 +59,7 @@ export class ApplicationController {
     }
   }
 
-  @Post('create-api-key/:applicationId')
+  @Post(':applicationId/api-keys')
   async createApiKey(
     @Param('applicationId', ParseIntPipe) applicationId: number
   ) {
@@ -71,7 +71,7 @@ export class ApplicationController {
     });
   }
 
-  @Delete('delete-api-key/:applicationId')
+  @Delete(':applicationId/api-keys')
   async deleteApiKey(
     @Param('applicationId', ParseIntPipe) applicationId: number
   ) {
