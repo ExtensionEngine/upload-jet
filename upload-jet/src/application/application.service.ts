@@ -51,4 +51,14 @@ export class ApplicationService {
       throw error;
     }
   }
+
+  async deleteApplication(applicationId: number) {
+    try {
+      const applicationToDelete = await this.getById(applicationId);
+      await this.em.remove(applicationToDelete).flush();
+      return applicationToDelete;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

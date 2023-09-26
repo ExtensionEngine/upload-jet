@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   NotFoundException,
@@ -55,7 +56,7 @@ export class ApplicationController {
     }
   }
 
-  @Post('create')
+  @Post()
   @Permission('create', 'Application')
   async createApplication(@Body('name') name: string, @Req() request: Request) {
     const applicationName = await applicationNameSchema.parseAsync(name);
@@ -73,6 +74,16 @@ export class ApplicationController {
         throw new BadRequestException(error.message);
       }
       throw error;
+    }
+  }
+
+  @Delete(':id')
+  async deleteApplication(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const deletedApp = await this.applicationService.deleteApplication(id);
+      return deletedApp;
+    } catch (error) {
+      console.log(error);
     }
   }
 }
