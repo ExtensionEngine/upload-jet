@@ -12,7 +12,7 @@
       <NuxtLink
         :to="`/dashboard/applications/${application.id}`"
         class="mb-6 flex h-14 list-none items-center justify-between rounded-lg border-2 bg-slate-50 pl-4 pr-2 duration-200 ease-out hover:cursor-pointer hover:border-slate-400"
-        v-for="application in mockedApplications"
+        v-for="application in applicationList"
         :key="application.id">
         <div class="font-semibold">
           {{ application.name }}
@@ -45,6 +45,8 @@ definePageMeta({
   middleware: ['auth']
 });
 
+const { applicationList } = await useApplication();
+
 const createApplicationModal = ref();
 const deleteApplicationModal = ref();
 
@@ -70,6 +72,7 @@ const applicationName = computed(() => {
   return filteredApplication?.name;
 });
 
+////////////////////////
 // Below is a test code just for the client side to showcase the render functionality, will be deleted before merging
 // TODO:
 // 1. Should retrieve a list of apps from the database that will be rendered on the client side
