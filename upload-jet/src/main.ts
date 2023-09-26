@@ -20,7 +20,6 @@ async function bootstrap() {
   });
 
   app.useLogger(logger);
-  app.enableCors({ credentials: true, origin: appUrl });
 
   process.on('uncaughtException', err => logUncaughtException(err, logger));
 
