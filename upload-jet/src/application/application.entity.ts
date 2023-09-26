@@ -39,14 +39,13 @@ export default class Application extends BaseEntity {
     this.userId = userId;
   }
 
-  async createApiKey(hashedKey: string) {
+  createApiKey(hashedKey: string): void {
     if (this.hasApiKey) throw new ApiKeyExistsError();
     this.apiKeys.add(new ApiKey(hashedKey));
   }
 
-  async deleteApiKey(): Promise<void> {
-    const apiKeys = await this.apiKeys.loadItems();
-    const apiKey = apiKeys.find(apiKey => !apiKey.deletedAt);
+  deleteApiKey(): void {
+    const apiKey = this.apiKeys.getItems().find(apiKey => !apiKey.deletedAt);
     if (apiKey) apiKey.deletedAt = new Date();
   }
 }
