@@ -11,15 +11,10 @@ import {
 } from './application.service';
 import { hasPermission } from 'shared/auth/authorization';
 import { readApplicationSchema } from './validation';
-import { MikroORM } from '@mikro-orm/core';
-import Application from './application.entity';
 
 @Injectable()
 export class GetApplicationMiddleware implements NestMiddleware {
-  constructor(
-    private readonly orm: MikroORM,
-    private readonly applicationService: ApplicationService
-  ) {}
+  constructor(private readonly applicationService: ApplicationService) {}
 
   async use(req: Request, _res: Response, next: NextFunction) {
     const { id: applicationId } = await readApplicationSchema.parseAsync({
@@ -27,13 +22,7 @@ export class GetApplicationMiddleware implements NestMiddleware {
     });
 
     try {
-      const em = this.orm.em.fork();
-      const application = await em.findOne(Application, {
-        id: applicationId
-      });
-
-      // const application = await this.applicationService.getById(applicationId);
-      console.log('#######', application);
+      const application = await this.applicationService.getById(applicationId);
 
       if (!application) throw new ApplicationNotFoundError();
 

@@ -14,6 +14,7 @@ import { AuthenticationMiddleware } from 'shared/auth/authentication.middleware'
 import { ApplicationModule } from 'application/application.module';
 import { ZodExceptionFilter } from 'shared/zod-exception.filter';
 import { APP_FILTER } from '@nestjs/core';
+import { RequestContextMiddleware } from 'shared/request-context-middleware';
 
 @Module({
   imports: [
@@ -62,7 +63,7 @@ import { APP_FILTER } from '@nestjs/core';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(AuthenticationMiddleware)
+      .apply(RequestContextMiddleware, AuthenticationMiddleware)
       .exclude('identity/callback')
       .forRoutes('*');
   }
