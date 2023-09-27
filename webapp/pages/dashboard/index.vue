@@ -98,10 +98,13 @@ const createApplication = async (applicationName: string) => {
   closeCreateModal();
 };
 
-const deleteApplication = (id: number | undefined) => {
-  mockedApplications.value = mockedApplications.value.filter(
-    app => app.id !== id
-  );
+const deleteApplication = async (id: number | undefined) => {
+  const { data } = await useApiFetch(`/applications/${id}`, {
+    method: 'DELETE'
+  });
+  const { data: refreshedApplicationList } =
+    await useApiFetch<Application[]>('/applications');
+  applicationList.value = refreshedApplicationList.value;
   closeDeleteModal();
 };
 </script>
