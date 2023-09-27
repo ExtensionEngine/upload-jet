@@ -1,4 +1,4 @@
-import { Identity } from 'types';
+import { Identity } from 'types/identity';
 
 export default async function useAuth() {
   const config = useRuntimeConfig();
