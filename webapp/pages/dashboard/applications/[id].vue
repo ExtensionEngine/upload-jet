@@ -15,9 +15,12 @@
       <div class="text-3xl mb-2 mr-2">Api Key</div>
       <div class="flex">
         <input type="text" class="border-gray border-2 rounded-md p-1 w-96 text-center mr-3"
-          placeholder="Press generate to create api key" value="ee5639da-31a1-437b-9ce1-52de5a8c3c15">
-        <button class="rounded-lg bg-blue-500 px-2 py-1 font-bold text-white hover:bg-blue-600">
+          placeholder="Api key does not exist" :value="apiKey" disabled>
+        <button v-if="!apiKey" class="rounded-lg bg-blue-500 px-2 py-1 font-bold text-white hover:bg-blue-600">
           Generate API key
+        </button>
+        <button v-if="apiKey" class="rounded-lg bg-red-500 px-2 py-1 font-bold text-white hover:bg-blue-600">
+          Delete API key
         </button>
       </div>
 
@@ -49,5 +52,10 @@ if (error.value) {
 const createdAt = computed(() => {
   return formatDate(application.value?.createdAt);
 });
+
+const apiKey = computed(() => {
+  const apiKeyMask = '********-****-****-****-************';
+  return application.value?.hasApiKey ? apiKeyMask : '';
+})
 
 </script>
