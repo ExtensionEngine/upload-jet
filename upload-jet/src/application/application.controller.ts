@@ -1,10 +1,13 @@
 import {
+  ConflictException,
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   NotFoundException,
   Param,
   ParseIntPipe,
+  Post,
   Req,
   UseGuards
 } from '@nestjs/common';
@@ -16,6 +19,7 @@ import {
 import { readApplicationSchema } from './validation';
 import { Permission, PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
+import { ApiKeyExistsError } from './application.entity';
 
 @Controller('applications')
 @UseGuards(PermissionGuard)
@@ -25,7 +29,10 @@ export class ApplicationController {
   @Get('list')
   @Permission('read', 'Application')
   async getAll(@Req() req: Request) {
-    return this.applicationService.getAllByUserId(req.userId);
+    const applications = await this.applicationService.getAllByUserId(
+      req.userId
+    );
+    return applications;
   }
 
   @Get(':id')
@@ -49,5 +56,24 @@ export class ApplicationController {
 
       throw error;
     }
+  }
+
+  @Post(':applicationId/api-keys')
+  async createApiKey(
+    @Param('applicationId', ParseIntPipe) applicationId: number
+  ) {
+    return this.applicationService.createApiKey(applicationId).catch(error => {
+      if (error instanceof ApiKeyExistsError) {
+        throw new ConflictException(error.message);
+      }
+      throw error;
+    });
+  }
+
+  @Delete(':applicationId/api-keys')
+  async deleteApiKey(
+    @Param('applicationId', ParseIntPipe) applicationId: number
+  ) {
+    return this.applicationService.deleteApiKey(applicationId);
   }
 }
