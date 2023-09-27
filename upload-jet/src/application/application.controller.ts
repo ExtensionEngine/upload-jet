@@ -27,7 +27,7 @@ import { hasPermission } from 'shared/auth/authorization';
 export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}
 
-  @Get('list')
+  @Get()
   @Permission('read', 'Application')
   async getAll(@Req() req: Request) {
     return this.applicationService.getAllByUserId(req.userId);
@@ -78,12 +78,29 @@ export class ApplicationController {
   }
 
   @Delete(':id')
-  async deleteApplication(@Param('id', ParseIntPipe) id: number) {
+  async deleteApplication(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number
+  ) {
     try {
-      const deletedApp = await this.applicationService.deleteApplication(id);
-      return deletedApp;
+      const { id: applicationId } = await readApplicationSchema.parseAsync({
+        id
+      });
+
+      const application = await this.applicationService.getById(applicationId);
+
+      if (!hasPermission(req.permissions, 'delete', application)) {
+        throw new ForbiddenException();
+      }
+
+      const deletedApplication =
+        await this.applicationService.deleteApplication(application);
+      return deletedApplication;
     } catch (error) {
-      console.log(error);
+      if (error instanceof ApplicationNotFoundError) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
   }
 }

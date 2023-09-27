@@ -1,6 +1,7 @@
 import {
   EntityManager,
   EntityRepository,
+  Loaded,
   UniqueConstraintViolationException
 } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
@@ -52,13 +53,8 @@ export class ApplicationService {
     }
   }
 
-  async deleteApplication(applicationId: number) {
-    try {
-      const applicationToDelete = await this.getById(applicationId);
-      await this.em.remove(applicationToDelete).flush();
-      return applicationToDelete;
-    } catch (error) {
-      console.log(error);
-    }
+  async deleteApplication(application: Loaded<Application, never>) {
+    await this.em.remove(application).flush();
+    return application;
   }
 }
