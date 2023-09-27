@@ -100,9 +100,17 @@ const deleteApiKey = async () => {
 const createApiKey = async () => {
   closeCreateModal();
 
-  const { status } = await useApiFetch(
+  const { data, error, status } = await useApiFetch<string>(
     `applications/${useRoute().params.id}/api-keys`
     , { method: 'POST' });
+
+  if (status.value === 'success' && data.value && application.value) {
+    apiKey.value = data.value;
+    application.value = {
+      ...application.value,
+      hasApiKey: true
+    }
+  }
 };
 
 </script>
