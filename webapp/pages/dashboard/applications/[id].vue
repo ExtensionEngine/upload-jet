@@ -15,17 +15,20 @@
       <div class="text-3xl mb-2 mr-2">Api Key</div>
       <div class="flex">
         <input type="text" class="border-gray border-2 rounded-md p-1 w-96 text-center mr-3"
-          placeholder="Api key does not exist" :value="apiKey" disabled>
-        <button v-if="!apiKey" class="rounded-lg bg-blue-500 px-2 py-1 font-bold text-white hover:bg-blue-600">
+          :placeholder="apiKeyPlacehoder" :value="apiKey" disabled>
+        <button v-if="!hasApiKey" class="rounded-lg bg-blue-500 px-2 py-1 font-bold text-white hover:bg-blue-600">
           Generate API key
         </button>
-        <button v-if="apiKey" class="rounded-lg bg-red-500 px-2 py-1 font-bold text-white hover:bg-blue-600">
+        <button v-if="hasApiKey" @click.prevent="openDeleteApiKeyModal()"
+          class="rounded-lg bg-red-500 px-2 py-1 font-bold text-white hover:bg-red-600">
           Delete API key
         </button>
       </div>
 
     </div>
   </div>
+
+  <DeleteApiKeyModal ref="deleteApiKeyModal" @delete:api-key="deleteApiKey()" :id="0" />
 </template>
 
 <script setup lang="ts">
@@ -37,11 +40,18 @@ definePageMeta({
   middleware: ['auth']
 });
 
+const apiKey = ref<string>();
+
+const deleteApiKeyModal = ref();
+const { showModal: showDeleteModal, closeModal: closeDeleteModal } = useModal(
+  deleteApiKeyModal
+);
+
 const formatDate = (dateString: string | undefined): string => {
   return dateString ? new Date(dateString).toUTCString() : '';
 }
 
-const { data: application, error } = await useApiFetch<Application>(
+const { data: application, error, refresh: refreshApp } = await useApiFetch<Application>(
   `applications/${useRoute().params.id}`
 );
 
@@ -53,9 +63,28 @@ const createdAt = computed(() => {
   return formatDate(application.value?.createdAt);
 });
 
-const apiKey = computed(() => {
-  const apiKeyMask = '********-****-****-****-************';
-  return application.value?.hasApiKey ? apiKeyMask : '';
-})
+const apiKeyPlacehoder = computed(() => {
+  return application.value?.hasApiKey ?
+    '********-****-****-****-************' :
+    'Api key does not exist';
+});
+
+const hasApiKey = computed(() => {
+  return application.value?.hasApiKey;
+});
+
+function openDeleteApiKeyModal() {
+  showDeleteModal();
+}
+
+const deleteApiKey = async () => {
+  closeDeleteModal();
+
+  const { error } = await useApiFetch(
+    `applications/${useRoute().params.id}/api-keys`
+    , { method: 'DELETE' });
+
+  console.log("$$$$$$$$", error)
+};
 
 </script>
