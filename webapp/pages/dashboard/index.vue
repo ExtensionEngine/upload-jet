@@ -92,7 +92,8 @@ const createApplication = async (applicationName: string) => {
     method: 'POST',
     body: { name: applicationName }
   });
-  const { data: refreshedApplicationList } = await useApiFetch('/applications');
+  const { data: refreshedApplicationList } =
+    await useApiFetch<Application[]>('/applications');
   applicationList.value = refreshedApplicationList.value;
   closeCreateModal();
 };

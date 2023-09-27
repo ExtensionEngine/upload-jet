@@ -28,8 +28,7 @@ export class ApplicationService {
   constructor(
     private readonly em: EntityManager,
     @InjectRepository(Application)
-    private readonly applicationRepository: EntityRepository<Application>,
-    private readonly em: EntityManager
+    private readonly applicationRepository: EntityRepository<Application>
   ) {}
 
   getAllByUserId(userId: number) {
