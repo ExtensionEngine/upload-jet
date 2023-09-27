@@ -38,6 +38,8 @@
 </template>
 
 <script setup lang="ts">
+import { Application } from 'types/application';
+
 definePageMeta({
   layout: 'dashboard-layout',
   name: 'Applications',
@@ -45,7 +47,8 @@ definePageMeta({
   middleware: ['auth']
 });
 
-const applicationList = await useApplication();
+const { data: applicationList } =
+  await useApiFetch<Application[]>('applications/list');
 
 const createApplicationModal = ref();
 const deleteApplicationModal = ref();
@@ -72,7 +75,6 @@ const applicationName = computed(() => {
   return filteredApplication?.name;
 });
 
-////////////////////////
 // Below is a test code just for the client side to showcase the render functionality, will be deleted before merging
 // TODO:
 // 1. Should retrieve a list of apps from the database that will be rendered on the client side
