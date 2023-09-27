@@ -1,12 +1,7 @@
 <template>
   <div class="p-4" v-if="application">
-    <div class="flex justify-between mb-4">
-      <h1 class="text-3xl">{{ createdAt }}</h1>
-      <button class="rounded-lg bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600">
-        Generate API key
-      </button>
-    </div>
-    <div>
+    <h1 class="text-3xl">{{ createdAt }}</h1>
+    <div class="mt-3">
       <div class="flex text-xl">
         <label class="mr-2">Name:</label>
         <div>{{ application.name }}</div>
@@ -15,6 +10,17 @@
         <label class="mr-2">Created:</label>
         <div>{{ createdAt }}</div>
       </div>
+    </div>
+    <div class="mt-3">
+      <div class="text-3xl mb-2 mr-2">Api Key</div>
+      <div class="flex">
+        <input type="text" class="border-gray border-2 rounded-md p-1 w-96 text-center mr-3"
+          placeholder="Press generate to create api key" value="ee5639da-31a1-437b-9ce1-52de5a8c3c15">
+        <button class="rounded-lg bg-blue-500 px-2 py-1 font-bold text-white hover:bg-blue-600">
+          Generate API key
+        </button>
+      </div>
+
     </div>
   </div>
 </template>
@@ -35,6 +41,7 @@ const formatDate = (dateString: string | undefined): string => {
 const { data: application, error } = await useApiFetch<Application>(
   `applications/${useRoute().params.id}`
 );
+
 if (error.value) {
   throw createError({ ...error.value, fatal: true });
 }
