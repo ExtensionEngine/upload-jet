@@ -5,14 +5,16 @@ import {
   Delete,
   ForbiddenException,
   Get,
+  HttpStatus,
   NotFoundException,
   Param,
   ParseIntPipe,
   Post,
   Req,
+  Res,
   UseGuards
 } from '@nestjs/common';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import {
   ApplicationNotFoundError,
   ApplicationService,
@@ -58,7 +60,11 @@ export class ApplicationController {
 
   @Post()
   @Permission('create', 'Application')
-  async createApplication(@Body('name') name: string, @Req() request: Request) {
+  async createApplication(
+    @Body('name') name: string,
+    @Req() request: Request,
+    @Res() res: Response
+  ) {
     const applicationName = await applicationNameSchema.parseAsync(name);
 
     try {
@@ -68,7 +74,9 @@ export class ApplicationController {
           applicationName,
           userId
         );
-      return createdApplication;
+      return res.status(HttpStatus.CREATED).json({
+        message: `Application ${createdApplication.name} has been created`
+      });
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
         throw new BadRequestException(error.message);
@@ -80,13 +88,14 @@ export class ApplicationController {
   @Delete(':id')
   async deleteApplication(
     @Req() req: Request,
-    @Param('id', ParseIntPipe) id: number
+    @Param('id', ParseIntPipe) id: number,
+    @Res() res: Response
   ) {
-    try {
-      const { id: applicationId } = await readApplicationSchema.parseAsync({
-        id
-      });
+    const { id: applicationId } = await readApplicationSchema.parseAsync({
+      id
+    });
 
+    try {
       const application = await this.applicationService.getById(applicationId);
 
       if (!hasPermission(req.permissions, 'delete', application)) {
@@ -95,7 +104,9 @@ export class ApplicationController {
 
       const deletedApplication =
         await this.applicationService.deleteApplication(application);
-      return deletedApplication;
+      return res.status(HttpStatus.OK).json({
+        message: `Application ${deletedApplication.name} has been deleted`
+      });
     } catch (error) {
       if (error instanceof ApplicationNotFoundError) {
         throw new NotFoundException(error.message);
