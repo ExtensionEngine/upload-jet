@@ -16,11 +16,11 @@
       <div class="flex">
         <input type="text" class="border-gray border-2 rounded-md p-1 w-96 text-center mr-3"
           :placeholder="apiKeyPlacehoder" :value="apiKey" disabled>
-        <button v-if="!hasApiKey" @click.prevent="openDeleteApiKeyModal()"
+        <button v-if="!hasApiKey" @click.prevent="showCreateModal()"
           class="rounded-lg bg-blue-500 px-2 py-1 font-bold text-white hover:bg-blue-600">
-          Generate API key
+          Create API key
         </button>
-        <button v-if="hasApiKey" @click.prevent="openDeleteApiKeyModal()"
+        <button v-if="hasApiKey" @click.prevent="showDeleteModal()"
           class="rounded-lg bg-red-500 px-2 py-1 font-bold text-white hover:bg-red-600">
           Delete API key
         </button>
@@ -30,10 +30,13 @@
   </div>
 
   <DeleteApiKeyModal ref="deleteApiKeyModal" @delete:api-key="deleteApiKey()" />
+  <CreateApiKeyModal ref="createApiKeyModal" @create:api-key="createApiKey()" />
 </template>
 
 <script setup lang="ts">
 import { Application } from '@/types/application';
+import DeleteApiKeyModal from '@/components/api-key/DeleteApiKeyModal.vue';
+import CreateApiKeyModal from '@/components/api-key/CreateApiKeyModal.vue';
 
 definePageMeta({
   name: 'Application details',
@@ -41,24 +44,28 @@ definePageMeta({
   middleware: ['auth']
 });
 
-const apiKey = ref<string>();
+const apiKey = ref<string>('');
 
 const deleteApiKeyModal = ref();
 const { showModal: showDeleteModal, closeModal: closeDeleteModal } = useModal(
   deleteApiKeyModal
 );
+const createApiKeyModal = ref();
+const { showModal: showCreateModal, closeModal: closeCreateModal } = useModal(
+  createApiKeyModal
+);
 
 const formatDate = (dateString: string | undefined): string => {
   return dateString ? new Date(dateString).toUTCString() : '';
-}
+};
 
-const { data: application, error, refresh: refreshApp } = await useApiFetch<Application>(
+const { data: application, error } = await useApiFetch<Application>(
   `applications/${useRoute().params.id}`
 );
 
 if (error.value) {
   throw createError({ ...error.value, fatal: true });
-}
+};
 
 const createdAt = computed(() => {
   return formatDate(application.value?.createdAt);
@@ -74,18 +81,28 @@ const hasApiKey = computed(() => {
   return application.value?.hasApiKey;
 });
 
-function openDeleteApiKeyModal() {
-  showDeleteModal();
-}
-
 const deleteApiKey = async () => {
   closeDeleteModal();
 
-  const { error } = await useApiFetch(
+  const { status } = await useApiFetch(
     `applications/${useRoute().params.id}/api-keys`
     , { method: 'DELETE' });
 
-  console.log("$$$$$$$$", error)
+  if (status.value === 'success' && application.value) {
+    apiKey.value = '';
+    application.value = {
+      ...application.value,
+      hasApiKey: false
+    }
+  }
+};
+
+const createApiKey = async () => {
+  closeCreateModal();
+
+  const { status } = await useApiFetch(
+    `applications/${useRoute().params.id}/api-keys`
+    , { method: 'POST' });
 };
 
 </script>
