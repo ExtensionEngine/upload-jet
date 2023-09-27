@@ -48,7 +48,7 @@ definePageMeta({
 });
 
 const { data: applicationList } =
-  await useApiFetch<Application[]>('applications/list');
+  await useApiFetch<Application[]>('applications');
 
 const createApplicationModal = ref();
 const deleteApplicationModal = ref();
