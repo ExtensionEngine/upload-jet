@@ -12,7 +12,7 @@
       <NuxtLink
         :to="`/dashboard/applications/${application.id}`"
         class="mb-6 flex h-14 list-none items-center justify-between rounded-lg border-2 bg-slate-50 pl-4 pr-2 duration-200 ease-out hover:cursor-pointer hover:border-slate-400"
-        v-for="application in mockedApplications"
+        v-for="application in applicationList"
         :key="application.id">
         <div class="font-semibold">
           {{ application.name }}
@@ -44,6 +44,8 @@ definePageMeta({
   alias: '/dashboard/applications',
   middleware: ['auth']
 });
+
+const { data: applicationList } = useApiFetch('/applications');
 
 const createApplicationModal = ref();
 const deleteApplicationModal = ref();
@@ -82,18 +84,17 @@ const mockedApplications = ref([
   { id: 3, name: 'Mocked App 3' }
 ]);
 
-const createApplication = (input: string) => {
-  const randomId = Math.floor(Math.random() * 1000);
-  const newApplication = { id: randomId, name: input };
-  mockedApplications.value.push(newApplication);
-  inputValue.value = '';
+const createApplication = async (applicationName: string) => {
+  const { data } = await useApiFetch('/applications', {
+    method: 'POST',
+    body: { name: applicationName }
+  });
+  const { data: refreshedApplicationList } = await useApiFetch('/applications');
+  applicationList.value = refreshedApplicationList.value;
   closeCreateModal();
 };
 
 const deleteApplication = (id: number | undefined) => {
-  mockedApplications.value = mockedApplications.value.filter(
-    app => app.id !== id
-  );
   closeDeleteModal();
 };
 </script>
