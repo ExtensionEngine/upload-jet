@@ -10,8 +10,7 @@
       <button @click="closeModal" class="rounded-sm border-2 bg-gray-300 p-2 text-black hover:bg-gray-400">
         Cancel
       </button>
-      <button @click="emit('delete:api-key', props.id)"
-        class="rounded-sm border-2 bg-gray-500 p-2 text-white hover:bg-red-500">
+      <button @click="emit('delete:api-key')" class="rounded-sm border-2 bg-gray-500 p-2 text-white hover:bg-red-500">
         Delete
       </button>
     </template>
@@ -19,10 +18,6 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  id: { type: Number, default: null },
-  applicationName: { type: String, default: null }
-});
 
 const baseModalRef = ref();
 const { showModal, closeModal } = useModal(baseModalRef);

@@ -16,7 +16,8 @@
       <div class="flex">
         <input type="text" class="border-gray border-2 rounded-md p-1 w-96 text-center mr-3"
           :placeholder="apiKeyPlacehoder" :value="apiKey" disabled>
-        <button v-if="!hasApiKey" class="rounded-lg bg-blue-500 px-2 py-1 font-bold text-white hover:bg-blue-600">
+        <button v-if="!hasApiKey" @click.prevent="openDeleteApiKeyModal()"
+          class="rounded-lg bg-blue-500 px-2 py-1 font-bold text-white hover:bg-blue-600">
           Generate API key
         </button>
         <button v-if="hasApiKey" @click.prevent="openDeleteApiKeyModal()"
@@ -28,7 +29,7 @@
     </div>
   </div>
 
-  <DeleteApiKeyModal ref="deleteApiKeyModal" @delete:api-key="deleteApiKey()" :id="0" />
+  <DeleteApiKeyModal ref="deleteApiKeyModal" @delete:api-key="deleteApiKey()" />
 </template>
 
 <script setup lang="ts">
