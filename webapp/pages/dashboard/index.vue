@@ -95,6 +95,9 @@ const createApplication = async (applicationName: string) => {
 };
 
 const deleteApplication = (id: number | undefined) => {
+  mockedApplications.value = mockedApplications.value.filter(
+    app => app.id !== id
+  );
   closeDeleteModal();
 };
 </script>
