@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 import Application from './application.entity';
+import { createHash, randomUUID } from 'crypto';
 
 export class ApplicationNotFoundError extends Error {
   constructor() {
@@ -25,6 +26,7 @@ export class UniqueConstraintError extends Error {
 @Injectable()
 export class ApplicationService {
   constructor(
+    private readonly em: EntityManager,
     @InjectRepository(Application)
     private readonly applicationRepository: EntityRepository<Application>,
     private readonly em: EntityManager
@@ -56,5 +58,28 @@ export class ApplicationService {
   async deleteApplication(application: Loaded<Application, never>) {
     await this.em.remove(application).flush();
     return application;
+  }
+
+  async createApiKey(applicationId: number) {
+    const apiKey = randomUUID();
+    const hashedKey = await this.hashApiKey(apiKey);
+
+    const application = await this.getById(applicationId);
+    application.createApiKey(hashedKey);
+    await this.em.persistAndFlush(application);
+
+    return apiKey;
+  }
+
+  async deleteApiKey(applicationId: number) {
+    const application = await this.getById(applicationId);
+    application.deleteApiKey();
+    this.em.persistAndFlush(application);
+  }
+
+  private async hashApiKey(apiKey: string): Promise<string> {
+    const hash = createHash('sha512');
+    hash.update(apiKey);
+    return hash.digest('hex');
   }
 }

@@ -7,6 +7,7 @@ declare global {
     export interface Request {
       userId: number;
       permissions: Permission[];
+      applicationId: number;
     }
   }
 }

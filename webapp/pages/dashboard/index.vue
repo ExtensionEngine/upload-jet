@@ -38,6 +38,8 @@
 </template>
 
 <script setup lang="ts">
+import { Application } from 'types/application';
+
 definePageMeta({
   layout: 'dashboard-layout',
   name: 'Applications',
@@ -45,7 +47,8 @@ definePageMeta({
   middleware: ['auth']
 });
 
-const { data: applicationList } = useApiFetch('/applications');
+const { data: applicationList } =
+  await useApiFetch<Application[]>('applications');
 
 const createApplicationModal = ref();
 const deleteApplicationModal = ref();
