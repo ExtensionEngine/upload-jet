@@ -26,7 +26,7 @@ import { ApiKeyExistsError } from './application.entity';
 export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}
 
-  @Get('list')
+  @Get()
   @Permission('read', 'Application')
   async getAll(@Req() req: Request) {
     const applications = await this.applicationService.getAllByUserId(
