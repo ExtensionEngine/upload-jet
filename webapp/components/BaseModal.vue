@@ -1,7 +1,7 @@
 <template>
   <dialog ref="baseModalRef">
     <div
-      class="relative m-auto flex w-96 flex-col gap-7 rounded-xl bg-white p-5 pl-7 shadow-md">
+      class="relative m-auto flex w-96 flex-col gap-7 bg-white p-5 pl-7 shadow-md">
       <slot name="header"></slot>
       <slot name="content"></slot>
       <slot name="error"></slot>
