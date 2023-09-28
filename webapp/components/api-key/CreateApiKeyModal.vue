@@ -5,7 +5,7 @@
     </template>
     <template v-slot:content>
       <p>Are you sure you want to create new api key?</p>
-      <p>Keep this key safe and do not share it publicly. If you lose it, you will need to create a new one</p>
+      <p>Keep this key safe and do not share it publicly. If you lose it, you will need to create a new one.</p>
     </template>
     <template v-slot:footer>
       <button @click="closeModal" class="rounded-sm border-2 bg-gray-300 p-2 text-black hover:bg-gray-400">
