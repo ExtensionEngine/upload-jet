@@ -92,16 +92,14 @@ export class ApplicationController {
     });
 
     try {
-      const deletedApplication = await this.applicationService.getById(
-        applicationId
-      );
+      const application = await this.applicationService.getById(applicationId);
 
-      if (!hasPermission(req.permissions, 'delete', deletedApplication)) {
+      if (!hasPermission(req.permissions, 'delete', application)) {
         throw new ForbiddenException();
       }
 
-      await this.applicationService.deleteApplication(deletedApplication);
-      return deletedApplication;
+      await this.applicationService.deleteApplication(application);
+      return application;
     } catch (error) {
       if (error instanceof ApplicationNotFoundError) {
         throw new NotFoundException(error.message);
