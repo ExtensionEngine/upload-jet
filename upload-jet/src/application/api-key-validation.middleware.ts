@@ -14,8 +14,9 @@ export class ApiKeyValidationMiddleware implements NestMiddleware {
     const authHeader = req.headers.authorization;
 
     const [name, apiKey] = authHeader?.split(' ') || '';
-    if (name !== 'Bearer')
+    if (name !== 'Bearer') {
       throw new UnauthorizedException('Incorrect authorization schema');
+    }
     if (!apiKey) throw new UnauthorizedException('Api key is missing');
 
     const isValidApiKey = await this.applicationService.isValidApiKey(apiKey);
