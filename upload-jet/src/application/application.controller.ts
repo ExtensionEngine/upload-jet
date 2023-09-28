@@ -65,11 +65,7 @@ export class ApplicationController {
 
   @Post()
   @Permission('create', 'Application')
-  async createApplication(
-    @Body('name') name: string,
-    @Req() request: Request,
-    @Res() res: Response
-  ) {
+  async createApplication(@Body('name') name: string, @Req() request: Request) {
     const applicationName = await applicationNameSchema.parseAsync(name);
 
     try {
@@ -79,11 +75,10 @@ export class ApplicationController {
           applicationName,
           userId
         );
-      return res.status(HttpStatus.CREATED).json({
-        message: `Application ${createdApplication.name} has been created`
-      });
+      return createdApplication;
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
+        console.log(error);
         throw new BadRequestException(error.message);
       }
       throw error;
@@ -93,8 +88,7 @@ export class ApplicationController {
   @Delete(':id')
   async deleteApplication(
     @Req() req: Request,
-    @Param('id', ParseIntPipe) id: number,
-    @Res() res: Response
+    @Param('id', ParseIntPipe) id: number
   ) {
     const { id: applicationId } = await readApplicationSchema.parseAsync({
       id
@@ -109,9 +103,7 @@ export class ApplicationController {
 
       const deletedApplication =
         await this.applicationService.deleteApplication(application);
-      return res.status(HttpStatus.OK).json({
-        message: `Application ${deletedApplication.name} has been deleted`
-      });
+      return deletedApplication;
     } catch (error) {
       if (error instanceof ApplicationNotFoundError) {
         throw new NotFoundException(error.message);

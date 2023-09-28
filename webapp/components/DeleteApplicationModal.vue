@@ -6,6 +6,9 @@
     <template v-slot:content>
       <p>Are you sure you want to permanently delete {{ applicationName }}?</p>
     </template>
+    <template #error v-if="errorMessage">
+      <div class="mt-0 text-red-700">{{ errorMessage }}</div>
+    </template>
     <template v-slot:footer>
       <button
         @click="closeModal"
@@ -13,7 +16,7 @@
         Cancel
       </button>
       <button
-        @click="emit('delete:application', props.id)"
+        @click="emit('delete:application', id)"
         class="rounded-sm border-2 bg-gray-500 p-2 text-white hover:bg-red-500">
         Delete
       </button>
@@ -24,16 +27,30 @@
 <script setup lang="ts">
 const props = defineProps({
   id: { type: Number, default: null },
-  applicationName: { type: String, default: null }
+  applicationName: { type: String, default: null },
+  errorMessage: { type: String, default: '' }
 });
 
+const emit = defineEmits<{
+  'delete:application': [id: number];
+  'update:errorMessage': [newValue: string];
+}>();
+
 const baseModalRef = ref();
-const { showModal, closeModal } = useModal(baseModalRef);
+
+const errorMessage = computed({
+  get() {
+    return props.errorMessage;
+  },
+  set(newValue) {
+    emit('update:errorMessage', newValue);
+  }
+});
+
+const { showModal, closeModal } = useModal(baseModalRef, errorMessage);
 
 defineExpose({
   showModal,
   closeModal
 });
-
-const emit = defineEmits(['delete:application']);
 </script>

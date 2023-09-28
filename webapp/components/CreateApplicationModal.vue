@@ -12,9 +12,12 @@
           class="h-10 w-full border-2 p-2" />
       </form>
     </template>
+    <template #error v-if="errorMessage">
+      <div class="mt-0 text-red-700">{{ errorMessage }}</div>
+    </template>
     <template #footer>
       <button
-        @click="closeModal"
+        @click="closeModal()"
         class="rounded-sm border-2 bg-gray-300 p-2 text-black hover:bg-gray-400">
         Cancel
       </button>
@@ -32,19 +35,15 @@
 <script setup lang="ts">
 const props = defineProps<{
   applicationName: string;
+  errorMessage: string;
 }>();
 
 const baseModalRef = ref();
-const { showModal, closeModal } = useModal(baseModalRef);
-
-defineExpose({
-  showModal,
-  closeModal
-});
 
 const emit = defineEmits<{
   'create:application': [applicationName: string];
   'update:applicationName': [newValue: string];
+  'update:errorMessage': [newValue: string];
 }>();
 
 const applicationName = computed({
@@ -54,5 +53,25 @@ const applicationName = computed({
   set(newValue) {
     emit('update:applicationName', newValue);
   }
+});
+
+const errorMessage = computed({
+  get() {
+    return props.errorMessage;
+  },
+  set(newValue) {
+    emit('update:errorMessage', newValue);
+  }
+});
+
+const { showModal, closeModal } = useModal(
+  baseModalRef,
+  errorMessage,
+  applicationName
+);
+
+defineExpose({
+  showModal,
+  closeModal
 });
 </script>

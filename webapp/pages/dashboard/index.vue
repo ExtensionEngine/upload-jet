@@ -29,12 +29,14 @@
   <CreateApplicationModal
     ref="createApplicationModal"
     @create:application="createApplication"
-    v-model:application-name="inputValue" />
+    v-model:application-name="inputValue"
+    v-model:errorMessage="errorMessage" />
   <DeleteApplicationModal
     ref="deleteApplicationModal"
     @delete:application="deleteApplication(applicationId)"
     :id="applicationId"
-    :application-name="applicationName" />
+    :application-name="applicationName"
+    v-model:errorMessage="errorMessage" />
 </template>
 
 <script setup lang="ts">
@@ -53,12 +55,17 @@ const applicationId = ref<number>();
 const inputValue = ref('');
 const createApplicationModal = ref();
 const deleteApplicationModal = ref();
+const errorMessage = ref<string>('');
 
 const { showModal: showCreateModal, closeModal: closeCreateModal } = useModal(
-  createApplicationModal
+  createApplicationModal,
+  errorMessage,
+  inputValue
 );
 const { showModal: showDeleteModal, closeModal: closeDeleteModal } = useModal(
-  deleteApplicationModal
+  deleteApplicationModal,
+  errorMessage,
+  inputValue
 );
 
 const applicationName = computed(() => {
@@ -69,23 +76,32 @@ const applicationName = computed(() => {
 });
 
 const createApplication = async (name: string) => {
-  const { data } = await useApiFetch('/applications', {
+  const { data, error } = await useApiFetch<Application>('/applications', {
     method: 'POST',
     body: { name }
   });
-  const { data: refreshedApplicationList } =
-    await useApiFetch<Application[]>('/applications');
-  applicationList.value = refreshedApplicationList.value;
+  if (error.value?.data) {
+    errorMessage.value = error.value.data.message;
+    return;
+  }
+  data.value && applicationList.value?.push(data.value);
   closeCreateModal();
 };
 
 const deleteApplication = async (id: number | undefined) => {
-  const { data } = await useApiFetch(`/applications/${id}`, {
-    method: 'DELETE'
-  });
-  const { data: refreshedApplicationList } =
-    await useApiFetch<Application[]>('/applications');
-  applicationList.value = refreshedApplicationList.value;
+  const { data, error } = await useApiFetch<Application>(
+    `/applications/${id}`,
+    {
+      method: 'DELETE'
+    }
+  );
+  if (error.value?.data) {
+    errorMessage.value = error.value.data.message;
+    return;
+  }
+  applicationList.value =
+    applicationList.value?.filter(app => app.id !== data.value?.id) ?? null;
+  errorMessage.value = '';
   closeDeleteModal();
 };
 
