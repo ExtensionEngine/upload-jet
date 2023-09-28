@@ -13,11 +13,11 @@
       </form>
     </template>
     <template #error v-if="errorMessage">
-      <div class="mt-0 text-red-700">{{ errorMessage }}</div>
+      <div class="text-red-700">{{ errorMessage }}</div>
     </template>
     <template #footer>
       <button
-        @click="closeModal()"
+        @click="closeModal"
         class="rounded-sm border-2 bg-gray-300 p-2 text-black hover:bg-gray-400">
         Cancel
       </button>

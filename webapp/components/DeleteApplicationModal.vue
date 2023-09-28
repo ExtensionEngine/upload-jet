@@ -7,7 +7,7 @@
       <p>Are you sure you want to permanently delete {{ applicationName }}?</p>
     </template>
     <template #error v-if="errorMessage">
-      <div class="mt-0 text-red-700">{{ errorMessage }}</div>
+      <div class="text-red-700">{{ errorMessage }}</div>
     </template>
     <template v-slot:footer>
       <button

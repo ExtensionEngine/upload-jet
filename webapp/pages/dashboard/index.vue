@@ -64,16 +64,8 @@ const { showModal: showCreateModal, closeModal: closeCreateModal } = useModal(
 );
 const { showModal: showDeleteModal, closeModal: closeDeleteModal } = useModal(
   deleteApplicationModal,
-  errorMessage,
-  inputValue
+  errorMessage
 );
-
-const applicationName = computed(() => {
-  const filteredApplication = applicationList.value?.find(
-    app => app.id === applicationId.value
-  );
-  return filteredApplication?.name;
-});
 
 const createApplication = async (name: string) => {
   const { data, error } = await useApiFetch<Application>('/applications', {
@@ -101,7 +93,6 @@ const deleteApplication = async (id: number | undefined) => {
   }
   applicationList.value =
     applicationList.value?.filter(app => app.id !== data.value?.id) ?? null;
-  errorMessage.value = '';
   closeDeleteModal();
 };
 
@@ -109,4 +100,11 @@ function openDeleteApplicationModal(id: number) {
   applicationId.value = id;
   showDeleteModal();
 }
+
+const applicationName = computed(() => {
+  const filteredApplication = applicationList.value?.find(
+    app => app.id === applicationId.value
+  );
+  return filteredApplication?.name;
+});
 </script>
