@@ -57,7 +57,6 @@ export class ApplicationService {
 
   async isValidApiKey(apiKey: string): Promise<boolean> {
     const keyHash = this.hashApiKey(apiKey);
-    console.log('KEY HASH', apiKey, keyHash);
     return !!(await this.apiKeyRepository.findOne({
       keyHash,
       deletedAt: null
