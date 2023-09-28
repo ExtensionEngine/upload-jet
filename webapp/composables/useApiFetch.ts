@@ -11,10 +11,11 @@ export function useApiFetch<T>(path: string, options: FetchOption = {}) {
   const { headers: overrideHeaders, method, ...rest } = options;
   const headers = { ...defaultHeaders, ...overrideHeaders };
 
-  return useFetch<T>(path, {
+  return useFetch<T, any, any, any>(path, {
     baseURL,
     credentials: 'include',
     headers,
+    method,
     ...rest
   });
 }
