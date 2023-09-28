@@ -69,28 +69,16 @@ function openDeleteApplicationModal(id: number) {
 }
 
 const applicationName = computed(() => {
-  const filteredApplication = mockedApplications.value.find(
+  const filteredApplication = applicationList.value?.find(
     app => app.id === applicationId.value
   );
   return filteredApplication?.name;
 });
 
-// Below is a test code just for the client side to showcase the render functionality, will be deleted before merging
-// TODO:
-// 1. Should retrieve a list of apps from the database that will be rendered on the client side
-// 2. When user creates an app it should send a post request to authorized route and add it to dabatabase and retrieve a new list of apps to render
-// 3. When user deletes an app it should send a post request to authorized route and delete it from the dabatabase and retrieve a new list of apps to render
-
-const mockedApplications = ref([
-  { id: 1, name: 'Mocked App 1' },
-  { id: 2, name: 'Mocked App 2' },
-  { id: 3, name: 'Mocked App 3' }
-]);
-
-const createApplication = async (applicationName: string) => {
+const createApplication = async (name: string) => {
   const { data } = await useApiFetch('/applications', {
     method: 'POST',
-    body: { name: applicationName }
+    body: { name }
   });
   const { data: refreshedApplicationList } =
     await useApiFetch<Application[]>('/applications');
