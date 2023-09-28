@@ -49,7 +49,8 @@ definePageMeta({
 
 const { data: applicationList } =
   await useApiFetch<Application[]>('applications');
-
+const applicationId = ref<number>();
+const inputValue = ref('');
 const createApplicationModal = ref();
 const deleteApplicationModal = ref();
 
@@ -59,14 +60,6 @@ const { showModal: showCreateModal, closeModal: closeCreateModal } = useModal(
 const { showModal: showDeleteModal, closeModal: closeDeleteModal } = useModal(
   deleteApplicationModal
 );
-
-const applicationId = ref<number>();
-const inputValue = ref('');
-
-function openDeleteApplicationModal(id: number) {
-  applicationId.value = id;
-  showDeleteModal();
-}
 
 const applicationName = computed(() => {
   const filteredApplication = applicationList.value?.find(
@@ -95,4 +88,9 @@ const deleteApplication = async (id: number | undefined) => {
   applicationList.value = refreshedApplicationList.value;
   closeDeleteModal();
 };
+
+function openDeleteApplicationModal(id: number) {
+  applicationId.value = id;
+  showDeleteModal();
+}
 </script>
