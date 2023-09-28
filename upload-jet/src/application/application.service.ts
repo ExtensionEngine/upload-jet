@@ -56,7 +56,6 @@ export class ApplicationService {
 
   async deleteApplication(application: Loaded<Application, never>) {
     await this.em.remove(application).flush();
-    return application;
   }
 
   async createApiKey(applicationId: number) {

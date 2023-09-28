@@ -6,16 +6,14 @@ import {
   Delete,
   ForbiddenException,
   Get,
-  HttpStatus,
   NotFoundException,
   Param,
   ParseIntPipe,
   Post,
   Req,
-  Res,
   UseGuards
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import {
   ApplicationNotFoundError,
   ApplicationService,
@@ -78,7 +76,6 @@ export class ApplicationController {
       return createdApplication;
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
-        console.log(error);
         throw new BadRequestException(error.message);
       }
       throw error;
@@ -95,14 +92,15 @@ export class ApplicationController {
     });
 
     try {
-      const application = await this.applicationService.getById(applicationId);
+      const deletedApplication = await this.applicationService.getById(
+        applicationId
+      );
 
-      if (!hasPermission(req.permissions, 'delete', application)) {
+      if (!hasPermission(req.permissions, 'delete', deletedApplication)) {
         throw new ForbiddenException();
       }
 
-      const deletedApplication =
-        await this.applicationService.deleteApplication(application);
+      await this.applicationService.deleteApplication(deletedApplication);
       return deletedApplication;
     } catch (error) {
       if (error instanceof ApplicationNotFoundError) {
