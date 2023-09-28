@@ -3,6 +3,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 import Application from './application.entity';
 import { createHash, randomUUID } from 'crypto';
+import ApiKey from './api-key.entity';
 
 export class ApplicationNotFoundError extends Error {
   constructor() {
@@ -16,7 +17,9 @@ export class ApplicationService {
   constructor(
     private readonly em: EntityManager,
     @InjectRepository(Application)
-    private readonly applicationRepository: EntityRepository<Application>
+    private readonly applicationRepository: EntityRepository<Application>,
+    @InjectRepository(ApiKey)
+    private readonly apiKeyRepository: EntityRepository<ApiKey>
   ) {}
 
   getAllByUserId(userId: number) {
@@ -31,7 +34,7 @@ export class ApplicationService {
 
   async createApiKey(applicationId: number) {
     const apiKey = randomUUID();
-    const hashedKey = await this.hashApiKey(apiKey);
+    const hashedKey = this.hashApiKey(apiKey);
 
     const application = await this.getById(applicationId);
     application.createApiKey(hashedKey);
@@ -46,9 +49,18 @@ export class ApplicationService {
     this.em.persistAndFlush(application);
   }
 
-  private async hashApiKey(apiKey: string): Promise<string> {
+  private hashApiKey(apiKey: string): string {
     const hash = createHash('sha512');
     hash.update(apiKey);
     return hash.digest('hex');
+  }
+
+  async isValidApiKey(apiKey: string): Promise<boolean> {
+    const keyHash = this.hashApiKey(apiKey);
+    const apiKeyResult = await this.apiKeyRepository.findOne({
+      keyHash,
+      deletedAt: null
+    });
+    return Boolean(apiKeyResult);
   }
 }
