@@ -38,6 +38,8 @@ import { Application } from '@/types/application';
 import DeleteApiKeyModal from '@/components/api-key/DeleteApiKeyModal.vue';
 import CreateApiKeyModal from '@/components/api-key/CreateApiKeyModal.vue';
 
+const { $apiFetch } = useNuxtApp();
+
 definePageMeta({
   name: 'Application details',
   layout: 'dashboard-layout',
@@ -82,35 +84,25 @@ const apiKeyPlacehoder = computed(() => {
 });
 
 const deleteApiKey = async () => {
-  closeDeleteModal();
-
-  const { status } = await useApiFetch(
-    `applications/${useRoute().params.id}/api-keys`
-    , { method: 'DELETE' });
-
-  if (status.value === 'success' && application.value) {
-    apiKey.value = '';
-    application.value = {
-      ...application.value,
-      hasApiKey: false
-    }
-  }
+  $apiFetch(`applications/${useRoute().params.id}/api-keys`, { method: 'DELETE' })
+    .then(() => {
+      apiKey.value = '';
+      application.value = {
+        ...application.value,
+        hasApiKey: false
+      } as Application;
+    }).finally(() => closeDeleteModal());
 };
 
 const createApiKey = async () => {
-  closeCreateModal();
-
-  const { data, status } = await useApiFetch<string>(
-    `applications/${useRoute().params.id}/api-keys`
-    , { method: 'POST' });
-
-  if (status.value === 'success' && data.value && application.value) {
-    apiKey.value = data.value;
-    application.value = {
-      ...application.value,
-      hasApiKey: true
-    }
-  }
+  $apiFetch(`applications/${useRoute().params.id}/api-keys`, { method: 'POST' })
+    .then(data => {
+      apiKey.value = data;
+      application.value = {
+        ...application.value,
+        hasApiKey: true
+      } as Application;
+    }).finally(() => closeCreateModal());
 };
 
 </script>
