@@ -1,5 +1,5 @@
 <template>
-  <BaseModal ref="baseModalRef">
+  <BaseModal ref="baseModalRef" @close="$emit('close')">
     <template #header>
       <h2 class="text-center text-xl uppercase">Create Application</h2>
     </template>
@@ -43,7 +43,7 @@ const baseModalRef = ref();
 const emit = defineEmits<{
   'create:application': [applicationName: string];
   'update:applicationName': [newValue: string];
-  'update:errorMessage': [newValue: string];
+  close: [];
 }>();
 
 const applicationName = computed({
@@ -55,20 +55,7 @@ const applicationName = computed({
   }
 });
 
-const errorMessage = computed({
-  get() {
-    return props.errorMessage;
-  },
-  set(newValue) {
-    emit('update:errorMessage', newValue);
-  }
-});
-
-const { showModal, closeModal } = useModal(
-  baseModalRef,
-  errorMessage,
-  applicationName
-);
+const { showModal, closeModal } = useModal(baseModalRef);
 
 defineExpose({
   showModal,

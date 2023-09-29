@@ -1,5 +1,5 @@
 <template>
-  <BaseModal ref="baseModalRef">
+  <BaseModal ref="baseModalRef" @close="$emit('close')">
     <template v-slot:header>
       <h2 class="text-center text-xl uppercase">Delete Application</h2>
     </template>
@@ -33,21 +33,12 @@ const props = defineProps({
 
 const emit = defineEmits<{
   'delete:application': [id: number];
-  'update:errorMessage': [newValue: string];
+  close: [];
 }>();
 
 const baseModalRef = ref();
 
-const errorMessage = computed({
-  get() {
-    return props.errorMessage;
-  },
-  set(newValue) {
-    emit('update:errorMessage', newValue);
-  }
-});
-
-const { showModal, closeModal } = useModal(baseModalRef, errorMessage);
+const { showModal, closeModal } = useModal(baseModalRef);
 
 defineExpose({
   showModal,

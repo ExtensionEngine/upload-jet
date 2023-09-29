@@ -30,13 +30,15 @@
     ref="createApplicationModal"
     @create:application="createApplication"
     v-model:application-name="inputValue"
-    v-model:errorMessage="errorMessage" />
+    :errorMessage="errorMessage"
+    @close="resetValues" />
   <DeleteApplicationModal
     ref="deleteApplicationModal"
     @delete:application="deleteApplication(applicationId)"
     :id="applicationId"
     :application-name="applicationName"
-    v-model:errorMessage="errorMessage" />
+    :errorMessage="errorMessage"
+    @close="resetValues" />
 </template>
 
 <script setup lang="ts">
@@ -58,13 +60,10 @@ const deleteApplicationModal = ref();
 const errorMessage = ref('');
 
 const { showModal: showCreateModal, closeModal: closeCreateModal } = useModal(
-  createApplicationModal,
-  errorMessage,
-  inputValue
+  createApplicationModal
 );
 const { showModal: showDeleteModal, closeModal: closeDeleteModal } = useModal(
-  deleteApplicationModal,
-  errorMessage
+  deleteApplicationModal
 );
 
 const createApplication = async (name: string) => {
@@ -107,4 +106,9 @@ const applicationName = computed(() => {
   );
   return filteredApplication?.name;
 });
+
+const resetValues = () => {
+  inputValue.value = '';
+  errorMessage.value = '';
+};
 </script>
