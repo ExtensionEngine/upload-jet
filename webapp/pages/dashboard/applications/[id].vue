@@ -76,7 +76,7 @@ const createdAt = computed(() => {
 const hasApiKey = computed(() => !!application.value?.hasApiKey);
 
 const apiKeyPlacehoder = computed(() =>
-  application.value?.hasApiKey ?
+  hasApiKey.value ?
     '********-****-****-****-************' :
     'Api key does not exist'
 );
