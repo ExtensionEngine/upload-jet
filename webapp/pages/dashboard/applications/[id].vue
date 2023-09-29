@@ -29,8 +29,8 @@
     </div>
   </div>
 
-  <DeleteApiKeyModal ref="deleteApiKeyModal" @delete:api-key="deleteApiKey()" />
-  <CreateApiKeyModal ref="createApiKeyModal" @create:api-key="createApiKey()" />
+  <DeleteApiKeyModal ref="deleteApiKeyModal" @delete:api-key="deleteApiKey" />
+  <CreateApiKeyModal ref="createApiKeyModal" @create:api-key="createApiKey" />
 </template>
 
 <script setup lang="ts">
