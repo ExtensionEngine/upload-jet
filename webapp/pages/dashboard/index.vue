@@ -55,7 +55,7 @@ const applicationId = ref<number>();
 const inputValue = ref('');
 const createApplicationModal = ref();
 const deleteApplicationModal = ref();
-const errorMessage = ref<string>('');
+const errorMessage = ref('');
 
 const { showModal: showCreateModal, closeModal: closeCreateModal } = useModal(
   createApplicationModal,
