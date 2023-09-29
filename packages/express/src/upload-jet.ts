@@ -97,8 +97,9 @@ export class UploadJet {
       );
 
     const url = new URL('upload-policy', API_URL);
+    const headers = { Authorization: `Bearer ${this.#apiKey}` };
     return axios
-      .post(url.href, policyRules)
+      .post(url.href, policyRules, { headers })
       .then(({ data }) => data)
       .catch(err => {
         throw new UploadJetError(err.message);
