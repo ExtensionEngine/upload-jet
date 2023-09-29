@@ -16,11 +16,11 @@
       <div class="flex">
         <input type="text" class="border-gray border-2 rounded-md p-1 w-96 text-center mr-3"
           :placeholder="apiKeyPlacehoder" :value="apiKey" disabled>
-        <button v-if="!hasApiKey" @click.prevent="showCreateModal()"
+        <button v-if="!hasApiKey" @click="showCreateModal()"
           class="rounded-lg bg-blue-500 px-2 py-1 font-bold text-white hover:bg-blue-600">
           Create API key
         </button>
-        <button v-if="hasApiKey" @click.prevent="showDeleteModal()"
+        <button v-else @click="showDeleteModal()"
           class="rounded-lg bg-red-500 px-2 py-1 font-bold text-white hover:bg-red-600">
           Delete API key
         </button>
