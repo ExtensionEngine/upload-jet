@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="mt-3">
-      <div class="text-2xl mb-2 mr-2">Api Key</div>
+      <h2 class="text-2xl mb-2 mr-2">Api Key</h2>
       <div class="flex">
         <input type="text" class="border-gray border-2 rounded-md p-1 w-96 text-center mr-3"
           :placeholder="apiKeyPlacehoder" :value="apiKey" disabled>
