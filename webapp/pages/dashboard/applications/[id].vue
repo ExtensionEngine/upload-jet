@@ -73,15 +73,13 @@ const createdAt = computed(() => {
   return formatDate(application.value?.createdAt);
 });
 
-const hasApiKey = computed(() => {
-  return application.value?.hasApiKey;
-});
+const hasApiKey = computed(() => !!application.value?.hasApiKey);
 
-const apiKeyPlacehoder = computed(() => {
-  return hasApiKey ?
+const apiKeyPlacehoder = computed(() =>
+  application.value?.hasApiKey ?
     '********-****-****-****-************' :
-    'Api key does not exist';
-});
+    'Api key does not exist'
+);
 
 const deleteApiKey = async () => {
   $apiFetch(`applications/${useRoute().params.id}/api-keys`, { method: 'DELETE' })
