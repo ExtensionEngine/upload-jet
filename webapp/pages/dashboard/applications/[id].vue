@@ -44,7 +44,7 @@ definePageMeta({
   middleware: ['auth']
 });
 
-const apiKey = ref<string>('');
+const apiKey = ref('');
 
 const deleteApiKeyModal = ref();
 const { showModal: showDeleteModal, closeModal: closeDeleteModal } = useModal(
@@ -71,14 +71,14 @@ const createdAt = computed(() => {
   return formatDate(application.value?.createdAt);
 });
 
-const apiKeyPlacehoder = computed(() => {
-  return application.value?.hasApiKey ?
-    '********-****-****-****-************' :
-    'Api key does not exist';
-});
-
 const hasApiKey = computed(() => {
   return application.value?.hasApiKey;
+});
+
+const apiKeyPlacehoder = computed(() => {
+  return hasApiKey ?
+    '********-****-****-****-************' :
+    'Api key does not exist';
 });
 
 const deleteApiKey = async () => {
