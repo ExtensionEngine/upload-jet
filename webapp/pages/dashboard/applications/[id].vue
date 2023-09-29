@@ -1,6 +1,6 @@
 <template>
   <div class="p-4" v-if="application">
-    <h1 class="text-3xl">{{ createdAt }}</h1>
+    <h1 class="text-3xl">{{ application.name }}</h1>
     <div class="mt-3">
       <div class="flex text-xl">
         <label class="mr-2">Name:</label>

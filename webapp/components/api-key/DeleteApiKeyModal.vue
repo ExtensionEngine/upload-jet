@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-
 const baseModalRef = ref();
 const { showModal, closeModal } = useModal(baseModalRef);
 
