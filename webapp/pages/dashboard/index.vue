@@ -52,8 +52,8 @@ definePageMeta({
 });
 
 const { $apiFetch } = useNuxtApp();
-const { data: applicationList } =
-  await useApiFetch<Application[]>('applications');
+const { data } = await useApiFetch<Application[]>('applications');
+let applicationList = data.value;
 const applicationId = ref<number>();
 const inputValue = ref('');
 const createApplicationModal = ref();
@@ -73,7 +73,7 @@ const createApplication = async (name: string) => {
     body: { name }
   })
     .then(data => {
-      applicationList.value?.push(data);
+      applicationList?.push(data);
       closeCreateModal();
     })
     .catch(error => {
@@ -86,8 +86,8 @@ const deleteApplication = async (id: number | undefined) => {
     method: 'DELETE'
   })
     .then(data => {
-      applicationList.value =
-        applicationList.value?.filter(app => app.id !== data?.id) ?? null;
+      applicationList =
+        applicationList?.filter(app => app.id !== data?.id) ?? null;
       closeDeleteModal();
     })
     .catch(error => {
@@ -101,7 +101,7 @@ function openDeleteApplicationModal(id: number) {
 }
 
 const applicationName = computed(() => {
-  const filteredApplication = applicationList.value?.find(
+  const filteredApplication = applicationList?.find(
     app => app.id === applicationId.value
   );
   return filteredApplication?.name;
