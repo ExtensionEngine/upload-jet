@@ -1,10 +1,17 @@
 <template>
-  <div
-    class="flex items-center md:mb-6 md:h-32 md:justify-center md:border-b-2 md:border-gray-300">
-    <div class="flex items-center md:space-x-8">
-      <div
-        class="h-10 w-10 overflow-hidden rounded-full border-2 border-gray-300 object-cover md:h-20 md:w-20" />
-      <div class="ml-2">Username</div>
-    </div>
+  <div class="p-3 flex items-center md:border-b-2 md:border-gray-300">
+    <img :src="user?.avatarUrl" class="h-20 w-20 rounded-full border-2 border-gray-300">
+    <UTooltip :text="user?.email">
+      <div class="ml-3 w-36 overflow-hidden overflow-ellipsis">{{ username }}</div>
+    </UTooltip>
   </div>
 </template>
+<script setup lang="ts">
+
+const { user } = await useAuth();
+
+const username = computed(() => {
+  return user.value?.email.split("@")[0];
+});
+
+</script>
