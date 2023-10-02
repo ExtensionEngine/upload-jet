@@ -17,8 +17,8 @@ githubLoginUrl.search = searchParams;
 
 <template>
   <div
-    class="flex h-10 cursor-pointer items-center gap-2 rounded-md bg-sky-600 px-3 py-2 text-white outline-none"
-    v-if="!isLoggedIn">
+    v-if="!isLoggedIn"
+    class="flex h-10 cursor-pointer items-center gap-2 rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
     <img :src="GithubLogo" alt="github" class="h-full" />
     <NuxtLink :href="githubLoginUrl.href"> Login with GitHub </NuxtLink>
   </div>
