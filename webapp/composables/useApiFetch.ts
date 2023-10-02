@@ -1,8 +1,4 @@
-type FetchOption = {
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
-  headers?: Record<string, string>;
-  body?: Record<string, string>;
-};
+import { FetchOption } from 'types/fetchOptions';
 
 export function useApiFetch<T>(path: string, options: FetchOption = {}) {
   const config = useRuntimeConfig();
