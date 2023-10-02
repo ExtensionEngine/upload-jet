@@ -1,5 +1,5 @@
 <template>
-  <BaseModal ref="baseModalRef">
+  <BaseModal ref="baseModalRef" @close="$emit('close')">
     <template #header>
       <h2 class="text-center text-xl uppercase">Create Application</h2>
     </template>
@@ -11,6 +11,9 @@
           v-model="applicationName"
           class="h-10 w-full border-2 p-2" />
       </form>
+    </template>
+    <template #error v-if="errorMessage">
+      <div class="text-red-700">{{ errorMessage }}</div>
     </template>
     <template #footer>
       <button
@@ -32,19 +35,15 @@
 <script setup lang="ts">
 const props = defineProps<{
   applicationName: string;
+  errorMessage: string;
 }>();
 
 const baseModalRef = ref();
-const { showModal, closeModal } = useModal(baseModalRef);
-
-defineExpose({
-  showModal,
-  closeModal
-});
 
 const emit = defineEmits<{
   'create:application': [applicationName: string];
   'update:applicationName': [newValue: string];
+  close: [];
 }>();
 
 const applicationName = computed({
@@ -54,5 +53,12 @@ const applicationName = computed({
   set(newValue) {
     emit('update:applicationName', newValue);
   }
+});
+
+const { showModal, closeModal } = useModal(baseModalRef);
+
+defineExpose({
+  showModal,
+  closeModal
 });
 </script>

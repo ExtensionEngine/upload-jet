@@ -1,4 +1,6 @@
 import {
+  BadRequestException,
+  Body,
   ConflictException,
   Controller,
   Delete,
@@ -14,9 +16,10 @@ import {
 import { Request } from 'express';
 import {
   ApplicationNotFoundError,
-  ApplicationService
+  ApplicationService,
+  UniqueConstraintError
 } from './application.service';
-import { readApplicationSchema } from './validation';
+import { createApplicationSchema, readApplicationSchema } from './validation';
 import { Permission, PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
 import { ApiKeyExistsError } from './application.entity';
@@ -54,6 +57,53 @@ export class ApplicationController {
         throw new NotFoundException(error.message);
       }
 
+      throw error;
+    }
+  }
+
+  @Post()
+  @Permission('create', 'Application')
+  async createApplication(@Body('name') name: string, @Req() request: Request) {
+    const { name: applicationName } = await createApplicationSchema.parseAsync(
+      name
+    );
+    const { userId } = request;
+    try {
+      const application = await this.applicationService.createApplication(
+        applicationName,
+        userId
+      );
+      return application;
+    } catch (error) {
+      if (error instanceof UniqueConstraintError) {
+        throw new BadRequestException(error.message);
+      }
+      throw error;
+    }
+  }
+
+  @Delete(':id')
+  async deleteApplication(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number
+  ) {
+    const { id: applicationId } = await readApplicationSchema.parseAsync({
+      id
+    });
+
+    try {
+      const application = await this.applicationService.getById(applicationId);
+
+      if (!hasPermission(req.permissions, 'delete', application)) {
+        throw new ForbiddenException();
+      }
+
+      await this.applicationService.deleteApplication(application);
+      return application;
+    } catch (error) {
+      if (error instanceof ApplicationNotFoundError) {
+        throw new NotFoundException(error.message);
+      }
       throw error;
     }
   }

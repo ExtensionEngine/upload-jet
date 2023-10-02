@@ -1,4 +1,9 @@
-import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import {
+  EntityManager,
+  EntityRepository,
+  Loaded,
+  UniqueConstraintViolationException
+} from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 import Application from './application.entity';
@@ -8,6 +13,13 @@ import ApiKey from './api-key.entity';
 export class ApplicationNotFoundError extends Error {
   constructor() {
     super('Application not found');
+    this.name = this.constructor.name;
+  }
+}
+
+export class UniqueConstraintError extends Error {
+  constructor() {
+    super('Application with the same name already exists');
     this.name = this.constructor.name;
   }
 }
@@ -30,6 +42,23 @@ export class ApplicationService {
     const result = await this.applicationRepository.findOne({ id });
     if (!result) throw new ApplicationNotFoundError();
     return result;
+  }
+
+  async createApplication(name: string, userId: number) {
+    try {
+      const application = new Application(name, userId);
+      await this.em.persistAndFlush(application);
+      return application;
+    } catch (error) {
+      if (error instanceof UniqueConstraintViolationException) {
+        throw new UniqueConstraintError();
+      }
+      throw error;
+    }
+  }
+
+  async deleteApplication(application: Loaded<Application, never>) {
+    await this.em.remove(application).flush();
   }
 
   async createApiKey(applicationId: number) {
