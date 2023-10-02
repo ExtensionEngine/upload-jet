@@ -46,9 +46,9 @@ export class ApplicationService {
 
   async createApplication(name: string, userId: number) {
     try {
-      const newApplication = new Application(name, userId);
-      await this.em.persistAndFlush(newApplication);
-      return newApplication;
+      const application = new Application(name, userId);
+      await this.em.persistAndFlush(application);
+      return application;
     } catch (error) {
       if (error instanceof UniqueConstraintViolationException) {
         throw new UniqueConstraintError();

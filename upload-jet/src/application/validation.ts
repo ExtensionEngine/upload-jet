@@ -8,4 +8,6 @@ export const readApplicationSchema = z
 
 export type ReadApplicationSchema = z.infer<typeof readApplicationSchema>;
 
-export const applicationNameSchema = z.string().nonempty();
+export const createApplicationSchema = z.object({
+  name: z.string().nonempty()
+});

@@ -19,7 +19,7 @@ import {
   ApplicationService,
   UniqueConstraintError
 } from './application.service';
-import { applicationNameSchema, readApplicationSchema } from './validation';
+import { createApplicationSchema, readApplicationSchema } from './validation';
 import { Permission, PermissionGuard } from 'shared/auth/permission.guard';
 import { hasPermission } from 'shared/auth/authorization';
 import { ApiKeyExistsError } from './application.entity';
@@ -64,16 +64,16 @@ export class ApplicationController {
   @Post()
   @Permission('create', 'Application')
   async createApplication(@Body('name') name: string, @Req() request: Request) {
-    const applicationName = await applicationNameSchema.parseAsync(name);
-
+    const { name: applicationName } = await createApplicationSchema.parseAsync(
+      name
+    );
+    const { userId } = request;
     try {
-      const { userId } = request;
-      const createdApplication =
-        await this.applicationService.createApplication(
-          applicationName,
-          userId
-        );
-      return createdApplication;
+      const application = await this.applicationService.createApplication(
+        applicationName,
+        userId
+      );
+      return application;
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
         throw new BadRequestException(error.message);
