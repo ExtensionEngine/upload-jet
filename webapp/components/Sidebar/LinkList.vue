@@ -1,11 +1,7 @@
 <template>
   <nav class="flex flex-col space-y-2">
-    <NuxtLink
-      v-for="route in menu"
-      @click="$emit('close')"
-      :to="route.to"
-      :key="route.text"
-      class="nav-link text-primary-600 p-4 duration-200 ease-out hover:bg-slate-300">
+    <NuxtLink v-for="route in menu" @click="$emit('close')" :to="route.to" :key="route.text"
+      class="nav-link p-4 duration-200 ease-out hover:bg-slate-300">
       <Icon :name="route.icon" size="24" class="mr-4" />
       {{ route.text }}
     </NuxtLink>
