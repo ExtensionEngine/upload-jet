@@ -29,7 +29,7 @@
   <CreateApplicationModal
     ref="createApplicationModal"
     @create:application="createApplication"
-    v-model:application-name="inputValue"
+    v-model:application-name="applicationNameInput"
     :errorMessage="errorMessage"
     @close="resetValues" />
   <DeleteApplicationModal
@@ -53,9 +53,9 @@ definePageMeta({
 
 const { $apiFetch } = useNuxtApp();
 const { data } = await useApiFetch<Application[]>('applications');
-let applicationList = data.value;
+const applicationList = ref<Application[] | null>(data.value);
 const applicationId = ref<number>();
-const inputValue = ref('');
+const applicationNameInput = ref('');
 const createApplicationModal = ref();
 const deleteApplicationModal = ref();
 const errorMessage = ref('');
@@ -73,7 +73,7 @@ const createApplication = async (name: string) => {
     body: { name }
   })
     .then(data => {
-      applicationList?.push(data);
+      applicationList?.value?.push(data);
       closeCreateModal();
     })
     .catch(error => {
@@ -86,8 +86,8 @@ const deleteApplication = async (id: number | undefined) => {
     method: 'DELETE'
   })
     .then(data => {
-      applicationList =
-        applicationList?.filter(app => app.id !== data?.id) ?? null;
+      applicationList.value =
+        applicationList?.value?.filter(app => app.id !== data?.id) ?? null;
       closeDeleteModal();
     })
     .catch(error => {
@@ -101,14 +101,14 @@ function openDeleteApplicationModal(id: number) {
 }
 
 const applicationName = computed(() => {
-  const filteredApplication = applicationList?.find(
+  const filteredApplication = applicationList?.value?.find(
     app => app.id === applicationId.value
   );
   return filteredApplication?.name;
 });
 
 const resetValues = () => {
-  inputValue.value = '';
+  applicationNameInput.value = '';
   errorMessage.value = '';
 };
 </script>
