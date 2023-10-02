@@ -82,7 +82,7 @@ const apiKeyPlacehoder = computed(() =>
 );
 
 const deleteApiKey = async () => {
-  $apiFetch(`applications/${useRoute().params.id}/api-keys`, { method: 'DELETE' })
+  return $apiFetch(`applications/${useRoute().params.id}/api-keys`, { method: 'DELETE' })
     .then(() => {
       apiKey.value = '';
       application.value = {
@@ -93,7 +93,7 @@ const deleteApiKey = async () => {
 };
 
 const createApiKey = async () => {
-  $apiFetch(`applications/${useRoute().params.id}/api-keys`, { method: 'POST' })
+  return $apiFetch(`applications/${useRoute().params.id}/api-keys`, { method: 'POST' })
     .then(data => {
       apiKey.value = data;
       application.value = {
