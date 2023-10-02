@@ -51,6 +51,7 @@ definePageMeta({
   middleware: ['auth']
 });
 
+const { $apiFetch } = useNuxtApp();
 const { data: applicationList } =
   await useApiFetch<Application[]>('applications');
 const applicationId = ref<number>();
@@ -67,32 +68,31 @@ const { showModal: showDeleteModal, closeModal: closeDeleteModal } = useModal(
 );
 
 const createApplication = async (name: string) => {
-  const { data, error } = await useApiFetch<Application>('/applications', {
+  return $apiFetch<Application>('/applications', {
     method: 'POST',
     body: { name }
-  });
-  if (error.value?.data) {
-    errorMessage.value = error.value.data.message;
-    return;
-  }
-  data.value && applicationList.value?.push(data.value);
-  closeCreateModal();
+  })
+    .then(data => {
+      applicationList.value?.push(data);
+      closeCreateModal();
+    })
+    .catch(error => {
+      errorMessage.value = error.response._data.message;
+    });
 };
 
 const deleteApplication = async (id: number | undefined) => {
-  const { data, error } = await useApiFetch<Application>(
-    `/applications/${id}`,
-    {
-      method: 'DELETE'
-    }
-  );
-  if (error.value?.data) {
-    errorMessage.value = error.value.data.message;
-    return;
-  }
-  applicationList.value =
-    applicationList.value?.filter(app => app.id !== data.value?.id) ?? null;
-  closeDeleteModal();
+  return $apiFetch<Application>(`/applications/${id}`, {
+    method: 'DELETE'
+  })
+    .then(data => {
+      applicationList.value =
+        applicationList.value?.filter(app => app.id !== data?.id) ?? null;
+      closeDeleteModal();
+    })
+    .catch(error => {
+      errorMessage.value = error.response._data.message;
+    });
 };
 
 function openDeleteApplicationModal(id: number) {
