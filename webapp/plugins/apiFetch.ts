@@ -3,14 +3,14 @@ import { FetchOption } from 'types/fetchOptions';
 export default defineNuxtPlugin(() => {
   return {
     provide: {
-      apiFetch: (path: string, options: FetchOption = {}): Promise<any> => {
+      apiFetch: function <T>(path: string, options: FetchOption = {}) {
         const config = useRuntimeConfig();
         const { apiBaseUrl: baseURL } = config.public;
         const defaultHeaders = useRequestHeaders();
         const { headers: overrideHeaders, method, ...rest } = options;
         const headers = { ...defaultHeaders, ...overrideHeaders };
 
-        return $fetch(path, {
+        return $fetch<T>(path, {
           baseURL,
           credentials: 'include',
           headers,

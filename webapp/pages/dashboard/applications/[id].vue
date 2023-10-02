@@ -93,7 +93,7 @@ const deleteApiKey = async () => {
 };
 
 const createApiKey = async () => {
-  return $apiFetch(`applications/${useRoute().params.id}/api-keys`, { method: 'POST' })
+  return $apiFetch<string>(`applications/${useRoute().params.id}/api-keys`, { method: 'POST' })
     .then(data => {
       apiKey.value = data;
       application.value = {
