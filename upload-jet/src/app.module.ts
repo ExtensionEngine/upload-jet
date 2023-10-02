@@ -24,7 +24,8 @@ import { RequestContextMiddleware } from 'shared/request-context-middleware';
       useFactory: (config: ConfigService) => ({
         loadStrategy: LoadStrategy.JOINED,
         ...config.get('database'),
-        autoLoadEntities: true
+        autoLoadEntities: true,
+        registerRequestContext: false
       })
     }),
     LoggerModule.forRoot({
