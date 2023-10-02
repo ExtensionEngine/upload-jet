@@ -12,7 +12,7 @@
       <NuxtLink
         :to="`/dashboard/applications/${application.id}`"
         class="mb-6 flex h-14 list-none items-center justify-between rounded-lg border-2 bg-slate-50 pl-4 pr-2 duration-200 ease-out hover:cursor-pointer hover:border-slate-400"
-        v-for="application in mockedApplications"
+        v-for="application in applicationList"
         :key="application.id">
         <div class="font-semibold">
           {{ application.name }}
@@ -29,15 +29,21 @@
   <CreateApplicationModal
     ref="createApplicationModal"
     @create:application="createApplication"
-    v-model:application-name="inputValue" />
+    v-model:application-name="applicationNameInput"
+    :errorMessage="errorMessage"
+    @close="resetValues" />
   <DeleteApplicationModal
     ref="deleteApplicationModal"
     @delete:application="deleteApplication(applicationId)"
     :id="applicationId"
-    :application-name="applicationName" />
+    :application-name="applicationName"
+    :errorMessage="errorMessage"
+    @close="resetValues" />
 </template>
 
 <script setup lang="ts">
+import { Application } from 'types/application';
+
 definePageMeta({
   layout: 'dashboard-layout',
   name: 'Applications',
@@ -45,8 +51,14 @@ definePageMeta({
   middleware: ['auth']
 });
 
+const { $apiFetch } = useNuxtApp();
+const { data } = await useApiFetch<Application[]>('applications');
+const applicationList = ref<Application[] | null>(data.value);
+const applicationId = ref<number>();
+const applicationNameInput = ref('');
 const createApplicationModal = ref();
 const deleteApplicationModal = ref();
+const errorMessage = ref('');
 
 const { showModal: showCreateModal, closeModal: closeCreateModal } = useModal(
   createApplicationModal
@@ -55,8 +67,33 @@ const { showModal: showDeleteModal, closeModal: closeDeleteModal } = useModal(
   deleteApplicationModal
 );
 
-const applicationId = ref<number>();
-const inputValue = ref('');
+const createApplication = async (name: string) => {
+  return $apiFetch<Application>('/applications', {
+    method: 'POST',
+    body: { name }
+  })
+    .then(data => {
+      applicationList?.value?.push(data);
+      closeCreateModal();
+    })
+    .catch(error => {
+      errorMessage.value = error.response._data.message;
+    });
+};
+
+const deleteApplication = async (id: number | undefined) => {
+  return $apiFetch<Application>(`/applications/${id}`, {
+    method: 'DELETE'
+  })
+    .then(data => {
+      applicationList.value =
+        applicationList?.value?.filter(app => app.id !== data?.id) ?? null;
+      closeDeleteModal();
+    })
+    .catch(error => {
+      errorMessage.value = error.response._data.message;
+    });
+};
 
 function openDeleteApplicationModal(id: number) {
   applicationId.value = id;
@@ -64,36 +101,14 @@ function openDeleteApplicationModal(id: number) {
 }
 
 const applicationName = computed(() => {
-  const filteredApplication = mockedApplications.value.find(
+  const filteredApplication = applicationList?.value?.find(
     app => app.id === applicationId.value
   );
   return filteredApplication?.name;
 });
 
-// Below is a test code just for the client side to showcase the render functionality, will be deleted before merging
-// TODO:
-// 1. Should retrieve a list of apps from the database that will be rendered on the client side
-// 2. When user creates an app it should send a post request to authorized route and add it to dabatabase and retrieve a new list of apps to render
-// 3. When user deletes an app it should send a post request to authorized route and delete it from the dabatabase and retrieve a new list of apps to render
-
-const mockedApplications = ref([
-  { id: 1, name: 'Mocked App 1' },
-  { id: 2, name: 'Mocked App 2' },
-  { id: 3, name: 'Mocked App 3' }
-]);
-
-const createApplication = (input: string) => {
-  const randomId = Math.floor(Math.random() * 1000);
-  const newApplication = { id: randomId, name: input };
-  mockedApplications.value.push(newApplication);
-  inputValue.value = '';
-  closeCreateModal();
-};
-
-const deleteApplication = (id: number | undefined) => {
-  mockedApplications.value = mockedApplications.value.filter(
-    app => app.id !== id
-  );
-  closeDeleteModal();
+const resetValues = () => {
+  applicationNameInput.value = '';
+  errorMessage.value = '';
 };
 </script>

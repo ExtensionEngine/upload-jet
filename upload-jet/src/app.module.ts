@@ -14,6 +14,7 @@ import { AuthenticationMiddleware } from 'shared/auth/authentication.middleware'
 import { ApplicationModule } from 'application/application.module';
 import { ZodExceptionFilter } from 'shared/zod-exception.filter';
 import { APP_FILTER } from '@nestjs/core';
+import { RequestContextMiddleware } from 'shared/request-context-middleware';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { APP_FILTER } from '@nestjs/core';
       useFactory: (config: ConfigService) => ({
         loadStrategy: LoadStrategy.JOINED,
         ...config.get('database'),
-        autoLoadEntities: true
+        autoLoadEntities: true,
+        registerRequestContext: false
       })
     }),
     LoggerModule.forRoot({
@@ -62,8 +64,10 @@ import { APP_FILTER } from '@nestjs/core';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
+      .apply(RequestContextMiddleware)
+      .forRoutes('*')
       .apply(AuthenticationMiddleware)
-      .exclude('identity/callback')
+      .exclude('identity/callback', 'upload-policy')
       .forRoutes('*');
   }
 }
