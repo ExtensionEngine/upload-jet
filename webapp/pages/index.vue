@@ -5,6 +5,9 @@ definePageMeta({
 </script>
 
 <template>
-  <h1 class="mb-2">Index page</h1>
-  <Login />
+  <div
+    class="flex h-screen flex-col items-center justify-between py-10 md:justify-center md:gap-12">
+    <Logo />
+    <Login />
+  </div>
 </template>
