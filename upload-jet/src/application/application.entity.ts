@@ -42,9 +42,9 @@ export default class Application extends BaseEntity {
     this.userId = userId;
   }
 
-  createApiKey(hashedKey: string): void {
+  createApiKey(hashedKey: string, keyHint: string): void {
     if (this.hasApiKey) throw new ApiKeyExistsError();
-    this.apiKeys.add(new ApiKey(hashedKey));
+    this.apiKeys.add(new ApiKey(hashedKey, keyHint));
   }
 
   deleteApiKey(): void {

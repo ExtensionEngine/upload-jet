@@ -15,8 +15,12 @@ export default class ApiKey extends BaseDeleteableEntity {
   })
   application!: Application;
 
-  constructor(keyHash: string) {
+  @Property({ nullable: false })
+  keyHint: string;
+
+  constructor(keyHash: string, keyHint: string) {
     super();
     this.keyHash = keyHash;
+    this.keyHint = keyHint;
   }
 }
