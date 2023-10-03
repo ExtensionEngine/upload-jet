@@ -77,7 +77,7 @@ const hasApiKey = computed(() => !!application.value?.hasApiKey);
 
 const apiKeyPlacehoder = computed(() =>
   hasApiKey.value ?
-    '********-****-****-****-************' :
+    application.value?.keyHint :
     'Api key does not exist'
 );
 
