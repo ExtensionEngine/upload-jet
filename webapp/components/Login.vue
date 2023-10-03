@@ -14,16 +14,12 @@ githubLoginUrl.search = searchParams;
 </script>
 
 <template>
-  <NuxtLink
-    v-if="!isLoggedIn"
-    :href="githubLoginUrl.href"
+  <NuxtLink v-if="!isLoggedIn" :href="githubLoginUrl.href"
     class="cursor-pointer rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
     Login with GitHub
   </NuxtLink>
 
-  <NuxtLink
-    v-else
-    :to="{ name: 'Applications' }"
+  <NuxtLink v-else :to="{ name: 'Applications' }"
     class="cursor-pointer rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
     Go to dashboard
   </NuxtLink>
