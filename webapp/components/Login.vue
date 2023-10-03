@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import githubLogo from '/img/Github.png';
+
 const config = useRuntimeConfig();
 const route = useRoute();
 const { isLoggedIn } = await useAuth();
@@ -14,13 +16,17 @@ githubLoginUrl.search = searchParams;
 </script>
 
 <template>
-  <NuxtLink v-if="!isLoggedIn" :href="githubLoginUrl.href"
-    class="cursor-pointer rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
-    Login with GitHub
-  </NuxtLink>
+  <div
+    v-if="!isLoggedIn"
+    class="flex h-10 cursor-pointer items-center gap-2 rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
+    <img :src="githubLogo" alt="github" class="h-full" />
+    <NuxtLink :href="githubLoginUrl.href"> Login with GitHub </NuxtLink>
+  </div>
 
-  <NuxtLink v-else :to="{ name: 'Applications' }"
-    class="cursor-pointer rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
+  <NuxtLink
+    v-else
+    :to="{ name: 'Applications' }"
+    class="h-10 cursor-pointer rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
     Go to dashboard
   </NuxtLink>
 </template>
