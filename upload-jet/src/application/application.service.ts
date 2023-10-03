@@ -64,9 +64,10 @@ export class ApplicationService {
   async createApiKey(applicationId: number) {
     const apiKey = randomUUID();
     const hashedKey = this.hashApiKey(apiKey);
+    const keyHint = this.createKeyHint(apiKey);
 
     const application = await this.getById(applicationId);
-    application.createApiKey(hashedKey);
+    application.createApiKey(hashedKey, keyHint);
     await this.em.persistAndFlush(application);
 
     return apiKey;
@@ -76,6 +77,15 @@ export class ApplicationService {
     const application = await this.getById(applicationId);
     application.deleteApiKey();
     this.em.persistAndFlush(application);
+  }
+
+  private createKeyHint(apiKey: string): string {
+    return apiKey
+      .split('')
+      .map((el, index) => {
+        return index > 3 && el !== '-' ? '*' : el;
+      })
+      .join('');
   }
 
   private hashApiKey(apiKey: string): string {

@@ -4,5 +4,6 @@ export type Application = {
   name: string;
   createdAt: string;
   hasApiKey: boolean;
+  keyHint: string;
   updatedAt: string;
 };
