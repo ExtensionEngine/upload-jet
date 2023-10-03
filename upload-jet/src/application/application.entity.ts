@@ -36,6 +36,12 @@ export default class Application extends BaseEntity {
     return apiKeys.some(apiKey => !apiKey.deletedAt);
   }
 
+  @Property({ persist: false })
+  get keyHint() {
+    const apiKeys = this.apiKeys.getItems();
+    return apiKeys.find(apiKey => !apiKey.deletedAt).keyHint;
+  }
+
   constructor(name: string, userId: number) {
     super();
     this.name = name;
