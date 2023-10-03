@@ -5,11 +5,5 @@
   </div>
 </template>
 <script setup lang="ts">
-
 const { user } = await useAuth();
-
-const username = computed(() => {
-  return user.value?.email.split("@")[0];
-});
-
 </script>
