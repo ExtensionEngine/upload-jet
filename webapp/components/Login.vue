@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import GithubLogo from '/img/Github.png';
+import githubLogo from '/img/Github.png';
 
 const config = useRuntimeConfig();
 const route = useRoute();
@@ -19,7 +19,7 @@ githubLoginUrl.search = searchParams;
   <div
     v-if="!isLoggedIn"
     class="flex h-10 cursor-pointer items-center gap-2 rounded-md bg-sky-600 px-3 py-2 text-white outline-none">
-    <img :src="GithubLogo" alt="github" class="h-full" />
+    <img :src="githubLogo" alt="github" class="h-full" />
     <NuxtLink :href="githubLoginUrl.href"> Login with GitHub </NuxtLink>
   </div>
 
