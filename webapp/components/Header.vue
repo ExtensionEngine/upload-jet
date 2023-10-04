@@ -6,7 +6,7 @@ defineEmits(['toggle-sidebar']);
 </script>
 
 <template>
-  <header class="z-50 w-full bg-white shadow-md">
+  <header class="z-50 h-12 w-full bg-white shadow-md">
     <div class="mx-auto flex h-full items-center justify-between px-4">
       <button
         @click="$emit('toggle-sidebar')"
