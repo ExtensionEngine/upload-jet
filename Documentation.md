@@ -10,7 +10,7 @@
 
 ## Introduction
 
-Welcome to Upload Jet, a full-stack file-sharing application that allows you to securely upload and share files to Amazon S3. It consists of two libraries: one for the Vue.js frontend and the other for the Express.js backend. This guide will walk you through the process of creating your account and setting up the libraries to enable secure and efficient file sharing."
+Welcome to Upload Jet, a full-stack file-sharing application that allows you to securely upload and share files to Amazon S3. This guide will walk you through the process of creating your account and setting up the libraries to enable secure and efficient file sharing."
 
 ## Prerequisites
 
@@ -49,7 +49,7 @@ Open your terminal and navigate to your Express server directory.
 Use npm to install the Express.js library:
 
 ```
-$ npm install upload-jet/express
+$ npm install @upload-jet/express
 ```
 
 ### Client side:
@@ -58,7 +58,7 @@ Open your terminal and navigate to your Vue client directory.
 Use npm to install the Vue library:
 
 ```
-$ npm install upload-jet/vue
+$ npm install @upload-jet/vue
 ```
 
 ## Uploading files
