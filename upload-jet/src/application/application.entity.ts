@@ -39,7 +39,7 @@ export default class Application extends BaseEntity {
   @Property({ persist: false })
   get keyHint() {
     const apiKeys = this.apiKeys.getItems();
-    return apiKeys.find(apiKey => !apiKey.deletedAt).keyHint;
+    return apiKeys.find(apiKey => !apiKey.deletedAt)?.keyHint;
   }
 
   constructor(name: string, userId: number) {

@@ -9,7 +9,7 @@ const { signOut } = await useAuth();
 <template>
   <aside
     :class="{ '-translate-x-full': !isOpen }"
-    class="absolute left-0 z-40 h-screen w-64 overflow-hidden border-r border-gray-200 bg-white pt-16 transition-all duration-300 md:relative md:translate-x-0 md:pt-0"
+    class="absolute left-0 z-40 h-screen w-80 overflow-hidden border-r border-gray-200 bg-white pt-16 transition-all duration-300 md:relative md:translate-x-0 md:pt-0"
     aria-label="Sidebar">
     <div class="flex h-full flex-col justify-start bg-white">
       <Avatar class="hidden md:inline-flex" />
