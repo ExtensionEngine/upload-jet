@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const uploadJetConfigSchema = z
   .object({
     apiKey: z.string(),
-    apiUrl: z.string()
+    url: z.string()
   })
   .strict();
 

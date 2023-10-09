@@ -19,12 +19,12 @@ const DEFAULT_SERVER_ERROR_MESSAGE = 'Something went wrong.';
 
 export class UploadJet {
   #apiKey: string;
-  #apiUrl: string;
+  #url: string;
 
   constructor(config: UploadJetConfig) {
     const data = uploadJetConfigSchema.parse(config);
     this.#apiKey = data.apiKey;
-    this.#apiUrl = data.apiUrl;
+    this.#url = data.url;
   }
 
   createUploadRoute(options: UploadOptions) {
@@ -97,7 +97,7 @@ export class UploadJet {
         {}
       );
 
-    const url = new URL('upload-policy', this.#apiUrl);
+    const url = new URL('upload-policy', this.#url);
     const headers = { Authorization: `Bearer ${this.#apiKey}` };
     return axios
       .post(url.href, policyRules, { headers })
