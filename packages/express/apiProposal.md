@@ -17,11 +17,11 @@ const UploadJet = require('upload-jet');
 
 ## Usage
 
-To use the uploader it is required to provide an api key when creating
-a new instance of Upload Jet class.
+To use the uploader it is required to provide an api key and specify the URL of the Upload-Jet server when creating a new instance of the Upload Jet class. The server's URL is http://localhost:3000."
 
 ```javascript
-const uploadJet = new UploadJet({ apiKey: API_KEY });
+const API_URL = 'http://localhost:3000';
+const uploadJet = new UploadJet({ apiKey: API_KEY, apiUrl: API_URL });
 ```
 
 ### Registering a new route
