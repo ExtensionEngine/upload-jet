@@ -10,7 +10,7 @@
 
 ## Introduction
 
-Welcome to Upload Jet, a full-stack file-sharing application that allows you to securely upload and share files to Amazon S3. This guide will walk you through the process of creating your account and setting up the libraries to enable secure and efficient file sharing."
+Welcome to Upload Jet, a service that allows you to securely upload and share files to Amazon S3. This guide will walk you through the process of creating your account and setting up the libraries to enable secure and efficient file sharing."
 
 ## Prerequisites
 
