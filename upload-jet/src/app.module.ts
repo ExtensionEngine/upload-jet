@@ -67,7 +67,7 @@ export class AppModule implements NestModule {
       .apply(RequestContextMiddleware)
       .forRoutes('*')
       .apply(AuthenticationMiddleware)
-      .exclude('identity/callback', 'upload-policy')
+      .exclude('identity/callback', 'identity/signout', 'upload-policy')
       .forRoutes('*');
   }
 }
