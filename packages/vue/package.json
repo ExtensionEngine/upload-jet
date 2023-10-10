@@ -12,7 +12,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/upload-jet.js",
       "require": "./dist/upload-jet.umd.cjs"
-    }
+    },
+    "./style.css": "./dist/style.css"
   },
   "types": "./dist/index.d.ts",
   "scripts": {

@@ -6,10 +6,11 @@ const app = express();
 const router = express.Router();
 const port = 3001;
 const API_KEY = 'example-api-key';
+const URL = 'http://localhost:3000';
 
 app.use(cors());
 
-const uploadJet = new UploadJet({ apiKey: API_KEY });
+const uploadJet = new UploadJet({ apiKey: API_KEY, url: URL });
 const uploadRouteConfig: UploadOptions = {
   fileType: 'image',
   maxFileSize: '1MB',
