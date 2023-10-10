@@ -8,11 +8,11 @@ Once the package is installed, you can import the library by using import or
 require approach:
 
 ```javascript
-import UploadJet from 'upload-jet';
+import UploadJet from '@upload-jet/express';
 
 // or
 
-const UploadJet = require('upload-jet');
+const UploadJet = require('@upload-jet/express');
 ```
 
 ## Usage
