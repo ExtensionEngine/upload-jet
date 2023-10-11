@@ -11,7 +11,11 @@ export class FileService {
     private readonly s3ClientService: S3ClientService
   ) {}
 
-  async getFile(key: string, duration: number) {
-    return this.s3ClientService.getFile(key, this.config.bucketName, duration);
+  async getFile(key: string, linkDuration: number): Promise<string> {
+    return this.s3ClientService.getFile(
+      key,
+      this.config.bucketName,
+      linkDuration
+    );
   }
 }

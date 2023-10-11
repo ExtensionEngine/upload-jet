@@ -1,5 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { FileService } from './file.service';
+import { getFileSchema } from './validation';
 
 @Controller('files')
 export class FileController {
@@ -9,7 +10,11 @@ export class FileController {
   async getImage(
     @Param('key') key: string,
     @Query('duration') duration: number
-  ) {
-    return this.fileService.getFile(key, duration);
+  ): Promise<string> {
+    const { duration: linkDuration } = await getFileSchema.parseAsync({
+      duration
+    });
+
+    return this.fileService.getFile(key, linkDuration);
   }
 }

@@ -12,6 +12,6 @@ import { ApplicationModule } from 'application/application.module';
 })
 export class FileModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ApiKeyValidationMiddleware).forRoutes('*');
+    consumer.apply(ApiKeyValidationMiddleware).forRoutes('files/:key');
   }
 }
