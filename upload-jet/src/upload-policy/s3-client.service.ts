@@ -1,5 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { S3Client } from '@aws-sdk/client-s3';
+import {
+  S3Client,
+  GetObjectCommand,
+  GetObjectCommandOutput
+} from '@aws-sdk/client-s3';
 import { ConfigType } from '@nestjs/config';
 import awsConfig from 'config/aws.config';
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
@@ -23,6 +27,18 @@ export class S3ClientService {
         secretAccessKey: secretKey
       }
     });
+  }
+
+  async getObject(
+    key: string,
+    bucket: string
+  ): Promise<GetObjectCommandOutput> {
+    const command = new GetObjectCommand({
+      Bucket: bucket,
+      Key: key
+    });
+
+    return this.s3Client.send(command);
   }
 
   generatePostPolicy({

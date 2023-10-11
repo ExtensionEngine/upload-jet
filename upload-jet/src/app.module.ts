@@ -15,6 +15,7 @@ import { ApplicationModule } from 'application/application.module';
 import { ZodExceptionFilter } from 'shared/zod-exception.filter';
 import { APP_FILTER } from '@nestjs/core';
 import { RequestContextMiddleware } from 'shared/request-context-middleware';
+import { FileModule } from 'file/file.module';
 
 @Module({
   imports: [
@@ -51,7 +52,8 @@ import { RequestContextMiddleware } from 'shared/request-context-middleware';
     }),
     UploadPolicyModule,
     ApplicationModule,
-    IdentityModule
+    IdentityModule,
+    FileModule
   ],
   controllers: [],
   providers: [
@@ -67,7 +69,12 @@ export class AppModule implements NestModule {
       .apply(RequestContextMiddleware)
       .forRoutes('*')
       .apply(AuthenticationMiddleware)
-      .exclude('identity/callback', 'identity/signout', 'upload-policy')
+      .exclude(
+        'identity/callback',
+        'identity/signout',
+        'upload-policy',
+        'files/:key'
+      )
       .forRoutes('*');
   }
 }
