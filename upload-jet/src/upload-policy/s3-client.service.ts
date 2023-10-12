@@ -26,13 +26,9 @@ export class S3ClientService {
     });
   }
 
-  async getFile(
-    key: string,
-    bucket: string,
-    linkDuration: number
-  ): Promise<string> {
+  async getFile(key: string, bucket: string): Promise<string> {
     const command = new GetObjectCommand({ Bucket: bucket, Key: key });
-    return getSignedUrl(this.s3Client, command, { expiresIn: linkDuration });
+    return getSignedUrl(this.s3Client, command);
   }
 
   generatePostPolicy({
