@@ -8,20 +8,20 @@ Once the package is installed, you can import the library by using import or
 require approach:
 
 ```javascript
-import UploadJet from 'upload-jet';
+import UploadJet from '@upload-jet/express';
 
 // or
 
-const UploadJet = require('upload-jet');
+const UploadJet = require('@upload-jet/express');
 ```
 
 ## Usage
 
-To use the uploader it is required to provide an api key when creating
-a new instance of Upload Jet class.
+To use the uploader it is required to provide an api key and specify the URL of the Upload-Jet server when creating a new instance of the Upload Jet class.
 
 ```javascript
-const uploadJet = new UploadJet({ apiKey: API_KEY });
+const URL = 'SERVER_URL';
+const uploadJet = new UploadJet({ apiKey: API_KEY, url: URL });
 ```
 
 ### Registering a new route

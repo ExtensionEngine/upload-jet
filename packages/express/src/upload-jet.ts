@@ -13,17 +13,18 @@ import { createUploadPolicyBodySchema } from './schema/create-upload-policy-body
 import * as bytes from 'bytes';
 import { ZodError } from 'zod';
 
-const API_URL = 'http://localhost:3000';
 const BAD_REQUEST_CODE = 400;
 const INTERNAL_SERVER_ERROR_CODE = 500;
 const DEFAULT_SERVER_ERROR_MESSAGE = 'Something went wrong.';
 
 export class UploadJet {
   #apiKey: string;
+  #url: string;
 
   constructor(config: UploadJetConfig) {
     const data = uploadJetConfigSchema.parse(config);
     this.#apiKey = data.apiKey;
+    this.#url = data.url;
   }
 
   createUploadRoute(options: UploadOptions) {
@@ -96,7 +97,7 @@ export class UploadJet {
         {}
       );
 
-    const url = new URL('upload-policy', API_URL);
+    const url = new URL('upload-policy', this.#url);
     const headers = { Authorization: `Bearer ${this.#apiKey}` };
     return axios
       .post(url.href, policyRules, { headers })
