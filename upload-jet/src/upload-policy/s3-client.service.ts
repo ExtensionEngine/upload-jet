@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { S3Client } from '@aws-sdk/client-s3';
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { ConfigType } from '@nestjs/config';
 import awsConfig from 'config/aws.config';
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
@@ -23,6 +24,11 @@ export class S3ClientService {
         secretAccessKey: secretKey
       }
     });
+  }
+
+  async getFile(key: string, bucket: string): Promise<string> {
+    const command = new GetObjectCommand({ Bucket: bucket, Key: key });
+    return getSignedUrl(this.s3Client, command);
   }
 
   generatePostPolicy({
